@@ -25,24 +25,24 @@
 
     <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
 
-    <link rel="stylesheet" href="./front/css/bulma.min.css">
-    <link rel="stylesheet" href="./front/css/bulma-carousel.min.css">
-    <link rel="stylesheet" href="./front/css/bulma-slider.min.css">
-    <link rel="stylesheet" href="./front/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="./web/css/bulma.min.css">
+    <link rel="stylesheet" href="./web/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="./web/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="./web/css/fontawesome.all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-    <link rel="stylesheet" href="./front/css/index.css">
-    <link rel="stylesheet" href="./front/css/stars.css">
-    <link rel="stylesheet" href="./front/css/cosmic-table.css">
-    <link rel="stylesheet" href="front/css/shooting-stars.css">
+    <link rel="stylesheet" href="./web/css/index.css">
+    <link rel="stylesheet" href="./web/css/stars.css">
+    <link rel="stylesheet" href="./web/css/cosmic-table.css">
+    <link rel="stylesheet" href="web/css/shooting-stars.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script defer src="./front/js/fontawesome.all.min.js"></script>
-    <script src="./front/js/bulma-carousel.min.js"></script>
-    <script src="./front/js/bulma-slider.min.js"></script>
-    <script src="./front/js/index.js"></script>
+    <script defer src="./web/js/fontawesome.all.min.js"></script>
+    <script src="./web/js/bulma-carousel.min.js"></script>
+    <script src="./web/js/bulma-slider.min.js"></script>
+    <script src="./web/js/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="./front/script_hourly.js"></script>
+    <script src="./web/script_hourly.js"></script>
 
     <script type="text/javascript" id="MathJax-script" async
         src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
@@ -402,12 +402,18 @@
 
                         <div class="publication-authors">
                             <div class="is-size-5">
-                                <span class="author-block has-text-primary-dark">
-                                    Anonymous submission</span>
+                                <span class="author-block">
+                                    <a href="#" class="author-link">Shunya Nagashima</a><sup>1</sup></span>
+                                <span class="author-block">
+                                    <a href="#" class="author-link">Komei Sugiura</a><sup>1</sup></span>
                             </div>
 
-                            <div>
-                                <br>
+                            <div class="is-size-6 has-text-grey-light" style="margin-top: 0.5rem;">
+                                <sup>1</sup>Keio University, Japan
+                            </div>
+
+                            <div class="is-size-6 has-text-grey-light" style="margin-top: 0.5rem;">
+                                {ng_sh, komei.sugiura}@keio.jp
                             </div>
                         </div>
 
@@ -424,7 +430,7 @@
 
                                 <!-- Dataset Link. -->
                                 <span class="link-block">
-                                    <a href="./front/data/flarebench_dataset.zip" download
+                                    <a href="./web/data/flarebench_dataset.zip" download
                                         class="external-link button is-normal is-rounded is-dark">
                                         <span class="icon">
                                             <i class="fas fa-database"></i>
@@ -466,7 +472,7 @@
                     <figure class="image">
                         <div
                             style="background-color: white; padding: 15px; border-radius: 10px; display: inline-block;">
-                            <img src="./front/images/eye-catch.png" alt="eye-catch.png" width="400" height="auto" />
+                            <img src="./web/images/eye-catch.png" alt="eye-catch.png" width="400" height="auto" />
                         </div>
                     </figure>
                     <br>
@@ -599,7 +605,7 @@
                     <div class="solar-card">
                         <div class="solar-video-container">
                             <video class="solar-video" autoplay muted loop playsinline>
-                                <source src="./front/videos/solar/aia_0094.mp4" type="video/mp4">
+                                <source src="./web/videos/solar/aia_0094.mp4" type="video/mp4">
                             </video>
                         </div>
                         <div class="solar-card-content">
@@ -613,7 +619,7 @@
                     <div class="solar-card">
                         <div class="solar-video-container">
                             <video class="solar-video" autoplay muted loop playsinline>
-                                <source src="./front/videos/solar/aia_0131.mp4" type="video/mp4">
+                                <source src="./web/videos/solar/aia_0131.mp4" type="video/mp4">
                             </video>
                         </div>
                         <div class="solar-card-content">
@@ -627,7 +633,7 @@
                     <div class="solar-card">
                         <div class="solar-video-container">
                             <video class="solar-video" autoplay muted loop playsinline>
-                                <source src="./front/videos/solar/aia_0171.mp4" type="video/mp4">
+                                <source src="./web/videos/solar/aia_0171.mp4" type="video/mp4">
                             </video>
                         </div>
                         <div class="solar-card-content">
@@ -641,7 +647,7 @@
                     <div class="solar-card">
                         <div class="solar-video-container">
                             <video class="solar-video" autoplay muted loop playsinline>
-                                <source src="./front/videos/solar/aia_0193.mp4" type="video/mp4">
+                                <source src="./web/videos/solar/aia_0193.mp4" type="video/mp4">
                             </video>
                         </div>
                         <div class="solar-card-content">
@@ -655,7 +661,7 @@
                     <div class="solar-card">
                         <div class="solar-video-container">
                             <video class="solar-video" autoplay muted loop playsinline>
-                                <source src="./front/videos/solar/aia_0211.mp4" type="video/mp4">
+                                <source src="./web/videos/solar/aia_0211.mp4" type="video/mp4">
                             </video>
                         </div>
                         <div class="solar-card-content">
@@ -669,7 +675,7 @@
                     <div class="solar-card">
                         <div class="solar-video-container">
                             <video class="solar-video" autoplay muted loop playsinline>
-                                <source src="./front/videos/solar/aia_0304.mp4" type="video/mp4">
+                                <source src="./web/videos/solar/aia_0304.mp4" type="video/mp4">
                             </video>
                         </div>
                         <div class="solar-card-content">
@@ -683,7 +689,7 @@
                     <div class="solar-card">
                         <div class="solar-video-container">
                             <video class="solar-video" autoplay muted loop playsinline>
-                                <source src="./front/videos/solar/aia_0335.mp4" type="video/mp4">
+                                <source src="./web/videos/solar/aia_0335.mp4" type="video/mp4">
                             </video>
                         </div>
                         <div class="solar-card-content">
@@ -697,7 +703,7 @@
                     <div class="solar-card">
                         <div class="solar-video-container">
                             <video class="solar-video" autoplay muted loop playsinline>
-                                <source src="./front/videos/solar/aia_1600.mp4" type="video/mp4">
+                                <source src="./web/videos/solar/aia_1600.mp4" type="video/mp4">
                             </video>
                         </div>
                         <div class="solar-card-content">
@@ -711,7 +717,7 @@
                     <div class="solar-card">
                         <div class="solar-video-container">
                             <video class="solar-video" autoplay muted loop playsinline>
-                                <source src="./front/videos/solar/aia_4500.mp4" type="video/mp4">
+                                <source src="./web/videos/solar/aia_4500.mp4" type="video/mp4">
                             </video>
                         </div>
                         <div class="solar-card-content">
@@ -725,7 +731,7 @@
                     <div class="solar-card">
                         <div class="solar-video-container">
                             <video class="solar-video" autoplay muted loop playsinline>
-                                <source src="./front/videos/solar/hmi.mp4" type="video/mp4">
+                                <source src="./web/videos/solar/hmi.mp4" type="video/mp4">
                             </video>
                         </div>
                         <div class="solar-card-content">
@@ -816,7 +822,7 @@
                                 <figure class="image" style="max-width: none; overflow-x: auto; margin: 2.5rem 0;">
                                     <div
                                         style="background-color: white; padding: 15px; border-radius: 10px; text-align: center; width: 100%; max-width: 1500px; margin: 0 auto;">
-                                        <img src="./front/images/model.png" alt="Deep SWM Architecture"
+                                        <img src="./web/images/model.png" alt="Deep SWM Architecture"
                                             style="width: 100%; height: auto;" />
                                     </div>
                                 </figure>
@@ -888,7 +894,7 @@
                                     <figure class="image" style="margin-bottom: 0;">
                                         <div
                                             style="background-color: white; padding: 5px; border-radius: 10px; text-align: center; width: 70%; max-width: 800px; margin: 0 auto;">
-                                            <img src="./front/images/pretraining.png" alt="Sparse MAE Pretraining"
+                                            <img src="./web/images/pretraining.png" alt="Sparse MAE Pretraining"
                                                 style="width: 100%; height: auto; margin-bottom: 0;" />
                                         </div>
                                         <figcaption class="content has-text-justified"
@@ -1005,7 +1011,7 @@
                         <figure class="image" style="margin-bottom: 20px; margin-top: 30px;">
                             <div
                                 style="background-color: white; padding: 15px; border-radius: 10px; text-align: center; width: 100%; margin: 0 auto;">
-                                <img src="./front/images/qualitative_results.png"
+                                <img src="./web/images/qualitative_results.png"
                                     alt="Qualitative results for flare predictions"
                                     style="width: 100%; height: auto;" />
                             </div>
@@ -1024,7 +1030,7 @@
                         <figure class="image" style="margin-top: 40px; margin-bottom: 20px;">
                             <div
                                 style="background-color: white; padding: 15px; border-radius: 10px; text-align: center; width: 70%; max-width: 800px; margin: 0 auto;">
-                                <img src="./front/images/qualitative_results_pretraining_supp.png"
+                                <img src="./web/images/qualitative_results_pretraining_supp.png"
                                     alt="Reconstruction results" style="width: 100%; height: auto;" />
                             </div>
                             <figcaption class="content has-text-justified" style="margin-top: 15px;">
