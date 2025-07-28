@@ -1,0 +1,93 @@
+epochs: 1
+lr: 0.00004
+weight_decay: 0.05
+bs: 32
+factor:
+  GMGS: 1
+  BS: 2
+  CE: 1
+main_metric: GMGS
+
+# Class weight settings (per stage)
+class_weights:
+  stage1:
+    enabled: false
+    method: "inverse"  # 'none', 'inverse', 'effective_samples', 'custom'
+    custom_weights: [1.0, 1.0, 2.0, 4.0]
+    beta: 0.9999
+  stage2:
+    enabled: false
+    method: "inverse"
+    custom_weights: [1.0, 1.0, 3.0, 5.0]  # emphasize imbalance in stage2
+    beta: 0.9999
+
+# Two-stage learning settings
+stage2:
+  lr: 0.00004
+  epochs: 15
+
+# Early stopping settings
+early_stopping:
+  metric: "valid_GMGS"  # "valid_GMGS" or "valid_loss"
+  patience: 7
+
+dataset:
+  force_recalc_indices: false
+  force_recalc_stats: false
+
+model:
+  selected: CNNLSTM
+  models:
+    FlareTransformer:
+      architecture_params: 
+        input_channel: 90
+        output_channel: 4
+        window: 4
+        sfm_params:
+          N: 1
+          d_model: 128
+          h: 4
+          d_ff: 16
+          dropout: 0.1
+        mm_params:
+          N: 1
+          d_model: 128
+          h: 4
+          d_ff: 16
+          dropout: 0.1
+    Flareformer:
+      architecture_params:
+        input_channel: 90
+        output_channel: 4
+        sfm_params:
+          N: 1
+          d_model: 128
+          h: 4
+          d_ff: 16
+          dropout: 0.1
+        mm_params:
+          N: 1
+          d_model: 128
+          h: 4
+          d_ff: 16
+          dropout: 0.1
+    CNNLSTM:
+      architecture_params:
+        hidden_dim: 128
+        cnn_layers: 4
+    DeepSWM:
+      architecture_params:
+        D: 64
+        drop_path_rate: 0.7
+        layer_scale_init_value: 1.0e-6
+        L: 128
+        L_SSE: 3
+        L_LT: 1
+        L_mixing: 1
+        dropout_rates:
+          sse: 0.6
+          dwcm: 0.6
+          stssm: 0.6
+          ltssm: 0.6
+          mixing_ssm: 0.6
+          head: 0.7

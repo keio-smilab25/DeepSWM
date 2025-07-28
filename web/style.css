@@ -1,0 +1,194 @@
+/* --- 全体基本設定 --- */
+body {
+  font-family: "Roboto", sans-serif;
+  margin: 10px;
+  background: #f5f5f5;
+  color: #333;
+}
+
+/* ヘッダー（薄い灰色） */
+header {
+  width: 100%;
+  height: 50px;
+  background-color: #ddd;
+  margin-bottom: 10px;
+}
+
+/* 見出し */
+h2, h3 {
+  text-align: center;
+  margin: 8px 0;
+}
+
+/* --- 上部レイアウト --- */
+.top-container {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* 左側：日付・時刻・ボタン */
+.left-top {
+  flex: 0 0 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* カレンダー・時刻選択のコンテナ */
+#date-container {
+  width: 100%;
+  text-align: center;
+}
+
+/* inlineカレンダーは初期は横幅100% */
+.inline-calendar {
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* 時刻選択部分：中央寄せ */
+#time-picker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+#time-picker select {
+  font-size: 16px;
+  padding: 4px 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  color: #333;
+}
+
+/* ボタン */
+#load-button {
+  background-color: #6200ee;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+#load-button:hover {
+  background-color: #3700b3;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* --- 右側：太陽画像グリッド --- */
+.right-top {
+  flex: 0 0 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(128px, 1fr));
+  grid-template-rows: repeat(2, auto);
+  gap: 6px;
+  width: 100%;
+}
+.channel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.channel img {
+  width: 100%;
+  height: auto;
+  border: 1px solid #ccc;
+}
+
+/* --- 下部：予測結果 --- */
+.prediction-container {
+  width: 100%;
+  margin: 10px 0;
+}
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.prediction-card {
+  flex: 0 0 250px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  background-color: #f9f9f9;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: transform 0.2s, border-color 0.2s;
+  font-size: 14px;
+}
+.prediction-card:hover {
+  transform: scale(1.05);
+}
+.prediction-card.highlight {
+  border-color: #ff9800;
+  box-shadow: 0 3px 8px rgba(255,152,0,0.5);
+}
+.class-label {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+.class-small {
+  font-size: 12px;
+  font-weight: normal;
+  color: #666;
+}
+.error-message {
+  width: 100%;
+  margin-top: 8px;
+  text-align: center;
+  color: red;
+  font-weight: bold;
+}
+
+#accuracy-container {
+  text-align: center;
+}
+
+/* --- 下部：グラフ --- */
+.graph-container {
+  width: 100%;
+  margin: 10px 0;
+  text-align: center;
+}
+
+/* --- レスポンシブ対応 --- 
+   画面幅が850px以下の場合、.top-container を縦方向に変更 */
+@media (max-width: 1050px) {
+  .top-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .left-top, .right-top {
+    flex: 1 1 100%;
+  }
+}
+
+/* --- 850px以上の場合、左側の内容を中央に固定 --- */
+@media (min-width: 1050px) {
+  #date-container {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+}
+
+#date-picker {
+  display: none;
+}

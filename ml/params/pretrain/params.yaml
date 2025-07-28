@@ -1,0 +1,100 @@
+# Pretrain configuration parameters
+
+# Basic settings
+trial_name: "sparse_mae_0.5_0.3_0.75"
+mode: "train"  # train, test, visualize, embed, inference_all
+fold: 1
+data_root: "datasets/"
+input_dir: "datasets/all_data_hours/"
+output_dir: "datasets/all_features"
+use_wandb: false
+force_recalc: false
+
+# Hardware settings
+cuda_device: 0
+num_workers: 4
+batch_size: 32
+
+# Training settings
+epochs: 20
+learning_rate: 4.0e-3
+weight_decay: 0.05
+betas: [0.9, 0.95]
+warmup_epochs: 10
+min_lr: 0.0
+
+# Model settings
+model:
+  type: "vit_for_FT128db"  # vit_for_FT128db, vit_for_FT64d4b, vit_for_FT32d4b, mae_vit_base_patch16_dec512d8b
+  in_chans: 10
+  mask_ratio: 0.5
+  stdwise: false
+  pyramid: true
+  sunspot: true
+  base_mask_ratio: 0.5
+  sunspot_spatial_ratio: 0.3
+  feature_mask_ratio: 0.5
+  norm_pix_loss: true
+
+# Visualization settings
+visualize:
+  timestamp: 20220419_120000  # format: YYYYMMDD_HHMMSS
+  num_images: 30
+  use_sunspot_masking: true
+  hours_before: 12
+  hours_after: 12
+
+# Fold periods (can be overridden by command line arguments)
+fold_periods:
+  1:
+    train:
+      - ["2011-12-01", "2012-05-31"]
+      - ["2012-06-01", "2019-05-31"]
+    val:
+      - ["2011-06-01", "2011-11-30"]
+      - ["2019-06-01", "2019-11-30"]
+    test:
+      - ["2019-12-01", "2021-11-30"]
+  2:
+    train:
+      - ["2011-12-01", "2012-05-31"]
+      - ["2012-06-01", "2019-11-30"]
+    val:
+      - ["2011-06-01", "2011-11-30"]
+      - ["2019-12-01", "2020-05-31"]
+    test:
+      - ["2020-06-01", "2022-05-31"]
+  3:
+    train:
+      - ["2011-12-01", "2012-05-31"]
+      - ["2012-06-01", "2020-05-31"]
+    val:
+      - ["2011-06-01", "2011-11-30"]
+      - ["2020-06-01", "2020-11-30"]
+    test:
+      - ["2020-12-01", "2022-11-30"]
+  4:
+    train:
+      - ["2011-12-01", "2012-05-31"]
+      - ["2012-06-01", "2020-11-30"]
+    val:
+      - ["2011-06-01", "2011-11-30"]
+      - ["2020-12-01", "2021-05-31"]
+    test:
+      - ["2021-06-01", "2023-05-31"]
+  5:
+    train:
+      - ["2011-12-01", "2012-05-31"]
+      - ["2012-06-01", "2021-05-31"]
+    val:
+      - ["2011-06-01", "2011-11-30"]
+      - ["2021-06-01", "2021-11-30"]
+    test:
+      - ["2021-12-01", "2023-11-30"]
+
+# Feature extraction settings
+feature_extraction:
+  output_format: "h5"  # h5, csv, npy
+  include_timestamps: true
+  include_labels: true
+  batch_size: 32 

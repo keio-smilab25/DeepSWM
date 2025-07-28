@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description"
+        content="Deep Space Weather Model: Long-Range Solar Flare Prediction from Multi-Wavelength Images">
+    <meta name="keywords"
+        content="AI for science, solar flare prediction, deep SSM, spatio-temporal dependencies, masked autoencoders, solar images, flarebench, Deep Space Weather Model">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Deep Space Weather Model: Long-Range Solar Flare Prediction from Multi-Wavelength Images
+    </title>
+
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-PYVRSFMDRL');
+    </script>
+
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+    <link rel="stylesheet" href="./front/css/bulma.min.css">
+    <link rel="stylesheet" href="./front/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="./front/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="./front/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="./front/css/index.css">
+    <link rel="stylesheet" href="./front/css/stars.css">
+    <link rel="stylesheet" href="./front/css/cosmic-table.css">
+    <link rel="stylesheet" href="front/css/shooting-stars.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="./front/js/fontawesome.all.min.js"></script>
+    <script src="./front/js/bulma-carousel.min.js"></script>
+    <script src="./front/js/bulma-slider.min.js"></script>
+    <script src="./front/js/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="./front/script_hourly.js"></script>
+
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+    <style>
+        @media screen and (min-width: 769px) {
+
+            #sensor-top:target~.solar-grid {
+                animation: none;
+                transition: all 0.5s ease;
+            }
+
+            #sensor-top:target~.solar-grid {
+                animation: none;
+                transition: all 0.5s ease;
+            }
+
+            #sensor-bottom:target~.solar-grid {
+                animation: none;
+                transition: all 0.5s ease;
+            }
+
+            #sensor-bottom:target~.solar-grid {
+                animation: none;
+                transition: all 0.5s ease;
+            }
+        }
+
+        /* Interactive Section Styles */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(0, 0, 51, 0.95), rgba(0, 20, 100, 0.9));
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .interactive-controls {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .control-group label {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        #utc-hour {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #ffffff;
+            padding: 0.5rem;
+            font-size: 1rem;
+        }
+
+        #load-button {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        #load-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .solar-display {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .prediction-panel {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .solar-images-panel {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .aia-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .channel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .channel div {
+            color: #ffffff;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .channel img {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            object-fit: cover;
+        }
+
+        .prediction-display {
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .prediction-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .prediction-time {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.8;
+        }
+
+        .prediction-class {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border: 2px solid;
+        }
+
+        .x-class {
+            border-color: #ff4444;
+        }
+
+        .m-class {
+            border-color: #ff8800;
+        }
+
+        .c-class {
+            border-color: #00cc44;
+        }
+
+        .o-class {
+            border-color: #4488ff;
+        }
+
+        .class-label {
+            font-size: 3rem;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .class-description {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .probability {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ff6b35;
+        }
+
+        .prediction-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .detail-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .detail-item.active {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+        }
+
+        .no-data {
+            color: #ff6b35;
+            font-size: 1.2rem;
+            font-style: italic;
+            margin: 2rem 0;
+        }
+
+        #timestamp {
+            color: #ff6b35;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .flatpickr-calendar {
+            background: rgba(0, 0, 51, 0.95) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-radius: 10px !important;
+            color: #ffffff !important;
+        }
+
+        .flatpickr-day {
+            color: #ffffff !important;
+        }
+
+        .flatpickr-day:hover {
+            background: rgba(255, 107, 53, 0.3) !important;
+        }
+
+        .flatpickr-day.selected {
+            background: linear-gradient(45deg, #ff6b35, #f7931e) !important;
+        }
+
+        @media (max-width: 768px) {
+            .solar-display {
+                grid-template-columns: 1fr;
+            }
+
+            .interactive-controls {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .aia-grid {
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(4, 1fr);
+            }
+
+            .prediction-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="starry-background">
+        <div class="star tiny white"></div>
+        <div class="star small blue"></div>
+        <div class="star medium white"></div>
+        <div class="star small yellow"></div>
+        <div class="star tiny white"></div>
+        <div class="star medium blue"></div>
+        <div class="star small white"></div>
+        <div class="star large yellow"></div>
+        <div class="star medium white"></div>
+        <div class="star small pink"></div>
+        <div class="star tiny white"></div>
+        <div class="star extra-large blue"></div>
+        <div class="star small white"></div>
+        <div class="star medium yellow"></div>
+        <div class="star tiny white"></div>
+        <div class="star small blue"></div>
+        <div class="star medium white"></div>
+        <div class="star small yellow"></div>
+        <div class="star tiny white"></div>
+        <div class="star medium blue"></div>
+        <div class="star small white"></div>
+        <div class="star large yellow"></div>
+        <div class="star medium white"></div>
+        <div class="star small pink"></div>
+        <div class="star tiny white"></div>
+        <div class="star extra-large blue"></div>
+        <div class="star small white"></div>
+        <div class="star medium yellow"></div>
+        <div class="star tiny white"></div>
+        <div class="star small blue"></div>
+        <div class="star medium white"></div>
+        <div class="star small yellow"></div>
+        <div class="star tiny white"></div>
+        <div class="star medium blue"></div>
+        <div class="star small white"></div>
+        <div class="star large yellow"></div>
+        <div class="star medium white"></div>
+        <div class="star small pink"></div>
+        <div class="star tiny white"></div>
+        <div class="star extra-large blue"></div>
+        <div class="star small white"></div>
+        <div class="star medium yellow"></div>
+        <div class="star tiny white"></div>
+        <div class="star small blue"></div>
+        <div class="star medium white"></div>
+
+        <!-- 流れ星 -->
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var video = document.getElementById("summaryVideo");
+            if (video) video.currentTime = 1;
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            var videos = document.querySelectorAll('.fast-video');
+            videos.forEach(function (video) {
+                video.playbackRate = 0.5;
+            });
+        });
+    </script>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-body">
+            <div class="container is-max-widescreen">
+                <div class="columns is-centered">
+                    <div class="column has-text-centered">
+                        <h1 class="title is-1 publication-title">Deep Space Weather Model: Long-Range Solar Flare
+                            Prediction from
+                            Multi-Wavelength Images</h1>
+                        <span class="is-size-4 has-text-weight-bold">
+                            <a class="venue-link" href="https://iccv.thecvf.com/">ICCV 2025</a><br><br></span>
+
+                        <div class="publication-authors">
+                            <div class="is-size-5">
+                                <span class="author-block has-text-primary-dark">
+                                    Anonymous submission</span>
+                            </div>
+
+                            <div>
+                                <br>
+                            </div>
+                        </div>
+
+                        <div class="column has-text-centered">
+                            <div class="publication-links">
+                                <span class="link-block">
+                                    <a href="" class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon">
+                                            <i class="ai ai-arxiv"></i>
+                                        </span>
+                                        <span>arXiv</span>
+                                    </a>
+                                </span>
+
+                                <!-- Dataset Link. -->
+                                <span class="link-block">
+                                    <a href="./front/data/flarebench_dataset.zip" download
+                                        class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon">
+                                            <i class="fas fa-database"></i>
+                                        </span>
+                                        <span>Dataset</span>
+                                    </a>
+                                </span>
+
+                                <!-- Code Link. -->
+                                <span class="link-block">
+                                    <a href="" class="external-link button is-normal is-rounded is-dark">
+                                        <span class="icon">
+                                            <i class="fab fa-github"></i>
+                                        </span>
+                                        <span>Code</span>
+                                    </a>
+                                </span>
+
+                            </div>
+                        </div>
+                        <p>
+                            We will set the links as soon as possible.
+                            <br>
+                            At this moment, our code and additional report are provided as supplementary materials.</b>
+                            <br>
+                            <br>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="hero teaser">
+        <div class="container is-max-desktop">
+            <div class="hero-body">
+                <div class="content-container"
+                    style="background-color: rgba(0, 0, 51, 0.85); padding: 20px; border-radius: 15px;">
+                    <figure class="image">
+                        <div
+                            style="background-color: white; padding: 15px; border-radius: 10px; display: inline-block;">
+                            <img src="./front/images/eye-catch.png" alt="eye-catch.png" width="400" height="auto" />
+                        </div>
+                    </figure>
+                    <br>
+                    <h2 class="subtitle has-text-centered" style="color: #ffffff;">
+                        <b>Deep Space Weather Model</b> accurately and reliably predicts solar flares by capturing
+                        long-range
+                        spatio-temporal
+                        dependencies and
+                        fine-grained features in multi-channel solar image series.
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Abstract. -->
+    <section class="section abstract-section">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                    <h2 class="title is-3 abstract-title">Abstract</h2>
+                    <div class="content has-text-justified">
+                        <p>
+                            <span class="keyword">Accurate, reliable solar flare prediction</span> is crucial for
+                            mitigating potential
+                            disruptions to critical
+                            infrastructure, while predicting solar flares remains a significant challenge. Existing
+                            methods based on
+                            heuristic physical features often lack <span class="keyword">representation learning</span>
+                            from solar
+                            images. On the other hand,
+                            end-to-end learning approaches struggle to model <span class="keyword">long-range temporal
+                                dependencies</span> in solar images.
+                        </p>
+                        <p>
+                            In this study, we propose <span class="keyword">Deep Space Weather Model (Deep SWM)</span>,
+                            which is based
+                            on multiple <span class="keyword">deep state space
+                                models</span> for handling both ten-channel solar images and long-range spatio-temporal
+                            dependencies.
+                            Deep SWM also features a <span class="keyword">sparse masked autoencoder</span>, a novel
+                            pretraining
+                            strategy that employs a <span class="keyword">two-phase
+                                masking approach</span> to preserve crucial regions such as sunspots while compressing
+                            spatial
+                            information.
+                        </p>
+                        <p>
+                            Furthermore, we built <span class="keyword">FlareBench</span>, a new public benchmark for
+                            solar flare
+                            prediction covering a full
+                            <span class="keyword">11-year solar activity cycle</span>, to validate our method.
+                        </p>
+                        <p>
+                            Our method <span class="keyword">outperformed baseline methods</span> and even <span
+                                class="keyword">human
+                                expert performance</span> on standard metrics in terms of
+                            performance and reliability.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--/ Abstract. -->
+
+    <!-- Interactive Solar Flare Prediction Section -->
+    <section class="section">
+        <div class="container is-max-desktop">
+            <div class="interactive-section">
+                <div class="columns is-centered has-text-centered">
+                    <div class="column is-full">
+                        <h2 class="title is-3" style="color: #ffffff; margin-bottom: 2rem;">
+                            Interactive Solar Flare Prediction Demo
+                        </h2>
+
+                        <div class="interactive-controls">
+                            <div class="control-group">
+                                <label>Select Date:</label>
+                                <input id="date-picker" type="text" readonly style="display: none;">
+                            </div>
+
+                            <div class="control-group">
+                                <label for="utc-hour">UTC Hour:</label>
+                                <select id="utc-hour"></select>
+                            </div>
+
+                            <button id="load-button">Load Prediction</button>
+                        </div>
+
+                        <div class="solar-display">
+                            <div class="prediction-panel">
+                                <div id="prediction-result">
+                                    <div class="prediction-display">
+                                        <h2 class="prediction-title">24-Hour Solar Flare Prediction</h2>
+                                        <div class="no-data">Select a date and time to view prediction</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="solar-images-panel">
+                                <h3 id="timestamp"
+                                    style="color: #ff6b35; font-weight: 600; margin-bottom: 1rem; text-align: center;">
+                                    Solar Images (Hourly Animation)
+                                </h3>
+                                <div class="aia-grid" id="aia-grid">
+                                    <!-- Solar images will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- solar observation videos -->
+    <section class="section">
+        <div class="container is-max-desktop">
+            <div class="solar-grid-container">
+                <div class="section-title-container">
+                    <h2 class="section-title">Multi-Wavelength Solar Observations</h2>
+                    <p class="section-subtitle">Exploring the Sun's dynamic nature through different wavelengths,
+                        revealing the
+                        complex interactions between plasma, magnetic fields, and solar phenomena</p>
+                </div>
+
+                <div class="solar-grid">
+                    <!-- AIA 94 -->
+                    <div class="solar-card">
+                        <div class="solar-video-container">
+                            <video class="solar-video" autoplay muted loop playsinline>
+                                <source src="./front/videos/solar/aia_0094.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="solar-card-content">
+                            <div class="wavelength-title">AIA 94 Å</div>
+                            <div class="wavelength-description">Hot corona & solar flares</div>
+                            <div class="wavelength-category">Extreme Ultraviolet (EUV)</div>
+                        </div>
+                    </div>
+
+                    <!-- AIA 131 -->
+                    <div class="solar-card">
+                        <div class="solar-video-container">
+                            <video class="solar-video" autoplay muted loop playsinline>
+                                <source src="./front/videos/solar/aia_0131.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="solar-card-content">
+                            <div class="wavelength-title">AIA 131 Å</div>
+                            <div class="wavelength-description">Flaring regions</div>
+                            <div class="wavelength-category">Extreme Ultraviolet (EUV)</div>
+                        </div>
+                    </div>
+
+                    <!-- AIA 171 -->
+                    <div class="solar-card">
+                        <div class="solar-video-container">
+                            <video class="solar-video" autoplay muted loop playsinline>
+                                <source src="./front/videos/solar/aia_0171.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="solar-card-content">
+                            <div class="wavelength-title">AIA 171 Å</div>
+                            <div class="wavelength-description">Quiet corona & loops</div>
+                            <div class="wavelength-category">Extreme Ultraviolet (EUV)</div>
+                        </div>
+                    </div>
+
+                    <!-- AIA 193 -->
+                    <div class="solar-card">
+                        <div class="solar-video-container">
+                            <video class="solar-video" autoplay muted loop playsinline>
+                                <source src="./front/videos/solar/aia_0193.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="solar-card-content">
+                            <div class="wavelength-title">AIA 193 Å</div>
+                            <div class="wavelength-description">Corona & hot spots</div>
+                            <div class="wavelength-category">Extreme Ultraviolet (EUV)</div>
+                        </div>
+                    </div>
+
+                    <!-- AIA 211 -->
+                    <div class="solar-card">
+                        <div class="solar-video-container">
+                            <video class="solar-video" autoplay muted loop playsinline>
+                                <source src="./front/videos/solar/aia_0211.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="solar-card-content">
+                            <div class="wavelength-title">AIA 211 Å</div>
+                            <div class="wavelength-description">Active regions</div>
+                            <div class="wavelength-category">Extreme Ultraviolet (EUV)</div>
+                        </div>
+                    </div>
+
+                    <!-- AIA 304 -->
+                    <div class="solar-card">
+                        <div class="solar-video-container">
+                            <video class="solar-video" autoplay muted loop playsinline>
+                                <source src="./front/videos/solar/aia_0304.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="solar-card-content">
+                            <div class="wavelength-title">AIA 304 Å</div>
+                            <div class="wavelength-description">Chromosphere & transition</div>
+                            <div class="wavelength-category">Extreme Ultraviolet (EUV)</div>
+                        </div>
+                    </div>
+
+                    <!-- AIA 335 -->
+                    <div class="solar-card">
+                        <div class="solar-video-container">
+                            <video class="solar-video" autoplay muted loop playsinline>
+                                <source src="./front/videos/solar/aia_0335.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="solar-card-content">
+                            <div class="wavelength-title">AIA 335 Å</div>
+                            <div class="wavelength-description">Active regions</div>
+                            <div class="wavelength-category">Extreme Ultraviolet (EUV)</div>
+                        </div>
+                    </div>
+
+                    <!-- AIA 1600 -->
+                    <div class="solar-card">
+                        <div class="solar-video-container">
+                            <video class="solar-video" autoplay muted loop playsinline>
+                                <source src="./front/videos/solar/aia_1600.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="solar-card-content">
+                            <div class="wavelength-title">AIA 1600 Å</div>
+                            <div class="wavelength-description">Upper photosphere</div>
+                            <div class="wavelength-category">Ultraviolet (UV)</div>
+                        </div>
+                    </div>
+
+                    <!-- AIA 4500 -->
+                    <div class="solar-card">
+                        <div class="solar-video-container">
+                            <video class="solar-video" autoplay muted loop playsinline>
+                                <source src="./front/videos/solar/aia_4500.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="solar-card-content">
+                            <div class="wavelength-title">AIA 4500 Å</div>
+                            <div class="wavelength-description">Photosphere</div>
+                            <div class="wavelength-category">Visible Light</div>
+                        </div>
+                    </div>
+
+                    <!-- HMI -->
+                    <div class="solar-card">
+                        <div class="solar-video-container">
+                            <video class="solar-video" autoplay muted loop playsinline>
+                                <source src="./front/videos/solar/hmi.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="solar-card-content">
+                            <div class="wavelength-title">HMI Magnetogram</div>
+                            <div class="wavelength-description">Solar magnetic field</div>
+                            <div class="wavelength-category">High-resolution</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="solar-description">
+                    <p>
+                        Data sources: AIA level 1 images in nine wavelengths (EUV: 94Å, 131Å, 171Å, 193Å, 211Å, 304Å,
+                        335Å; UV:
+                        1600Å; Visible: 4500Å) and high-resolution (1K) magnetograms from the HMI, obtained from JSOC.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--/ solar observation videos -->
+
+    <div class="main-content">
+        <!-- Overview section -->
+        <section class="section">
+            <div class="container is-max-desktop">
+                <div class="columns is-centered has-text-centered">
+                    <div class="column is-four-fifths">
+                        <h2 class="title is-3">Overview</h2>
+                        <h2 class="title is-4 has-text-justified">Problem Setting</h2>
+                        <p class="content has-text-justified">
+                            We tackle the challenging task of <b>predicting the class of the largest solar flare within
+                                a 24-hour
+                                horizon</b> using full-disk multi-wavelength solar images. This is formulated as a
+                            multi-class
+                            classification problem with significant real-world implications for space weather
+                            forecasting.
+                        </p>
+                        <div class="cosmic-table-container" style="margin-top: 0.5rem;">
+                            <div class="cosmic-table">
+                                <div class="cosmic-table-header">
+                                    <div class="cosmic-cell">Flare Class</div>
+                                    <div class="cosmic-cell">Peak X-ray Flux (I) [W/m<sup>2</sup>]</div>
+                                </div>
+                                <div class="cosmic-table-row">
+                                    <div class="cosmic-cell">X</div>
+                                    <div class="cosmic-cell"><i>I</i> > 10<sup>-4</sup></div>
+                                </div>
+                                <div class="cosmic-table-row">
+                                    <div class="cosmic-cell">M</div>
+                                    <div class="cosmic-cell">10<sup>-5</sup>
+                                        < <i>I</i> ≤ 10<sup>-4</sup>
+                                    </div>
+                                </div>
+                                <div class="cosmic-table-row">
+                                    <div class="cosmic-cell">C</div>
+                                    <div class="cosmic-cell">10<sup>-6</sup>
+                                        < <i>I</i> ≤ 10<sup>-5</sup>
+                                    </div>
+                                </div>
+                                <div class="cosmic-table-row">
+                                    <div class="cosmic-cell">O</div>
+                                    <div class="cosmic-cell"><i>I</i> ≤ 10<sup>-6</sup></div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="content has-text-justified">
+                            Correspondence between flare classes and peak X-ray flux intensities.
+                        </p>
+                        <div class="columns is-centered">
+                        </div>
+                    </div>
+                </div>
+
+                <section class="section" style="max-width: 100%; padding-left: 0; padding-right: 0;">
+                    <div class="container" style="max-width: 100%; width: 100%;">
+                        <div class="columns is-centered has-text-centered">
+                            <div class="column is-full-width">
+                                <h2 class="title is-4 has-text-justified">Model Architecture</h2>
+                                <p class="content has-text-justified">
+                                    We propose Deep SWM, a novel architecture extending deep state-space models for
+                                    classifying the
+                                    maximum
+                                    solar flare class within a 24-hour horizon, utilizing HMI and multi-wavelength AIA
+                                    images.
+                                </p>
+
+                                <figure class="image" style="max-width: none; overflow-x: auto; margin: 2.5rem 0;">
+                                    <div
+                                        style="background-color: white; padding: 15px; border-radius: 10px; text-align: center; width: 100%; max-width: 1500px; margin: 0 auto;">
+                                        <img src="./front/images/model.png" alt="Deep SWM Architecture"
+                                            style="width: 100%; height: auto;" />
+                                    </div>
+                                </figure>
+
+                                <div class="content has-text-justified">
+                                    <p>
+                                        The novelties of our proposed method are as follows:
+                                    </p>
+
+                                    <div class="key-innovations">
+                                        <div class="innovation-item"
+                                            style="display: flex; margin-bottom: 2rem; background: linear-gradient(135deg, rgba(0,0,51,0.8), rgba(0,20,100,0.7)); border-radius: 15px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                                            <div class="innovation-content">
+                                                <h3 class="innovation-title"
+                                                    style="color: #ffffff; font-size: 1.25rem; margin-bottom: 0.75rem; font-weight: 600;">
+                                                    Solar
+                                                    Spatial Encoder (SSE)</h3>
+                                                <p style="color: #e0e0e0; margin: 0; line-height: 1.6;">Comprising the
+                                                    Depth-wise Channel
+                                                    Selective Module (DCSM) and the Spatio-Temporal State-Space
+                                                    Module (ST-SSM). The DCSM selectively weights multi-wavelength image
+                                                    channels to emphasize
+                                                    features relevant to solar events, while the ST-SSM efficiently
+                                                    captures long-range
+                                                    spatio-temporal dependencies in the solar images.</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="innovation-item"
+                                            style="display: flex; margin-bottom: 2rem; background: linear-gradient(135deg, rgba(0,0,51,0.8), rgba(0,20,100,0.7)); border-radius: 15px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                                            <div class="innovation-content">
+                                                <h3 class="innovation-title"
+                                                    style="color: #ffffff; font-size: 1.25rem; margin-bottom: 0.75rem; font-weight: 600;">
+                                                    Long-range Temporal SSM (LT-SSM)</h3>
+                                                <p style="color: #e0e0e0; margin: 0; line-height: 1.6;">Extends deep
+                                                    state-space models to
+                                                    effectively model temporal dependencies exceeding the solar
+                                                    rotation period within the intermediate features obtained from the
+                                                    pretraining stage. This
+                                                    allows
+                                                    the LT-SSM to efficiently capture long-range relationships that are
+                                                    crucial for solar flare
+                                                    prediction.</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="innovation-item"
+                                            style="display: flex; margin-bottom: 2rem; background: linear-gradient(135deg, rgba(0,0,51,0.8), rgba(0,20,100,0.7)); border-radius: 15px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                                            <div class="innovation-content">
+                                                <h3 class="innovation-title"
+                                                    style="color: #ffffff; font-size: 1.25rem; margin-bottom: 0.75rem; font-weight: 600;">
+                                                    Sparse
+                                                    MAE</h3>
+                                                <p style="color: #e0e0e0; margin: 0; line-height: 1.6;">A pretraining
+                                                    strategy tailored for
+                                                    solar images that extends the Masked Autoencoder (MAE).
+                                                    Sparse MAE addresses the challenge of sparse, yet crucial,
+                                                    information regions in solar images
+                                                    (e.g., sunspots) using a novel two-phase masking approach. This
+                                                    ensures that these crucial
+                                                    regions
+                                                    are less likely to be completely masked during pretraining, leading
+                                                    to improved intermediate
+                                                    feature representations.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <figure class="image" style="margin-bottom: 0;">
+                                        <div
+                                            style="background-color: white; padding: 5px; border-radius: 10px; text-align: center; width: 70%; max-width: 800px; margin: 0 auto;">
+                                            <img src="./front/images/pretraining.png" alt="Sparse MAE Pretraining"
+                                                style="width: 100%; height: auto; margin-bottom: 0;" />
+                                        </div>
+                                        <figcaption class="content has-text-justified"
+                                            style="margin-top: 0.5rem; margin-bottom: 0;">
+                                            (a) An example of an original image. (b) Visualization of patches with
+                                            the top α% highest standard deviation highlighted, often corresponding to
+                                            sunspot regions. (c)
+                                            Illustration of the spatial-level masking. (d) Reconstructed image by our
+                                            proposed Sparse MAE.
+                                        </figcaption>
+                                    </figure>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-full-width">
+                    <div class="content-block">
+                        <h2 class="title is-4 has-text-justified">Quantitative Results</h2>
+                        <p class="content has-text-justified">
+                            Our method outperforms all baseline approaches across all metrics and even surpasses human
+                            expert
+                            performance, demonstrating the effectiveness of our approach for solar flare prediction.
+                        </p>
+
+                        <p class="content has-text-justified table-caption">
+                            <b>Table 1:</b> Comparison of our method with state-of-the-art approaches and human experts.
+                            Higher values are better for all metrics.
+                        </p>
+
+                        <div class="cosmic-table-container mega-wide no-title">
+                            <div class="cosmic-table">
+                                <div class="cosmic-table-header">
+                                    <div class="cosmic-cell method-cell">Method</div>
+                                    <div class="cosmic-cell period-cell">Test period</div>
+                                    <div class="cosmic-cell metric-cell">GMGS↑</div>
+                                    <div class="cosmic-cell metric-cell">BSS≥M↑</div>
+                                    <div class="cosmic-cell metric-cell">TSS≥M↑</div>
+                                </div>
+
+                                <div class="cosmic-table-row">
+                                    <div class="cosmic-cell method-cell">
+                                        Flare Transformer w/o PF <a href="#" class="citation">[35]</a>
+                                    </div>
+                                    <div class="cosmic-cell period-cell">2014-2017 (4 years)</div>
+                                    <div class="cosmic-cell metric-cell">0.220±0.116</div>
+                                    <div class="cosmic-cell metric-cell">-1.770±0.225</div>
+                                    <div class="cosmic-cell metric-cell">0.198±0.371</div>
+                                </div>
+
+                                <div class="cosmic-table-row">
+                                    <div class="cosmic-cell method-cell">
+                                        DeFN-R <a href="#" class="citation">[54]</a>
+                                    </div>
+                                    <div class="cosmic-cell period-cell">2014-2015 (2 years)</div>
+                                    <div class="cosmic-cell metric-cell">0.302±0.055</div>
+                                    <div class="cosmic-cell metric-cell">0.036±0.982</div>
+                                    <div class="cosmic-cell metric-cell">0.279±0.162</div>
+                                </div>
+
+                                <div class="cosmic-table-row">
+                                    <div class="cosmic-cell method-cell">CNN-LSTM</div>
+                                    <div class="cosmic-cell period-cell">2019-12-01 – 2022-11-30 (3 years)</div>
+                                    <div class="cosmic-cell metric-cell">0.315±0.166</div>
+                                    <div class="cosmic-cell metric-cell">0.272±0.259</div>
+                                    <div class="cosmic-cell metric-cell">0.330±0.306</div>
+                                </div>
+
+                                <div class="cosmic-table-row">
+                                    <div class="cosmic-cell method-cell">
+                                        DeFN <a href="#" class="citation">[53]</a>
+                                    </div>
+                                    <div class="cosmic-cell period-cell">2014-2015 (2 years)</div>
+                                    <div class="cosmic-cell metric-cell">0.375±0.141</div>
+                                    <div class="cosmic-cell metric-cell">0.022±0.782</div>
+                                    <div class="cosmic-cell metric-cell">0.413±0.150</div>
+                                </div>
+
+                                <div class="cosmic-table-row">
+                                    <div class="cosmic-cell method-cell">
+                                        Flare Transformer <a href="#" class="citation">[35]</a>
+                                    </div>
+                                    <div class="cosmic-cell period-cell">2014-2017 (4 years)</div>
+                                    <div class="cosmic-cell metric-cell">0.503±0.059</div>
+                                    <div class="cosmic-cell metric-cell">0.082±0.974</div>
+                                    <div class="cosmic-cell metric-cell">0.530±0.112</div>
+                                </div>
+
+                                <div class="cosmic-table-row highlight-row">
+                                    <div class="cosmic-cell method-cell">Ours</div>
+                                    <div class="cosmic-cell period-cell">2019-12-01 – 2022-11-30 (3 years)</div>
+                                    <div class="cosmic-cell metric-cell highlight-value">0.582±0.032</div>
+                                    <div class="cosmic-cell metric-cell highlight-value">0.334±0.299</div>
+                                    <div class="cosmic-cell metric-cell highlight-value">0.543±0.074</div>
+                                </div>
+
+                                <div class="cosmic-table-row human-row">
+                                    <div class="cosmic-cell method-cell">
+                                        Human experts <a href="#" class="citation">[38, 51]</a>
+                                    </div>
+                                    <div class="cosmic-cell period-cell">2000-2015 (16 years)</div>
+                                    <div class="cosmic-cell metric-cell">0.48</div>
+                                    <div class="cosmic-cell metric-cell">0.16</div>
+                                    <div class="cosmic-cell metric-cell">0.50</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h2 class="title is-4 has-text-justified" style="margin-top: 40px;">Qualitative Results</h2>
+
+                        <figure class="image" style="margin-bottom: 20px; margin-top: 30px;">
+                            <div
+                                style="background-color: white; padding: 15px; border-radius: 10px; text-align: center; width: 100%; margin: 0 auto;">
+                                <img src="./front/images/qualitative_results.png"
+                                    alt="Qualitative results for flare predictions"
+                                    style="width: 100%; height: auto;" />
+                            </div>
+                            <figcaption class="content has-text-justified" style="margin-top: 15px;">
+                                Qualitative results for flare predictions. (a) and (b) illustrate successful X-class
+                                predictions, (c)
+                                illustrates a successful M-class prediction, and (d) illustrates a failed X-class
+                                prediction. For each
+                                case, we present Extreme Ultraviolet images at 131 Å, 193 Å, and 304 Å from time
+                                <i>t-k</i> to <i>t</i>,
+                                the ground truth (GT) label, and the predictions from the baseline and our proposed
+                                method.
+                            </figcaption>
+                        </figure>
+
+                        <figure class="image" style="margin-top: 40px; margin-bottom: 20px;">
+                            <div
+                                style="background-color: white; padding: 15px; border-radius: 10px; text-align: center; width: 70%; max-width: 800px; margin: 0 auto;">
+                                <img src="./front/images/qualitative_results_pretraining_supp.png"
+                                    alt="Reconstruction results" style="width: 100%; height: auto;" />
+                            </div>
+                            <figcaption class="content has-text-justified" style="margin-top: 15px;">
+                                Reconstruction results obtained from the baseline MAE (ρ=0.5) and our proposed Sparse
+                                MAE. Rows (a),
+                                (b), (c), (d), (e), and (f) show 94 Å, 171 Å, 304 Å, 1600 Å, 4500 Å AIA, and HMI images,
+                                respectively,
+                                captured three hours before an upcoming X-class flare. Columns (i), (ii), (iii), (iv),
+                                and (v) present
+                                the original image, the baseline reconstruction, a visualization of patches with the top
+                                α% highest
+                                standard deviation highlighted, the spatial-level masking of the Sparse MAE, and the
+                                reconstruction of
+                                the Sparse MAE, respectively.
+                            </figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+    </div>
+    </section>
+
+    <div class="night-sky">
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+    </div>
+
+    <div class="section-banner-sun">
+        <div id="star-1">
+            <div class="curved-corner-star">
+                <div id="curved-corner-bottomright"></div>
+                <div id="curved-corner-bottomleft"></div>
+            </div>
+            <div class="curved-corner-star">
+                <div id="curved-corner-topright"></div>
+                <div id="curved-corner-topleft"></div>
+            </div>
+        </div>
+
+        <div id="star-2">
+            <div class="curved-corner-star">
+                <div id="curved-corner-bottomright"></div>
+                <div id="curved-corner-bottomleft"></div>
+            </div>
+            <div class="curved-corner-star">
+                <div id="curved-corner-topright"></div>
+                <div id="curved-corner-topleft"></div>
+            </div>
+        </div>
+
+        <div id="star-3">
+            <div class="curved-corner-star">
+                <div id="curved-corner-bottomright"></div>
+                <div id="curved-corner-bottomleft"></div>
+            </div>
+            <div class="curved-corner-star">
+                <div id="curved-corner-topright"></div>
+                <div id="curved-corner-topleft"></div>
+            </div>
+        </div>
+
+        <div id="star-4">
+            <div class="curved-corner-star">
+                <div id="curved-corner-bottomright"></div>
+                <div id="curved-corner-bottomleft"></div>
+            </div>
+            <div class="curved-corner-star">
+                <div id="curved-corner-topright"></div>
+                <div id="curved-corner-topleft"></div>
+            </div>
+        </div>
+
+        <div id="star-5">
+            <div class="curved-corner-star">
+                <div id="curved-corner-bottomright"></div>
+                <div id="curved-corner-bottomleft"></div>
+            </div>
+            <div class="curved-corner-star">
+                <div id="curved-corner-topright"></div>
+                <div id="curved-corner-topleft"></div>
+            </div>
+        </div>
+
+        <div id="star-6">
+            <div class="curved-corner-star">
+                <div id="curved-corner-bottomright"></div>
+                <div id="curved-corner-bottomleft"></div>
+            </div>
+            <div class="curved-corner-star">
+                <div id="curved-corner-topright"></div>
+                <div id="curved-corner-topleft"></div>
+            </div>
+        </div>
+
+        <div id="star-7">
+            <div class="curved-corner-star">
+                <div id="curved-corner-bottomright"></div>
+                <div id="curved-corner-bottomleft"></div>
+            </div>
+            <div class="curved-corner-star">
+                <div id="curved-corner-topright"></div>
+                <div id="curved-corner-topleft"></div>
+            </div>
+        </div>
+    </div>
+
+    <section class="section" id="BibTeX">
+        <div class="container is-max-desktop content">
+            <h2 class="title">BibTeX</h2>
+            <pre><code>coming soon</code></pre>
+        </div>
+    </section>
+
+    <footer class="footer"
+        style="background: linear-gradient(to bottom, rgba(0,0,51,0.95), rgba(0,0,51,1)); padding: 3rem 1.5rem; margin-top: 4rem;">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-8">
+                    <div class="content has-text-centered" style="color: rgba(255,255,255,0.7);">
+                        <p style="margin-bottom: 1rem;">
+                            Website template borrowed from
+                            <a href="https://github.com/nerfies/nerfies.github.io"
+                                style="color: #00d1b2; text-decoration: none; transition: color 0.3s ease;">
+                                NeRFies
+                            </a>
+                        </p>
+                        <p style="font-size: 0.9rem; color: rgba(255,255,255,0.5);">
+                            Licensed under a
+                            <a href="http://creativecommons.org/licenses/by-sa/4.0/"
+                                style="color: #00d1b2; text-decoration: none; transition: color 0.3s ease;">
+                                Creative Commons Attribution-ShareAlike 4.0 International License
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        @media screen and (min-width: 769px) {
+
+            #sensor-top:target~.solar-grid {
+                animation: none;
+                transition: all 0.5s ease;
+            }
+
+            #sensor-top:target~.solar-grid {
+                animation: none;
+                transition: all 0.5s ease;
+            }
+
+            #sensor-bottom:target~.solar-grid {
+                animation: none;
+                transition: all 0.5s ease;
+            }
+
+            #sensor-bottom:target~.solar-grid {
+                animation: none;
+                transition: all 0.5s ease;
+            }
+        }
+    </style>
+
+</body>
+
+</html>
