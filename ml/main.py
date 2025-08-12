@@ -11,6 +11,7 @@ warnings.filterwarnings('ignore', category=UserWarning, module='torchvision')
 
 from src.experiments.main.experiment import ExperimentManager
 from src.experiments.utils.main.config import parse_params
+from src.experiments.utils.main.inference import run_main_inference
 
 
 def setup_main_args():
@@ -24,7 +25,7 @@ def setup_main_args():
     parser.add_argument("--data_root", type=str, default="/data2/01flare24", help="Data root directory")
     
     # Mode and stage
-    parser.add_argument("--mode", type=str, default="train", choices=["train", "test"], help="Mode")
+    parser.add_argument("--mode", type=str, default="train", choices=["train", "test", "inference"], help="Mode")
     parser.add_argument("--stage", type=int, default=1, choices=[1, 2], help="Training stage")
     parser.add_argument("--imbalance", action="store_true", help="Use imbalanced dataset")
     
@@ -45,6 +46,9 @@ def setup_main_args():
     parser.add_argument("--resume_from_checkpoint", type=str, help="Resume from checkpoint")
     parser.add_argument("--wandb", action="store_true", help="Use Weights & Biases")
     parser.add_argument("--debug", action="store_true", help="Enable debug mode")
+
+    # Inference-specific
+    parser.add_argument("--datetime", type=str, help="YYYYMMDD_HHMMSS: run inference for a single timestamp")
     
     return parser.parse_args()
 
@@ -52,6 +56,11 @@ def setup_main_args():
 def main():
     # Parse arguments locally
     args = setup_main_args()
+
+    # Inference-only shortcut (no YAML parse/ExperimentManager needed)
+    if args.mode == "inference":
+        run_main_inference(args)
+        return
     
     # Parse YAML parameters and merge with args
     args, _ = parse_params(args, dump=True)
@@ -67,9 +76,7 @@ def main():
 
             # Stage 2: Training with reduced learning rate (optional)
             if hasattr(args, 'lr_for_2stage') and args.lr_for_2stage:
-                experiment.logger.info("Starting Stage 2 training")
-                experiment.current_stage = 2
-                experiment.reset_optimizer(lr=args.lr_for_2stage)
+                experiment.prepare_stage2_training(lr=args.lr_for_2stage)
                 experiment.train(epochs=args.epoch_for_2stage)
         
         # Save predictions after training completion

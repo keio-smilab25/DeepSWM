@@ -378,8 +378,6 @@ class LambdaResnet(nn.Module):  # Reference CNNModel in train.py
 class SparseMAE(nn.Module):
     """Sparse Masked Autoencoder with VisionTransformer backbone"""
 
-    # 512の場合はここ変える
-
     def __init__(
         self,
         img_size=256,

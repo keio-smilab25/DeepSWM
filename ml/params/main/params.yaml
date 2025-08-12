@@ -1,4 +1,4 @@
-epochs: 1
+epochs: 20
 lr: 0.00004
 weight_decay: 0.05
 bs: 32
@@ -36,7 +36,7 @@ dataset:
   force_recalc_stats: false
 
 model:
-  selected: CNNLSTM
+  selected: DeepSWM
   models:
     FlareTransformer:
       architecture_params: 
