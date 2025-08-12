@@ -27,19 +27,115 @@ def create_optimizer(
     """
     # Create optimizer
     if optimizer_name.lower() == "adamw":
-        optimizer = torch.optim.AdamW(
-            model.parameters(),
-            lr=lr,
-            weight_decay=weight_decay,
-            betas=(0.9, 0.999)
-        )
+        # More aggressive approach to find ALL problematic parameters
+        decay_params = []
+        no_decay_params = []
+        
+        print("Comprehensive parameter analysis for weight_decay compatibility...")
+        for name, param in model.named_parameters():
+            exclude_from_decay = False
+            reason = ""
+            
+            # Exclude all potentially problematic patterns:
+            
+            # 1. All S5SSM related parameters (not just B)
+            if '.s5.seq.' in name:
+                exclude_from_decay = True
+                reason = "S5SSM parameter"
+            
+            # 2. Any tensor with dimension 2 that might cause conflicts
+            elif len(param.shape) >= 2 and 2 in param.shape:
+                # Only keep simple bias vectors and common classification patterns
+                if (len(param.shape) == 1 and param.shape[0] == 2) or \
+                   (len(param.shape) == 2 and param.shape in [torch.Size([2, 2]), torch.Size([4, 2]), torch.Size([2, 4])]):
+                    pass  # These are safe
+                else:
+                    exclude_from_decay = True
+                    reason = f"tensor with dimension 2: {param.shape}"
+            
+            # 3. Any 3D tensor (these often cause issues)
+            elif len(param.shape) == 3:
+                exclude_from_decay = True
+                reason = f"3D tensor: {param.shape}"
+            
+            if exclude_from_decay:
+                print(f"Excluding {name}: {reason}")
+                no_decay_params.append(param)
+            else:
+                decay_params.append(param)
+        
+        print(f"Analysis complete: {len(decay_params)} decay, {len(no_decay_params)} no-decay")
+        
+        # Create optimizer with parameter groups
+        if no_decay_params:
+            optimizer = torch.optim.AdamW([
+                {'params': decay_params, 'weight_decay': weight_decay},
+                {'params': no_decay_params, 'weight_decay': 0.0}
+            ], lr=lr, betas=(0.9, 0.999))
+            print(f"AdamW with parameter groups - effective weight_decay: {weight_decay} for {len(decay_params)}/{len(decay_params)+len(no_decay_params)} parameters")
+        else:
+            optimizer = torch.optim.AdamW(
+                model.parameters(),
+                lr=lr,
+                weight_decay=weight_decay,
+                betas=(0.9, 0.999)
+            )
+            print(f"AdamW with uniform weight_decay={weight_decay}")
     elif optimizer_name.lower() == "adam":
-        optimizer = torch.optim.Adam(
-            model.parameters(),
-            lr=lr,
-            weight_decay=weight_decay,
-            betas=(0.9, 0.999)
-        )
+        # More aggressive approach to find ALL problematic parameters
+        decay_params = []
+        no_decay_params = []
+        
+        print("Comprehensive parameter analysis for weight_decay compatibility...")
+        for name, param in model.named_parameters():
+            exclude_from_decay = False
+            reason = ""
+            
+            # Exclude all potentially problematic patterns:
+            
+            # 1. All S5SSM related parameters (not just B)
+            if '.s5.seq.' in name:
+                exclude_from_decay = True
+                reason = "S5SSM parameter"
+            
+            # 2. Any tensor with dimension 2 that might cause conflicts
+            elif len(param.shape) >= 2 and 2 in param.shape:
+                # Only keep simple bias vectors and common classification patterns
+                if (len(param.shape) == 1 and param.shape[0] == 2) or \
+                   (len(param.shape) == 2 and param.shape in [torch.Size([2, 2]), torch.Size([4, 2]), torch.Size([2, 4])]):
+                    pass  # These are safe
+                else:
+                    exclude_from_decay = True
+                    reason = f"tensor with dimension 2: {param.shape}"
+            
+            # 3. Any 3D tensor (these often cause issues)
+            elif len(param.shape) == 3:
+                exclude_from_decay = True
+                reason = f"3D tensor: {param.shape}"
+            
+            if exclude_from_decay:
+                print(f"Excluding {name}: {reason}")
+                no_decay_params.append(param)
+            else:
+                decay_params.append(param)
+        
+        print(f"Analysis complete: {len(decay_params)} decay, {len(no_decay_params)} no-decay")
+        
+        # Create optimizer with parameter groups
+        if no_decay_params:
+            optimizer = torch.optim.Adam([
+                {'params': decay_params, 'weight_decay': weight_decay},
+                {'params': no_decay_params, 'weight_decay': 0.0}
+            ], lr=lr, betas=(0.9, 0.999))
+            print(f"Adam with parameter groups - effective weight_decay: {weight_decay} for {len(decay_params)}/{len(decay_params)+len(no_decay_params)} parameters")
+        else:
+            optimizer = torch.optim.Adam(
+                model.parameters(),
+                lr=lr,
+                weight_decay=weight_decay,
+                betas=(0.9, 0.999)
+            )
+            print(f"Adam with uniform weight_decay={weight_decay}")
     elif optimizer_name.lower() == "sgd":
         optimizer = torch.optim.SGD(
             model.parameters(),

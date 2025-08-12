@@ -30,9 +30,9 @@ def train_epoch(
     count = 0
 
     for X, h, y in tqdm(train_dl):
-        if count > 1:
-            break
-        count += 1
+        # if count > 1:
+        #     break
+        # count += 1
         X, h, y = X.to(args.device), h.to(args.device), y.to(args.device)
         optimizer.zero_grad()
         output, _ = model(X, h)
@@ -98,9 +98,9 @@ def eval_epoch(
 
     with torch.no_grad():
         for batch in tqdm(val_dl):
-            if count > 1:
-                break
-            count += 1
+            # if count > 1:
+            #     break
+            # count += 1
             if len(batch) == 4:  # If file_paths are included
                 X, h, y, file_paths = batch
             else:  # Normal case with 3 elements

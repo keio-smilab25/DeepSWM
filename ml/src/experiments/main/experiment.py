@@ -27,7 +27,7 @@ class ExperimentManager:
 
     def __init__(self, args: Namespace):
         # Setup logging
-        self.logger = setup_logging_main(args.trial_name)
+        self.logger = setup_logging_main(args.trial_name, args.fold)
         self.logger.info(f"Using fold {args.fold}")
         self.logger.info("Dataset configuration:")
         self.logger.info(f"force_preprocess: {args.dataset.get('force_preprocess')}")
@@ -133,6 +133,11 @@ class ExperimentManager:
         # Analyze model complexity
         analyze_model_complexity(model, args.device, self.logger)
         get_model_summary(model, self.logger)
+        
+        if sample is not None:
+            self.log_writer.print_model_summary(model, args, sample)
+        else:
+            self.log_writer.print_model_summary(model)
 
         # Create optimizer and scheduler
         optimizer, scheduler = create_optimizer(
@@ -280,6 +285,13 @@ class ExperimentManager:
         self.logger.info(f"Starting stage {self.current_stage} training")
         self.logger.info(f"Learning rate: {lr}, Epochs: {epochs}")
 
+        # Save initial checkpoint for stage 2 to ensure it exists
+        if self.current_stage == 2 and start_epoch == 0:
+            initial_checkpoint_path = save_checkpoint(
+                self.model, self.optimizer, self.best_valid_gmgs, self.current_stage, self.args
+            )
+            self.logger.info(f"Saved initial stage 2 checkpoint: {initial_checkpoint_path}")
+
         for epoch in range(start_epoch, epochs):
             if self.should_stop:
                 self.logger.info("Early stopping triggered")
@@ -386,8 +398,12 @@ class ExperimentManager:
         # Run test
         self.test(save_qualitative=save_qualitative)
         
+        # Print detailed test results
+        self.log_writer.print_best_metrics(self, f"stage{self.current_stage}")
+        
         # Save predictions
-        self.save_predictions()
+        results_dir = self.save_predictions()
+        self.logger.info(f"Test predictions saved to: {results_dir}")
         
         self.logger.info("Test completed successfully")
 
@@ -439,6 +455,43 @@ class ExperimentManager:
         )
 
         self.losser = Losser(loss_config, self.args.device)
+
+    def prepare_stage2_training(self, lr: Optional[float] = None):
+        """Prepare for stage 2 training by loading best stage 1 checkpoint and resetting early stopping"""
+        self.logger.info("Preparing for Stage 2 training")
+        self.current_stage = 2
+        
+        # Load best stage 1 checkpoint
+        stage1_checkpoint_path = os.path.join(
+            "checkpoints", "main", f"{self.args.trial_name}_stage1_best.pth"
+        )
+        
+        if os.path.exists(stage1_checkpoint_path):
+            self.logger.info(f"Loading stage 1 best checkpoint: {stage1_checkpoint_path}")
+            config, self.best_valid_gmgs, _ = load_checkpoint(
+                self.model,
+                self.optimizer,
+                stage1_checkpoint_path,
+                self.args.device,
+                scheduler=self.scheduler,
+            )
+            self.logger.info(f"Loaded stage 1 checkpoint with GMGS: {self.best_valid_gmgs}")
+            
+            # Reset early stopping for stage 2 but keep the best metric value from stage 1
+            self.best_metric_value = self.best_valid_gmgs
+            self.patience_counter = 0
+            self.should_stop = False
+        else:
+            self.logger.warning(f"Stage 1 checkpoint not found: {stage1_checkpoint_path}")
+        
+        # Reload dataloaders with imbalance=False for stage 2 (enables balanced batch sampler)
+        self.logger.info("Reloading dataloaders for stage 2 with balanced batch sampling")
+        dataloaders, _ = prepare_dataloaders(self.args, self.args.debug, imbalance=False)
+        self.train_dl, self.valid_dl, self.test_dl = dataloaders 
+        self.dataloaders = dataloaders
+        
+        # Reset optimizer with stage 2 learning rate
+        self.reset_optimizer(lr=lr)
 
     def print_best_metrics(self, stage: str = "1st"):
         """Output evaluation metrics for the best model"""

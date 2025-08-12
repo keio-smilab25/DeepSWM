@@ -92,6 +92,10 @@ def get_model_summary(model: torch.nn.Module, logger: logging.Logger, input_size
         logger.info(f"Model Summary:\n{model_summary}")
     except Exception as e:
         logger.warning(f"Could not generate model summary: {e}")
+        try:
+            model_summary = summary(model, input_size=(1, 4, 10, 256, 256), verbose=0)
+        except Exception as e2:
+            logger.info(f"Model structure:\n{model}")
 
 
 def save_args_to_file(args, filepath: str):
