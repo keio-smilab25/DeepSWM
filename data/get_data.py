@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import requests
 import sys
@@ -26,7 +27,7 @@ XRS_URL = "https://services.swpc.noaa.gov/json/goes/primary/xrays-7-day.json"
 def fetch_and_process_aia_image(wavelength, dt):
     """
     Fetch an AIA FITS image for the given wavelength and datetime,
-    downsample to 256×256, then crop, flip, and restore to 256×256.
+    downsample to 256x256, then crop, flip, and restore to 256x256.
     
     Args:
         wavelength (str): AIA wavelength (e.g., '0171', '0193')
@@ -61,7 +62,7 @@ def fetch_and_process_aia_image(wavelength, dt):
         # Apply gaussian blur before downsampling
         blurred = cv2.GaussianBlur(img, ksize=(5, 5), sigmaX=1.5, sigmaY=1.5)
 
-        # Downsample to 256×256
+        # Downsample to 256x256
         img256 = cv2.resize(blurred, (256, 256), interpolation=cv2.INTER_AREA)
 
         # Crop margins to remove artifacts
@@ -71,7 +72,7 @@ def fetch_and_process_aia_image(wavelength, dt):
         # Flip vertically to match reference orientation
         cropped = cropped[::-1, :]
 
-        # Resize back to 256×256
+        # Resize back to 256x256
         zh = img256.shape[0] / cropped.shape[0]
         zw = img256.shape[1] / cropped.shape[1]
         img_fixed = zoom(cropped, (zh, zw), order=1)
@@ -113,7 +114,7 @@ def download_hmi_image(dt):
         # Apply gaussian blur before downsampling
         blurred = cv2.GaussianBlur(img, ksize=(5, 5), sigmaX=1.5, sigmaY=1.5)
 
-        # Downsample to 256×256
+        # Downsample to 256x256
         img256 = cv2.resize(blurred, (256, 256), interpolation=cv2.INTER_AREA)
 
         # Remove text area at bottom by overwriting with zeros

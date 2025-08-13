@@ -133,7 +133,7 @@ def build_sparsemae(in_chans: int, checkpoint_path: str, device: torch.device, r
 
     cleaned = {}
     for k, v in state_dict.items():
-        cleaned[k[7:]] = v if not k.startswith("module.") else v
+        cleaned[k[7:] if k.startswith("module.") else k] = v
     missing, unexpected = model.load_state_dict(cleaned, strict=False)
     if missing:
         print(f"[warn] Missing keys: {len(missing)} (showing first 5): {missing[:5]}")

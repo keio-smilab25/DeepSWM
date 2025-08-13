@@ -31,17 +31,29 @@ if [[ $(date -d "$START" +%s) -gt $(date -d "$END" +%s) ]]; then echo "START > E
 current="$START"
 
 while [[ $(date -d "$current" +%s) -le $(date -d "$END" +%s) ]]; do
-  ts=$(date -u -d "$current" +"%Y%m%d_%H0000")
+  ts=$(date -d "$current" +"%Y%m%d_%H0000")
   echo "[pretrain-batch] $current (ts=$ts)"
-  python ml/pretrain.py \
+  
+  if python ml/pretrain.py \
     --mode inference \
     --datetime "$ts" \
     --fold "$FOLD" \
     --data_root ml/datasets \
     --cuda_device "$CUDA" \
-    --pretrain_checkpoint ml/checkpoints/pretrain/ours.pth || true
-  current=$(date -u -d "$current +1 hour" +"%Y-%m-%d %H:%M")
+    --pretrain_checkpoint ml/checkpoints/pretrain/SparseMAE.pth; then
+    echo "✅ Successfully processed $current"
+  else
+    echo "⚠️  Failed to process $current (continuing...)"
+  fi
+  
+  # Use Python to reliably increment the time by 1 hour
+  current=$(python3 -c "
+from datetime import datetime, timedelta
+dt = datetime.strptime('$current', '%Y-%m-%d %H:%M')
+dt += timedelta(hours=1)
+print(dt.strftime('%Y-%m-%d %H:%M'))
+")
   sleep 0.1
 done
 
-echo "Done batch pretrain inference range." 
+echo "✅ Batch pretrain inference completed successfully for range: $START to $END" 
