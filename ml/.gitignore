@@ -1,4 +1,3 @@
-checkpoints/
 wandb/
 __pycache__/
 output_dir/
@@ -8,15 +7,12 @@ output_dir/
 *.fits
 *.npz
 .jsonl
-.pth
 .json
 *.log
 .*.txt
-*.h5
 *.pkl
 *.npy
 *.png
-*.pth
 *.gz
 *.log
 *.pickle
@@ -31,17 +27,7 @@ output_dir/
 *.tar.xz
 *.txt
 *.svg
-datasets/all_data/
-datasets/all_data_hour_preprocessed/
-datasets/flare_data/
-datasets/flare_compressed/
-datasets/all_features/
-datasets/data/
-datasets/xrs_data/
-SegMamba
-hdf*
-checkpoints/
-logs/
+
 
 pyproject.toml
 type_info.json
@@ -51,11 +37,3 @@ view.sh
 results/
 
 *.pdf
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.bmp
-*.tiff
-*.ico
-*.webp
