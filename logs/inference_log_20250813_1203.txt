@@ -1,0 +1,34 @@
+Starting inference execution at Wed Aug 13 12:03:55 UTC 2025
+=== Starting Inference Pipeline ===
+Current datetime: 081312
+Previous datetime: 081311
+Inference datetime: 20250813_120000
+[CURRENT] Fetching data for: 081312
+Traceback (most recent call last):
+  File "/home/runner/work/DeepSWM/DeepSWM/data/get_data.py", line 3, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+[CURRENT] Warning: Data fetch failed for 081312
+[PREVIOUS] Fetching data for: 081311
+Traceback (most recent call last):
+  File "/home/runner/work/DeepSWM/DeepSWM/data/get_data.py", line 3, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+[PREVIOUS] Warning: Data fetch failed for 081311
+[FEATURES] Extracting features for: 20250813_120000
+Traceback (most recent call last):
+  File "/home/runner/work/DeepSWM/DeepSWM/ml/pretrain.py", line 10, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+[FEATURES] Warning: Feature extraction failed
+[INFERENCE] Running inference for: 20250813_120000
+Traceback (most recent call last):
+  File "/home/runner/work/DeepSWM/DeepSWM/ml/main.py", line 6, in <module>
+    import torch.multiprocessing as mp
+ModuleNotFoundError: No module named 'torch'
+[INFERENCE] Warning: Inference failed
+=== Execution Summary ===
+Total errors encountered: 4
+Execution completed at: Wed Aug 13 12:03:55 UTC 2025
+⚠️  Workflow completed with 4 warnings
+Check the log file: inference_log_20250813_1203.txt for details
