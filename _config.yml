@@ -1,0 +1,23 @@
+# GitHub Pages configuration
+exclude:
+  - ml/
+  - scripts/
+  - requirements.txt
+  - logs/
+  - README.md
+
+# Include specific files for GitHub Pages
+include:
+  - index.html
+  - data/pred_24.json
+  - data/images/
+  - web/
+
+# Plugins
+plugins:
+  - jekyll-relative-links
+
+# Relative links configuration
+relative_links:
+  enabled: true
+  collections: false 
