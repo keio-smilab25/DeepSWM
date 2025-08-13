@@ -35,9 +35,10 @@ if [[ $(date -d "$START" +%s) -gt $(date -d "$END" +%s) ]]; then echo "START > E
 current="$START"
 
 while [[ $(date -d "$current" +%s) -le $(date -d "$END" +%s) ]]; do
-  ts_full=$(date -u -d "$current" +"%Y%m%d_%H0000")
+  ts_full=$(date -d "$current" +"%Y%m%d_%H0000")
   echo "[main-batch] $current (ts=$ts_full)"
-  python ml/main.py \
+  
+  if python ml/main.py \
     --params ml/params/main/params.yaml \
     --trial_name batch \
     --fold "$FOLD" \
@@ -46,9 +47,20 @@ while [[ $(date -d "$current" +%s) -le $(date -d "$END" +%s) ]]; do
     --history "$HISTORY" \
     --mode inference \
     --resume_from_checkpoint "$CKPT" \
-    --datetime "$ts_full" || true
-  current=$(date -u -d "$current +1 hour" +"%Y-%m-%d %H:%M")
+    --datetime "$ts_full"; then
+    echo "✅ Successfully processed $current"
+  else
+    echo "⚠️  Failed to process $current (continuing...)"
+  fi
+  
+  # Use Python to reliably increment the time by 1 hour
+  current=$(python3 -c "
+from datetime import datetime, timedelta
+dt = datetime.strptime('$current', '%Y-%m-%d %H:%M')
+dt += timedelta(hours=1)
+print(dt.strftime('%Y-%m-%d %H:%M'))
+")
   sleep 0.1
 done
 
-echo "Done batch main inference range." 
+echo "✅ Batch main inference completed successfully for range: $START to $END" 

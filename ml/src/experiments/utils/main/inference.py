@@ -114,17 +114,17 @@ def run_main_inference(args) -> None:
     ml_dir = _ascend(this_file, 5)  # <repo>/ml
     repo_root = os.path.dirname(ml_dir)
 
-    # Resolve data_root
+    # Resolve data_root (relative paths are repo-root based, like pretrain)
     if os.path.isabs(args.data_root):
         data_root = args.data_root
     else:
-        data_root = os.path.normpath(os.path.join(ml_dir, args.data_root))
+        data_root = os.path.normpath(os.path.join(repo_root, args.data_root))
 
     data_path = os.path.join(data_root, "all_data_hours")
     feature_dir = os.path.join(data_root, "all_features")
 
-    # Stats under repo_root/datasets/main/fold{fold}/train
-    stats_train_dir = os.path.join(repo_root, "datasets", "main", f"fold{args.fold}", "train")
+    # Stats under ml_dir/datasets/main/fold{fold}/train
+    stats_train_dir = os.path.join(ml_dir, "datasets", "main", f"fold{args.fold}", "train")
 
     means, stds = load_stats(stats_train_dir)
 
@@ -164,7 +164,7 @@ def run_main_inference(args) -> None:
 
     ckpt = args.resume_from_checkpoint
     if not os.path.isabs(ckpt):
-        ckpt = os.path.join(ml_dir, ckpt)
+        ckpt = os.path.join(repo_root, ckpt)
     load_main_checkpoint(model, ckpt, device)
     model.eval()
 
