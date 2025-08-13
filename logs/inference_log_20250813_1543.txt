@@ -1,0 +1,71 @@
+Starting inference execution at Wed Aug 13 15:43:16 UTC 2025
+=== Starting Inference Pipeline ===
+Current datetime: 081315
+Previous datetime: 081314
+Inference datetime: 20250813_150000
+[CURRENT] Fetching data for: 081315
+🚀 Starting data collection for: 2025-08-13 15:00 UTC
+✅ XRS updated: 2025081315 → 2.6886812065640697e-06
+✅ XRS updated: 2025081314 → 1.7022478004946606e-06
+📡 Fetching solar observation data...
+  Fetching AIA 0094Å...
+    ✅ PNG saved: data/images/0813/15_aia_0094.png
+  Fetching AIA 0131Å...
+    ✅ PNG saved: data/images/0813/15_aia_0131.png
+  Fetching AIA 0171Å...
+    ✅ PNG saved: data/images/0813/15_aia_0171.png
+  Fetching AIA 0193Å...
+    ✅ PNG saved: data/images/0813/15_aia_0193.png
+  Fetching AIA 0211Å...
+    ✅ PNG saved: data/images/0813/15_aia_0211.png
+  Fetching AIA 0304Å...
+    ✅ PNG saved: data/images/0813/15_aia_0304.png
+  Fetching AIA 0335Å...
+    ✅ PNG saved: data/images/0813/15_aia_0335.png
+  Fetching AIA 1600Å...
+    ✅ PNG saved: data/images/0813/15_aia_1600.png
+  Fetching AIA 4500Å...
+    ✅ PNG saved: data/images/0813/15_aia_4500.png
+  Fetching HMI magnetogram...
+    ✅ PNG saved: data/images/0813/15_hmi.png
+💾 Saving H5 file for ML inference...
+✅ H5 saved: ./ml/datasets/all_data_hours/20250813_150000.h5
+🎉 Data collection completed for 2025-08-13 15:00 UTC
+[CURRENT] Data fetch successful for 081315
+[PREVIOUS] Fetching data for: 081314
+🚀 Starting data collection for: 2025-08-13 14:00 UTC
+✅ XRS updated: 2025081314 → 1.7022478004946606e-06
+✅ XRS updated: 2025081313 → 1.2263739108675509e-06
+✅ All files already exist for 2025-08-13 14:00
+[PREVIOUS] Data fetch successful for 081314
+[FEATURES] Extracting features for: 20250813_150000
+Traceback (most recent call last):
+  File "/home/runner/work/DeepSWM/DeepSWM/ml/pretrain.py", line 14, in <module>
+    from src.experiments.pretrain.experiment import PretrainExperimentManager
+  File "/home/runner/work/DeepSWM/DeepSWM/ml/src/experiments/pretrain/experiment.py", line 22, in <module>
+    from src.experiments.utils.pretrain.logs import PretrainLogger
+  File "/home/runner/work/DeepSWM/DeepSWM/ml/src/experiments/utils/pretrain/logs.py", line 4, in <module>
+    from torch.utils.tensorboard import SummaryWriter
+  File "/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/torch/utils/tensorboard/__init__.py", line 1, in <module>
+    import tensorboard
+ModuleNotFoundError: No module named 'tensorboard'
+[FEATURES] Warning: Feature extraction failed
+[INFERENCE] Running inference for: 20250813_150000
+Traceback (most recent call last):
+  File "/home/runner/work/DeepSWM/DeepSWM/ml/main.py", line 12, in <module>
+    from src.experiments.main.experiment import ExperimentManager
+  File "/home/runner/work/DeepSWM/DeepSWM/ml/src/experiments/main/experiment.py", line 20, in <module>
+    from src.experiments.utils.main.logs import Log, Logger, setup_logging_main
+  File "/home/runner/work/DeepSWM/DeepSWM/ml/src/experiments/utils/main/logs.py", line 11, in <module>
+    from src.experiments.utils.logs import setup_logging as common_setup_logging, setup_tensorboard, setup_wandb, close_wandb
+  File "/home/runner/work/DeepSWM/DeepSWM/ml/src/experiments/utils/logs.py", line 4, in <module>
+    from torch.utils.tensorboard import SummaryWriter
+  File "/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/torch/utils/tensorboard/__init__.py", line 1, in <module>
+    import tensorboard
+ModuleNotFoundError: No module named 'tensorboard'
+[INFERENCE] Warning: Inference failed
+=== Execution Summary ===
+Total errors encountered: 2
+Execution completed at: Wed Aug 13 15:43:32 UTC 2025
+⚠️  Workflow completed with 2 warnings
+Check the log file: inference_log_20250813_1543.txt for details
