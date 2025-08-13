@@ -68,7 +68,7 @@ def main():
 
     if args.mode == "train":
         if args.resume_from_checkpoint:
-            experiment.logger.info(f"Resuming from checkpoint: {args.resume_from_checkpoint}")
+            experiment.logger.info("Resuming from checkpoint: {}".format(args.resume_from_checkpoint))
             experiment.train()
         else:
             # Stage 1: Training with base model
@@ -89,7 +89,7 @@ def main():
         experiment.logger.info("Test completed")
     
     else:
-        experiment.logger.error(f"Unknown mode: {args.mode}")
+        experiment.logger.error("Unknown mode: {}".format(args.mode))
 
 
 if __name__ == "__main__":

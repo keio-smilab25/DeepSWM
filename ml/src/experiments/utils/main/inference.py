@@ -193,7 +193,22 @@ def run_main_inference(args) -> None:
     out_dir = os.path.join(repo_root, "data")
     os.makedirs(out_dir, exist_ok=True)
     out_path = os.path.join(out_dir, "pred_24.json")
+    
+    # Load existing predictions if file exists
+    existing_predictions = {}
+    if os.path.exists(out_path):
+        try:
+            with open(out_path, "r") as f:
+                existing_predictions = json.load(f)
+        except (json.JSONDecodeError, IOError):
+            # If file is corrupted or unreadable, start fresh
+            existing_predictions = {}
+    
+    # Update existing predictions with new ones
+    existing_predictions.update(predictions)
+    
+    # Save updated predictions
     with open(out_path, "w") as f:
-        json.dump(predictions, f, indent=2)
+        json.dump(existing_predictions, f, indent=2)
 
-    print(f"Saved predictions for {len(predictions)} timestamps to {out_path}") 
+    print(f"Updated predictions: added {len(predictions)} new, total {len(existing_predictions)} timestamps in {out_path}") 
