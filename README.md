@@ -1,10 +1,10 @@
 # [ICCV 25] Deep Space Weather Model: Long-Range Solar Flare Prediction from Multi-Wavelength Images 🛰️
 
 [![Conference](https://img.shields.io/badge/ICCV-2025-b_eaff.svg)](https://iccv.thecvf.com/)
-[![arXiv](https://img.shields.io/badge/arXiv-Coming%20Soon-b31b1b.svg)]()
+[![arXiv](https://img.shields.io/badge/arXiv-2508.07847-b31b1b.svg)](https://arxiv.org/abs/2508.07847)
 [![project](https://img.shields.io/badge/Project-Page-brightgreen.svg)](https://iccv25-6qrol.kinsta.page)
 [![paper](https://img.shields.io/badge/Paper-PDF-red.svg)]()
-[![data](https://img.shields.io/badge/Dataset-FlareBench-orange.svg)](https://huggingface.co/datasets/sh237/FlareBench)
+[![data](https://img.shields.io/badge/Dataset-FlareBench-orange.svg)]()
 
 PyTorch training code for **Deep Space Weather Model (Deep SWM)** - accurately and reliably predicts solar flares by capturing long-range spatio-temporal dependencies and fine-grained features in multi-channel solar image series.
 
@@ -87,10 +87,6 @@ Clone the repository and set up the environment:
 git clone https://github.com/username/DeepSWM.git
 cd DeepSWM
 
-# (Optional) Create and activate a conda environment
-conda create -n deepswm python=3.9
-conda activate deepswm
-
 # Install dependencies
 pip install -r requirements.txt
 ```
@@ -99,30 +95,7 @@ pip install -r requirements.txt
 
 ## 📊 Data Preparation
 
-Download the FlareBench dataset from [Hugging Face](https://huggingface.co/datasets/sh237/FlareBench):
-
-```bash
-# Install huggingface_hub if not already installed
-pip install huggingface_hub
-```
-
-```python
-# Download the dataset using Python
-from huggingface_hub import snapshot_download
-snapshot_download(repo_id="sh237/FlareBench", repo_type="dataset", local_dir="./flarebench_dataset")
-```
-
-Or use the command line:
-
-```bash
-huggingface-cli download sh237/FlareBench --repo-type dataset --local-dir ./flarebench_dataset
-```
-
-Convert the dataset to h5 format using the provided script:
-
-```bash
-python datasets/main/create_datasets.py
-```
+The FlareBench dataset will be made available on Zenodo upon publication. Please check back soon for download instructions.
 
 ## 🚀 Pre-training
 
