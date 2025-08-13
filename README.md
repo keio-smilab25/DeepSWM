@@ -6,7 +6,7 @@
 [![paper](https://img.shields.io/badge/Paper-PDF-red.svg)]()
 [![data](https://img.shields.io/badge/Dataset-FlareBench-orange.svg)]()
 
-PyTorch training code for **Deep Space Weather Model (Deep SWM)** - accurately and reliably predicts solar flares by capturing long-range spatio-temporal dependencies and fine-grained features in multi-channel solar image series.
+**Deep Space Weather Model (Deep SWM)** - accurately and reliably predicts solar flares by capturing long-range spatio-temporal dependencies and fine-grained features in multi-channel solar image series.
 
 <p align="center">
   <img src="web/images/eye-catch_white.png" alt="Deep SWM Overview">
@@ -54,13 +54,13 @@ Our model demonstrates state-of-the-art performance, outperforming existing meth
 
 | Method                            | Test Period                          | GMGS↑             | BSS<sub>≥M</sub>↑      | TSS<sub>≥M</sub>↑      |
 | --------------------------------- | ------------------------------------ | ----------------- | -------------------- | ----------------- |
-| Flare Transformer (w/o PF)   | 2014-2017 (4 years)                  | 0.220±0.116       | -1.770±0.225         | 0.198±0.371       |
-| DeFN-R                       | 2014-2015 (2 years)                  | 0.302±0.055       | 0.036±0.982          | 0.279±0.162       |
+| Flare Transformer (w/o PF) [1]   | 2014-2017 (4 years)                  | 0.220±0.116       | -1.770±0.225         | 0.198±0.371       |
+| DeFN-R [2]                       | 2014-2015 (2 years)                  | 0.302±0.055       | 0.036±0.982          | 0.279±0.162       |
 | CNN-LSTM                          | 2019-12-01 - 2022-11-30 (3 years)    | 0.315±0.166       | 0.272±0.259          | 0.330±0.306       |
-| DeFN                         | 2014-2015 (2 years)                  | 0.375±0.141       | 0.022±0.782          | 0.413±0.150       |
-| Flare Transformer (full)     | 2014-2017 (4 years)                  | 0.503±0.059       | 0.082±0.974          | 0.530±0.112       |
+| DeFN [3]                         | 2014-2015 (2 years)                  | 0.375±0.141       | 0.022±0.782          | 0.413±0.150       |
+| Flare Transformer (full) [1]     | 2014-2017 (4 years)                  | 0.503±0.059       | 0.082±0.974          | 0.530±0.112       |
 | **Ours** | **2019-12-01 - 2022-11-30 (3 years)**| **0.582±0.032** | **0.334±0.299** | **0.543±0.074** |
-| *Experts [38, 49]* | *2000-2015 (16 years)* | *0.48* | *0.16* | *0.50* |
+| *Experts* | *2000-2015 (16 years)* | *0.48* | *0.16* | *0.50* |
 
 </details>
 <br>
@@ -102,10 +102,11 @@ The FlareBench dataset will be made available on Zenodo upon publication. Please
 Run the pre-training process to learn representations from the magnetogram images:
 
 ```bash
-python pretrain.py --input_dir ./flarebench_dataset/all_data_hours \
-                  --output_dir ./flarebench_dataset/all_features \
+cd ml
+python pretrain.py --input_dir ../flarebench_dataset/all_data_hours \
+                  --output_dir ../flarebench_dataset/all_features \
                   --mode train \
-                  --data_root ./flarebench_dataset
+                  --data_root ../flarebench_dataset
 ```
 
 ## 🔍 Feature Extraction
@@ -113,16 +114,18 @@ python pretrain.py --input_dir ./flarebench_dataset/all_data_hours \
 Extract intermediate features from the pre-trained model:
 
 ```bash
-python pretrain.py --input_dir ./flarebench_dataset/all_data_hours \
-                  --output_dir ./flarebench_dataset/all_features \
+cd ml
+python pretrain.py --input_dir ../flarebench_dataset/all_data_hours \
+                  --output_dir ../flarebench_dataset/all_features \
                   --mode inference_all \
-                  --data_root ./flarebench_dataset
+                  --data_root ../flarebench_dataset
 ```
 
 Organize the extracted features by sample:
 
 ```bash
-python datasets/main/create_history_features.py
+cd ml
+python src/features/create_history_features.py
 ```
 
 ## 🎯 Training
@@ -130,13 +133,23 @@ python datasets/main/create_history_features.py
 Train the model using the extracted features:
 
 ```bash
+cd ml
 python main.py --params params/main/params.yaml \
               --imbalance \
               --fold 3 \
-              --data_root ./flarebench_dataset \
+              --data_root ../flarebench_dataset \
               --cuda_device 0
 
 ```
+
+## 📚 References
+
+[1] Kanta Kaneda et al. Flare transformer: Solar flare prediction using magnetograms and sunspot physical features. In ACCV, pages 1488–1503, 2022.
+
+[2] Naoto Nishizuka, Yuki Kubo, et al. Reliable probability forecast of solar flares: Deep flare net-reliable (defn-r). The Astrophysical Journal, 899(2):150, 2020.
+
+[3] N. Nishizuka, K. Sugiura, Y. Kubo, M. Den, and M. Ishii. Deep flare net (defn) model for solar flare prediction. The Astrophysical Journal, 858(2):113, 2018.
+
 
 ## 📝 Citation
 
