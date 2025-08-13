@@ -9,7 +9,7 @@
 PyTorch training code for **Deep Space Weather Model (Deep SWM)** - accurately and reliably predicts solar flares by capturing long-range spatio-temporal dependencies and fine-grained features in multi-channel solar image series.
 
 <p align="center">
-  <img src="web/images/eye-catch.png" alt="Deep SWM Overview">
+  <img src="web/images/eye-catch_white.png" alt="Deep SWM Overview">
 </p>
 
 ## 📖 Abstract
@@ -31,12 +31,12 @@ In this study, we propose **Deep Space Weather Model (Deep SWM)**, which is base
 - **FlareBench Dataset**: A new public benchmark covering a complete 11-year solar cycle for robust and unbiased evaluation.
 
 <p align="center">
-  <img src="web/images/model.png" width="800px" alt="Deep SWM Architecture">
+  <img src="web/images/model_white.png" width="800px" alt="Deep SWM Architecture">
   <em><br>Deep SWM Architecture: Solar Spatial Encoder (SSE) and Long-range Temporal SSM (LT-SSM)</em>
 </p>
 
 <p align="center">
-  <img src="web/images/pretraining.png" width="600px" alt="Sparse MAE Pretraining">
+  <img src="web/images/pretraining_white.png" width="600px" alt="Sparse MAE Pretraining">
   <em><br>Our Sparse MAE pre-training preserves critical sunspot regions better than standard methods.</em>
 </p>
 
@@ -69,7 +69,7 @@ Our model demonstrates state-of-the-art performance, outperforming existing meth
   <br>
   Deep SWM successfully predicts high-impact X-class flares where baseline models fail.
   <p align="center">
-    <img src="web/images/qualitative_results.png" alt="Qualitative results for flare predictions">
+    <img src="web/images/qualitative_results_white.png" alt="Qualitative results for flare predictions">
   </p>
   <em>Qualitative results showing successful predictions of X-class and M-class solar flares.</em>
 </details>
