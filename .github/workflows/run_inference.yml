@@ -1,0 +1,78 @@
+name: inference
+
+on:
+  schedule:
+    - cron: "20 * * * *" # Run at 20 minutes past every hour
+    - cron: "50 * * * *" # Run at 50 minutes past every hour
+  workflow_dispatch: # Manual execution
+
+jobs:
+  inference:
+    runs-on: ubuntu-latest
+    permissions: # Grant write permissions to token
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      
+      - name: Cache pip
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies (if requirements.txt exists)
+        run: |
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            echo "No requirements.txt found; skipping pip install"
+          fi
+
+      - name: Make scripts executable
+        run: chmod +x scripts/inference.sh
+
+      - name: Create logs directory
+        run: mkdir -p logs
+
+      - name: Run inference pipeline
+        run: |
+          ./scripts/inference.sh
+
+      - name: Upload logs artifact (always)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: inference-logs
+          path: logs/
+          if-no-files-found: warn
+
+      - name: Commit and push results (always)
+        if: always()
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add data/ ml/datasets/ logs/ || echo "Warning: Some directories could not be added"
+          TIMESTAMP=$(date +"%H:%M")
+          git commit -m "🤖Update data and logs [auto] at $TIMESTAMP" || echo "No changes to commit"
+          git push || echo "Warning: Failed to push changes"
+
+      - name: Final status (always)
+        if: always()
+        run: |
+          echo "✅ Workflow completed at $(date)"
+          echo "📊 Check logs/ directory for detailed execution logs"
+          LATEST_LOG=$(ls -1t logs/inference_log_*.txt 2>/dev/null | head -1)
+          if [ -n "$LATEST_LOG" ]; then
+            echo "=== Latest execution summary ($LATEST_LOG) ==="
+            tail -n 50 "$LATEST_LOG"
+          else
+            echo "No log files were found in logs/"
+          fi 
+ 
