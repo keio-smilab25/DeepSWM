@@ -3,15 +3,11 @@ __pycache__/
 output_dir/
 
 .python-version
-*.csv
 *.fits
-*.npz
 .jsonl
 .json
 *.log
-.*.txt
-*.pkl
-*.npy
+*.txt
 *.png
 *.gz
 *.log
@@ -25,7 +21,6 @@ output_dir/
 *.bz2
 *.tar.gz
 *.tar.xz
-*.txt
 *.svg
 
 
