@@ -1,0 +1,86 @@
+Starting inference execution at Wed Aug 13 22:44:50 UTC 2025
+=== Starting Inference Pipeline ===
+Current datetime: 081322
+Previous datetime: 081321
+Inference datetime: 20250813_220000
+[CURRENT] Fetching data for: 081322
+🚀 Starting data collection for: 2025-08-13 22:00 UTC
+✅ XRS updated: 2025081322 → 2.599613935672096e-06
+✅ XRS updated: 2025081321 → 4.127241027163109e-06
+📡 Fetching solar observation data...
+  Fetching AIA 0094Å...
+    ✅ PNG saved: data/images/0813/22_aia_0094.png
+  Fetching AIA 0131Å...
+    ✅ PNG saved: data/images/0813/22_aia_0131.png
+  Fetching AIA 0171Å...
+    ✅ PNG saved: data/images/0813/22_aia_0171.png
+  Fetching AIA 0193Å...
+    ✅ PNG saved: data/images/0813/22_aia_0193.png
+  Fetching AIA 0211Å...
+    ✅ PNG saved: data/images/0813/22_aia_0211.png
+  Fetching AIA 0304Å...
+    ✅ PNG saved: data/images/0813/22_aia_0304.png
+  Fetching AIA 0335Å...
+    ✅ PNG saved: data/images/0813/22_aia_0335.png
+  Fetching AIA 1600Å...
+    ✅ PNG saved: data/images/0813/22_aia_1600.png
+  Fetching AIA 4500Å...
+    ✅ PNG saved: data/images/0813/22_aia_4500.png
+  Fetching HMI magnetogram...
+    ✅ PNG saved: data/images/0813/22_hmi.png
+💾 Saving H5 file for ML inference...
+✅ H5 saved: ./ml/datasets/all_data_hours/20250813_220000.h5
+🎉 Data collection completed for 2025-08-13 22:00 UTC
+[CURRENT] Data fetch successful for 081322
+[PREVIOUS] Fetching data for: 081321
+🚀 Starting data collection for: 2025-08-13 21:00 UTC
+✅ XRS updated: 2025081321 → 4.127241027163109e-06
+✅ XRS updated: 2025081320 → 4.37975086242659e-06
+📡 Fetching solar observation data...
+  Fetching AIA 0094Å...
+    ✅ PNG saved: data/images/0813/21_aia_0094.png
+  Fetching AIA 0131Å...
+    ✅ PNG saved: data/images/0813/21_aia_0131.png
+  Fetching AIA 0171Å...
+    ✅ PNG saved: data/images/0813/21_aia_0171.png
+  Fetching AIA 0193Å...
+    ✅ PNG saved: data/images/0813/21_aia_0193.png
+  Fetching AIA 0211Å...
+    ✅ PNG saved: data/images/0813/21_aia_0211.png
+  Fetching AIA 0304Å...
+    ✅ PNG saved: data/images/0813/21_aia_0304.png
+  Fetching AIA 0335Å...
+    ✅ PNG saved: data/images/0813/21_aia_0335.png
+  Fetching AIA 1600Å...
+    ✅ PNG saved: data/images/0813/21_aia_1600.png
+  Fetching AIA 4500Å...
+❌ AIA 4500 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2025/08/13/H2100/AIA20250813_210000_4500.fits
+    ⚠️  AIA 4500 data unavailable, skipping PNG
+  Fetching HMI magnetogram...
+    ✅ PNG saved: data/images/0813/21_hmi.png
+💾 Saving H5 file for ML inference...
+✅ H5 saved: ./ml/datasets/all_data_hours/20250813_210000.h5
+🎉 Data collection completed for 2025-08-13 21:00 UTC
+[PREVIOUS] Data fetch successful for 081321
+[FEATURES] Extracting features for: 20250813_220000
+Skip existing: /home/runner/work/DeepSWM/DeepSWM/ml/datasets/all_features/20250813_220000.h5
+[FEATURES] Feature extraction successful
+[INFERENCE] Running inference for: 20250813_220000
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/torch/amp/autocast_mode.py:250: UserWarning: User provided device_type of 'cuda', but CUDA is not available. Disabling
+  warnings.warn(
+Traceback (most recent call last):
+  File "/home/runner/work/DeepSWM/DeepSWM/ml/main.py", line 97, in <module>
+    main()
+  File "/home/runner/work/DeepSWM/DeepSWM/ml/main.py", line 62, in main
+    run_main_inference(args)
+  File "/home/runner/work/DeepSWM/DeepSWM/ml/src/experiments/utils/main/inference.py", line 129, in run_main_inference
+    means, stds = load_stats(stats_train_dir)
+  File "/home/runner/work/DeepSWM/DeepSWM/ml/src/experiments/utils/main/inference.py", line 17, in load_stats
+    raise FileNotFoundError(f"Stats not found under: {stats_dir}")
+FileNotFoundError: Stats not found under: /home/runner/work/DeepSWM/DeepSWM/ml/datasets/main/fold1/train
+[INFERENCE] Warning: Inference failed
+=== Execution Summary ===
+Total errors encountered: 1
+Execution completed at: Wed Aug 13 22:45:17 UTC 2025
+⚠️  Workflow completed with 1 warnings
+Check the log file: inference_log_20250813_2244.txt for details
