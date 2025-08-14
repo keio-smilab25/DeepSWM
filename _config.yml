@@ -1,23 +1,29 @@
 # GitHub Pages configuration
 exclude:
   - ml/
-  - scripts/
-  - requirements.txt
-  - logs/
+  - server.py
   - README.md
+  - LICENSE
+  - logs/
 
-# Include specific files for GitHub Pages
-include:
-  - index.html
-  - data/pred_24.json
-  - data/images/
-  - web/
-
-# Plugins
+# Theme
+remote_theme: pages-themes/minimal@v0.2.0
 plugins:
-  - jekyll-relative-links
+  - jekyll-remote-theme
 
-# Relative links configuration
-relative_links:
-  enabled: true
-  collections: false 
+# Site settings
+title: "Deep Space Weather Model"
+description: "Long-Range Solar Flare Prediction from Multi-Wavelength Images"
+
+# Enable client-side routing support
+include:
+  - _redirects
+
+# Markdown settings
+markdown: kramdown
+highlighter: rouge
+
+# Sass/CSS settings
+sass:
+  sass_dir: web/css
+  style: compressed 

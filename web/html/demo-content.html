@@ -1,0 +1,381 @@
+<!-- Demo Content - Abstract and Interactive Demo Section -->
+
+
+<!-- Interactive Solar Flare Prediction Section -->
+<section class="section">
+    <div class="container is-fluid" style="max-width: 100%; width: 100%; padding: 0 1rem;">
+        <div class="interactive-section">
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-full">
+                    <h2 class="title is-4" style="color: #ffffff; margin-bottom: 1rem;">
+                        Interactive Solar Flare Prediction Demo
+                    </h2>
+
+
+
+                    <div class="solar-display">
+                        <!-- Left: Calendar Panel -->
+                        <div class="calendar-panel">
+                            <h3 style="color: #ff6b35; font-weight: 600; margin-bottom: 1rem; text-align: center;">
+                                Select Date & Time
+                            </h3>
+                            <div style="margin-bottom: 1rem;">
+                                <input id="date-picker" type="text" readonly>
+                            </div>
+                            <div class="time-selector" style="text-align: center;">
+                                <label for="utc-hour"
+                                    style="color: #ffffff; font-weight: 600; display: block; margin-bottom: 0.5rem;">UTC
+                                    Hour:</label>
+                                <select id="utc-hour-panel"
+                                    style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; color: #ffffff; padding: 0.5rem; font-size: 1rem; width: 100%; margin-bottom: 1rem;"></select>
+                                <button id="load-button-panel"
+                                    style="background: #222a3a; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; color: white; padding: 0.75rem 1.5rem; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; width: 100%;">Load
+                                    Prediction</button>
+                            </div>
+                        </div>
+
+                        <!-- Center: Solar Images Panel -->
+                        <div class="solar-images-panel">
+                            <h3 id="timestamp"
+                                style="color: #ff6b35; font-weight: 600; margin-bottom: 1rem; text-align: center;">
+                                Solar Images (Hourly Animation)
+                            </h3>
+                            <div class="aia-grid" id="aia-grid">
+                                <!-- Solar images will be loaded here -->
+                            </div>
+                        </div>
+
+                        <!-- Right: Prediction Panel -->
+                        <div class="prediction-panel">
+                            <div id="prediction-result">
+                                <div class="prediction-display">
+                                    <div class="no-data">Select a date and time to view prediction</div>
+                                </div>
+                            </div>
+
+                            <!-- Performance Summary -->
+                            <div id="performance-summary" style="margin-top: 1.5rem;">
+                                <!-- Performance data will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Interactive Section Styles */
+    .interactive-section {
+        background: rgba(0, 0, 51, 0.92);
+        border-radius: 20px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        min-height: 85vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .interactive-controls {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        flex-shrink: 0;
+    }
+
+    .control-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .control-group label {
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    #utc-hour {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        color: #ffffff;
+        padding: 0.5rem;
+        font-size: 1rem;
+    }
+
+    #load-button {
+        background: linear-gradient(45deg, #ff6b35, #f7931e);
+        border: none;
+        border-radius: 12px;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+    }
+
+    #load-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+    }
+
+    .solar-display {
+        display: grid;
+        grid-template-columns: 0.7fr 8fr 0.6fr;
+        gap: 0.5rem;
+        flex: 1;
+        min-height: 0;
+        margin: 0;
+    }
+
+    .calendar-panel {
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 15px;
+        padding: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        min-width: 350px;
+        max-width: 400px;
+    }
+
+    #load-button-panel {
+        background: #222a3a;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    #load-button-panel:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .prediction-panel {
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 15px;
+        padding: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        min-width: 260px;
+        max-width: 300px;
+    }
+
+    .solar-images-panel {
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 15px;
+        padding: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+    }
+
+    .aia-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        gap: 0.6rem;
+        flex: 1;
+        min-height: 0;
+        margin-top: 0.5rem;
+    }
+
+
+
+    .channel {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .channel div {
+        color: #ffffff;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .channel img {
+        width: 100%;
+        aspect-ratio: 1;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        object-fit: cover;
+    }
+
+    .prediction-display {
+        text-align: center;
+        color: #ffffff;
+    }
+
+    .prediction-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 0.8rem;
+        color: #ff6b35;
+    }
+
+    .prediction-time {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+        opacity: 0.8;
+    }
+
+    .prediction-class {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 15px;
+        padding: 1rem;
+        margin: 0.8rem 0;
+        border: 2px solid;
+    }
+
+    .x-class {
+        border-color: #ff4444;
+    }
+
+    .m-class {
+        border-color: #ff8800;
+    }
+
+    .c-class {
+        border-color: #00cc44;
+    }
+
+    .o-class {
+        border-color: #4488ff;
+    }
+
+    .class-label {
+        font-size: 2.5rem;
+        font-weight: 800;
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .class-description {
+        font-size: 1.2rem;
+        opacity: 0.8;
+        display: block;
+        margin-bottom: 1rem;
+    }
+
+    .probability {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #ff6b35;
+    }
+
+    .prediction-details {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .detail-item {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.75rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+    }
+
+    .detail-item.active {
+        background: #ff6b35;
+    }
+
+    .no-data {
+        color: #ff6b35;
+        font-size: 1.1rem;
+        font-style: italic;
+        margin: 1rem 0;
+    }
+
+    #timestamp {
+        color: #ff6b35;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+
+    /* Prediction accuracy styling - fixing the color issue */
+    .prediction-accuracy {
+        border-radius: 8px;
+        margin: 1rem 0;
+        font-weight: 600;
+        text-align: center;
+        padding: 0.5rem;
+        color: white !important;
+    }
+
+    .prediction-accuracy.correct {
+        background: #2d5a3d !important;
+    }
+
+    .prediction-accuracy.incorrect {
+        background: #cc4444 !important;
+    }
+
+    .flatpickr-calendar {
+        background: rgba(0, 0, 51, 0.95) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 10px !important;
+        color: #ffffff !important;
+    }
+
+    .flatpickr-day {
+        color: #ffffff !important;
+    }
+
+    .flatpickr-day:hover {
+        background: rgba(255, 107, 53, 0.3) !important;
+    }
+
+    .flatpickr-day.selected {
+        background: linear-gradient(45deg, #ff6b35, #f7931e) !important;
+    }
+
+    @media (max-width: 1200px) {
+        .solar-display {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .aia-grid {
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+        }
+
+        .prediction-details {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .solar-display {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .aia-grid {
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+        }
+
+        .prediction-details {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

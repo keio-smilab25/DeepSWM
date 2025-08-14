@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Deep Space Weather Model</title>
+    <script>
+        // GitHub Pages SPA routing
+        // This handles client-side routing for GitHub Pages deployment
+
+        const currentPath = window.location.pathname;
+        const currentSearch = window.location.search;
+        const currentHash = window.location.hash;
+
+        console.log('404 handler - Current path:', currentPath);
+
+        // Handle /demo route
+        if (currentPath.startsWith('/demo')) {
+            console.log('Redirecting /demo to index.html#demo');
+            window.location.replace('/index.html#demo' + currentSearch);
+        }
+        // Handle repository-based GitHub Pages URLs (e.g., /DeepSWM/demo)
+        else if (currentPath.includes('/demo')) {
+            const basePath = currentPath.split('/demo')[0];
+            console.log('Redirecting repo-based /demo to index.html#demo');
+            window.location.replace(basePath + '/index.html#demo' + currentSearch);
+        }
+        // Handle other routes - redirect to home
+        else {
+            console.log('Redirecting to index.html');
+            window.location.replace('/index.html' + currentSearch + currentHash);
+        }
+    </script>
+</head>
+
+<body>
+    <div style="
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        height: 100vh; 
+        background: linear-gradient(to bottom, #000033, #000066);
+        color: white;
+        font-family: 'Google Sans', sans-serif;
+        text-align: center;
+    ">
+        <div>
+            <h1>🚀 Redirecting...</h1>
+            <p>Taking you to the Deep Space Weather Model</p>
+            <div style="margin-top: 20px;">
+                <div style="
+                    width: 40px; 
+                    height: 40px; 
+                    border: 4px solid #ff6b35; 
+                    border-top: 4px solid transparent; 
+                    border-radius: 50%; 
+                    animation: spin 1s linear infinite;
+                    margin: 0 auto;
+                "></div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</body>
+
+</html>
