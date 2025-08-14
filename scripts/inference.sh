@@ -61,7 +61,7 @@ run_inference() {
     echo "[INFERENCE] Running inference for: $datetime" | tee -a "$LOG_FILE"
     python ml/main.py \
         --params params/main/params.yaml \
-        --fold 1 \
+        --fold 2 \
         --data_root ./ml/datasets \
         --cuda_device -1 \
         --history 4 \

@@ -7,13 +7,13 @@
 set -euo pipefail
 
 if [ $# -lt 2 ]; then
-  echo "Usage: $0 START_DATETIME END_DATETIME [--fold 1] [--cuda -1] [--history 4] [--ckpt ml/checkpoints/main/DeepSWM.pth]"
+  echo "Usage: $0 START_DATETIME END_DATETIME [--fold 2] [--cuda -1] [--history 4] [--ckpt ml/checkpoints/main/DeepSWM.pth]"
   exit 1
 fi
 
 START="$1"; shift
 END="$1"; shift
-FOLD=1
+FOLD=2
 CUDA=-1
 HISTORY=4
 CKPT="ml/checkpoints/main/DeepSWM.pth"
