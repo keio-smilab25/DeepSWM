@@ -2,7 +2,7 @@
 
 [![Conference](https://img.shields.io/badge/ICCV-2025-b_eaff.svg)](https://iccv.thecvf.com/)
 [![arXiv](https://img.shields.io/badge/arXiv-2508.07847-b31b1b.svg)](https://arxiv.org/abs/2508.07847)
-[![project](https://img.shields.io/badge/Project-Page-brightgreen.svg)](https://iccv25-6qrol.kinsta.page)
+[![project](https://img.shields.io/badge/Project-Page-brightgreen.svg)](https://keio-smilab25.github.io/DeepSWM)
 [![paper](https://img.shields.io/badge/Paper-PDF-red.svg)]()
 [![data](https://img.shields.io/badge/Dataset-FlareBench-orange.svg)]()
 
