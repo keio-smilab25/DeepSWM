@@ -40,7 +40,9 @@ jobs:
           fi
 
       - name: Make scripts executable
-        run: chmod +x scripts/inference.sh
+        run: |
+          chmod +x scripts/inference.sh
+          chmod +x scripts/cleanup_old_data.sh
 
       - name: Create logs directory
         run: mkdir -p logs
@@ -49,6 +51,30 @@ jobs:
         timeout-minutes: 10
         run: |
           ./scripts/inference.sh
+
+      - name: Clean up old data (oldest hour)
+        timeout-minutes: 5
+        run: |
+          echo "🧹 Cleaning up oldest hour data to free space..."
+          ./scripts/cleanup_old_data.sh --mode=oldest-hour
+          echo "✅ Data cleanup completed"
+
+      - name: Weekly deep cleanup (Mondays only)
+        if: github.event.schedule == '20 * * * *' && github.event_name == 'schedule'
+        timeout-minutes: 15
+        run: |
+          # Run deep cleanup only on Mondays at the first scheduled time
+          DAY_OF_WEEK=$(date +%u)  # 1=Monday, 7=Sunday
+          HOUR=$(date +%H)
+          if [[ "$DAY_OF_WEEK" == "1" && "$HOUR" == "00" ]]; then
+            echo "🧹 Running weekly deep cleanup (removing data older than 3 months)..."
+            ./scripts/cleanup_old_data.sh --mode=cleanup --months=3
+            echo "🖼️ Running image cleanup (removing images older than 2 years)..."
+            ./scripts/cleanup_old_data.sh --mode=images --years=2
+            echo "✅ Weekly deep cleanup completed"
+          else
+            echo "⏭️ Skipping weekly cleanup (not Monday 00:xx)"
+          fi
 
       - name: Upload logs artifact (always)
         if: always()
