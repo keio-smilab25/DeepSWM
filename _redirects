@@ -1,2 +1,4 @@
-# Redirect all routes to index.html for client-side routing
+# Redirect all routes to index.html for client-side routing, except /demo
+# /demo will naturally serve web/demo/index.html
+!/demo*
 /*    /index.html   200 
