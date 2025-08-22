@@ -16,7 +16,7 @@ class SPAHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         
         # Handle /demo route specifically
         if path == '/demo' or path == '/demo/':
-            self.path = '/index.html'
+            self.path = '/web/demo/index.html'
             super().do_GET()
             return
         

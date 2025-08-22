@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Space Weather Model - Interactive Demo</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Bulma CSS for buttons -->
+    <link rel="stylesheet" href="/web/css/bulma.min.css">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/web/demo/styles/main.css">
+    <link rel="stylesheet" href="/web/css/stars.css">
+    <link rel="stylesheet" href="/web/css/shooting-stars.css">
+</head>
+
+<body>
+    <!-- Night Sky Background -->
+    <div class="night-sky" id="night-sky" style="display: none;">
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+    </div>
+
+    <!-- Starry Background -->
+    <div class="starry-background" id="starry-background" style="display: none;">
+        <div class="star tiny white"></div>
+        <div class="star small blue"></div>
+        <div class="star medium yellow"></div>
+        <div class="star large white"></div>
+        <div class="star small pink"></div>
+        <div class="star medium white"></div>
+        <div class="star tiny blue"></div>
+        <div class="star large yellow"></div>
+        <div class="star small white"></div>
+        <div class="star medium pink"></div>
+        <div class="star tiny white"></div>
+        <div class="star small blue"></div>
+        <div class="star medium yellow"></div>
+        <div class="star large white"></div>
+        <div class="star small pink"></div>
+        <div class="star medium white"></div>
+        <div class="star tiny blue"></div>
+        <div class="star large yellow"></div>
+        <div class="star small white"></div>
+        <div class="star medium pink"></div>
+        <div class="star tiny white"></div>
+        <div class="star small blue"></div>
+        <div class="star medium yellow"></div>
+        <div class="star large white"></div>
+        <div class="star small pink"></div>
+        <div class="star medium white"></div>
+        <div class="star tiny blue"></div>
+        <div class="star large yellow"></div>
+        <div class="star small white"></div>
+        <div class="star medium pink"></div>
+        <div class="star tiny white"></div>
+        <div class="star small blue"></div>
+        <div class="star medium yellow"></div>
+        <div class="star large white"></div>
+        <div class="star small pink"></div>
+        <div class="star medium white"></div>
+        <div class="star tiny blue"></div>
+        <div class="star large yellow"></div>
+        <div class="star small white"></div>
+        <div class="star medium pink"></div>
+        <div class="star tiny white"></div>
+        <div class="star small blue"></div>
+        <div class="star medium yellow"></div>
+        <div class="star large white"></div>
+        <div class="star small pink"></div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <div class="title-section">
+                    <h1 class="title">Deep Space Weather Model</h1>
+                    <p class="subtitle" data-i18n="subtitle">Interactive Solar Flare Prediction Demo</p>
+
+                    <!-- Publication Links -->
+                    <div class="publication-links">
+                        <span class="link-block">
+                            <a href="https://arxiv.org/abs/2508.07847"
+                                class="external-link button is-normal is-rounded is-dark">
+                                <span class="icon">
+                                    <i class="ai ai-arxiv"></i>
+                                </span>
+                                <span>arXiv</span>
+                            </a>
+                        </span>
+
+                        <!-- Dataset Link. -->
+                        <span class="link-block">
+                            <a href="../data/flarebench_dataset.zip" download
+                                class="external-link button is-normal is-rounded is-dark">
+                                <span class="icon">
+                                    <i class="fas fa-database"></i>
+                                </span>
+                                <span>Dataset</span>
+                            </a>
+                        </span>
+
+                        <!-- Code Link. -->
+                        <span class="link-block">
+                            <a href="https://github.com/keio-smilab25/DeepSWM"
+                                class="external-link button is-normal is-rounded is-dark">
+                                <span class="icon">
+                                    <i class="fab fa-github"></i>
+                                </span>
+                                <span>Code</span>
+                            </a>
+                        </span>
+                    </div>
+                </div>
+                <div class="theme-toggle">
+                    <button id="theme-toggle-btn" class="theme-btn">
+                        <span class="theme-icon">🌙</span>
+                        <span class="theme-text">Space Mode</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-layout">
+            <!-- Left Panel (7/10) -->
+            <div class="left-panel">
+                <!-- Prediction Results (Top 30%) -->
+                <div class="prediction-section">
+                    <!-- Section Headers -->
+                    <div class="section-headers">
+                        <div class="section-header">
+                            <span data-i18n="prediction_results">Prediction Results</span>
+                        </div>
+                        <div class="section-header">
+                            <span data-i18n="prediction_probabilities">Prediction Probabilities</span>
+                        </div>
+                        <div class="section-header">
+                            <span data-i18n="prediction_performance">Prediction Performance</span>
+                        </div>
+                    </div>
+
+                    <div class="prediction-result loading" id="prediction-result">
+                        <div class="flare-class">--</div>
+                        <div class="flare-description" data-i18n="loading_prediction">Loading prediction...</div>
+                        <div class="confidence">Confidence: --%</div>
+                        <div class="actual-class" id="actual-class" style="display: none;">
+                            Actual: <span class="actual-value">--</span>
+                        </div>
+                        <div class="prediction-details" id="prediction-details">
+                            <!-- Details will be populated here -->
+                        </div>
+                    </div>
+
+                    <!-- Prediction Probabilities -->
+                    <div class="probabilities-section" id="probabilities-section">
+                        <div class="prob-item">
+                            <div class="prob-value">--%</div>
+                            <div class="prob-label">X-Class</div>
+                        </div>
+                        <div class="prob-item">
+                            <div class="prob-value">--%</div>
+                            <div class="prob-label">M-Class</div>
+                        </div>
+                        <div class="prob-item">
+                            <div class="prob-value">--%</div>
+                            <div class="prob-label">C-Class</div>
+                        </div>
+                        <div class="prob-item">
+                            <div class="prob-value">--%</div>
+                            <div class="prob-label">O-Class</div>
+                        </div>
+                    </div>
+
+                    <!-- Binary Classification -->
+                    <div class="binary-section" id="binary-section">
+                        <div class="binary-item">
+                            <div class="binary-value">87.3%</div>
+                            <div class="binary-label" data-i18n="classification">O+C vs M+X</div>
+                            <div class="binary-period">Since April 2025</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solar Images (Bottom 70%) -->
+                <div class="solar-section">
+                    <h3 class="section-title" data-i18n="solar_images">Multi-wavelength Solar Images</h3>
+                    <div class="solar-grid" id="solar-grid">
+                        <!-- Solar images will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel (3/10) - Calendar -->
+            <div class="right-panel">
+                <div class="calendar-section">
+                    <div class="timestamp" id="timestamp">
+                        <span>2025-08-22 12:00 UTC</span>
+                    </div>
+                    <div class="time-selector">
+                        <label for="time-select" data-i18n="time_label">Time (UTC)</label>
+                        <select id="time-select" class="time-select">
+                            <!-- Time options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div id="custom-calendar">
+                        <!-- Custom calendar will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="/web/demo/js/translations.js"></script>
+    <script src="/web/demo/js/colormaps.js"></script>
+    <script src="/web/demo/js/solar-images.js"></script>
+    <script src="/web/demo/js/predictions.js"></script>
+    <script src="/web/demo/js/main.js"></script>
+</body>
+
+</html>
