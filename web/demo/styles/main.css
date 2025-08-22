@@ -40,7 +40,7 @@ body {
 .header {
     text-align: center;
     background: #fff;
-    padding: 1rem;
+    padding: 0.5rem;
     border: 1px solid #dee2e6;
     flex-shrink: 0;
     position: relative;
@@ -92,13 +92,30 @@ body {
     font-size: 0.875rem;
 }
 
+/* Title and Subtitle */
+.title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem 0;
+    color: #333;
+    line-height: 1.2;
+}
+
+.subtitle {
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 0 0 0.5rem 0;
+    color: #666;
+    line-height: 1.3;
+}
+
 /* Publication Links */
 .publication-links {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
-    margin-top: 0.75rem;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
     flex-wrap: wrap;
 }
 
@@ -111,14 +128,14 @@ body {
     border: 1px solid #363636;
     background-color: #363636;
     color: #fff;
-    padding: 0.75rem 1rem;
+    padding: 0.5rem 0.75rem;
     border-radius: 4px;
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     font-weight: 500;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
     font-family: "Kanit", sans-serif;
 }
 
@@ -418,11 +435,12 @@ body {
     grid-template-rows: repeat(2, 1fr);
     gap: 0.15rem;
     flex: 1;
-    min-height: 0;
+    min-height: 250px;
     align-items: stretch;
-    align-content: end;
+    align-content: stretch;
     margin-bottom: 0;
     padding-bottom: 0;
+    height: 100%;
 }
 
 .channel {
@@ -430,9 +448,9 @@ body {
     flex-direction: column;
     align-items: stretch;
     gap: 0;
-    min-height: 0;
+    min-height: 80px;
     height: 100%;
-    justify-content: flex-end;
+    justify-content: flex-start;
 }
 
 .channel canvas,
@@ -444,22 +462,28 @@ body {
     border: 1px solid #dee2e6;
     display: block;
     border-radius: 4px;
-    margin-bottom: 0;
+    margin: 0;
+    padding: 0;
     flex-shrink: 0;
 }
 
 .channel-label {
-    color: #6c757d;
-    font-size: 0.7rem;
+    color: #495057;
+    font-size: 0.75rem;
     font-weight: 600;
     text-align: center;
     padding: 0.1rem 0.2rem;
-    background: #f8f9fa;
-    border: 1px solid #e9ecef;
+    background: #ffffff;
+    border: 1px solid #dee2e6;
     border-radius: 3px;
     flex-shrink: 0;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    margin-top: 0.05rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    margin: 0;
+    min-height: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
 }
 
 /* Right Panel - Calendar */
@@ -747,6 +771,8 @@ body {
     .solar-grid {
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: repeat(5, 1fr);
+        min-height: 400px;
+        gap: 0.2rem;
     }
     
     .flare-class {

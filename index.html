@@ -504,9 +504,6 @@
 
                 if (this.routes[path]) {
                     this.routes[path]();
-                } else if (path === '/demo' || path.endsWith('/demo') || path.includes('demo')) {
-                    console.log('Showing demo auth');
-                    this.showDemoAuth();
                 } else {
                     console.log('Showing main page');
                     this.showMainPage();
@@ -514,11 +511,7 @@
             }
 
             showMainPage() {
-                const auth = document.getElementById('demo-auth-container');
-                const content = document.getElementById('demo-content-container');
                 const main = document.getElementById('main-content');
-                if (auth) auth.classList.add('hidden');
-                if (content) content.classList.add('hidden');
                 if (main) main.classList.remove('hidden');
 
                 // Update title
@@ -530,14 +523,7 @@
                 }
             }
 
-            showDemoAuth() {
-                const main = document.getElementById('main-content');
-                const content = document.getElementById('demo-content-container');
-                const auth = document.getElementById('demo-auth-container');
-                // Don't hide main content - we want to show demo inline
-                if (content) content.classList.add('hidden');
-                if (auth) auth.classList.remove('hidden');
-            }
+
 
 
         }
@@ -754,92 +740,12 @@
             });
         });
 
-        // Hash-based routing for GitHub Pages compatibility
-        document.addEventListener('DOMContentLoaded', function () {
-            function handleRouting() {
-                const hash = window.location.hash;
-                const path = window.location.pathname;
 
-                console.log('Current hash:', hash);
-                console.log('Current path:', path);
-
-                // Handle #demo hash or /demo path
-                if (hash === '#demo' || path.includes('/demo')) {
-                    console.log('Demo route detected, triggering authentication');
-
-                    // Scroll to demo section if it exists
-                    const demoAnchor = document.getElementById('demo-anchor');
-                    if (demoAnchor) {
-                        setTimeout(() => {
-                            demoAnchor.scrollIntoView({ behavior: 'smooth' });
-                        }, 500);
-                    }
-
-                    // Trigger demo authentication automatically
-                    setTimeout(() => {
-                        const authContainer = document.getElementById('demo-auth-container');
-                        if (authContainer) {
-                            authContainer.classList.remove('hidden');
-                            authContainer.style.display = 'block';
-
-                            // Auto-focus on password input
-                            const passwordInput = document.getElementById('demo-password');
-                            if (passwordInput) {
-                                passwordInput.focus();
-                            }
-                        }
-                    }, 1000);
-                }
-            }
-
-            // Handle initial load
-            handleRouting();
-
-            // Handle hash changes
-            window.addEventListener('hashchange', handleRouting);
-        });
     </script>
 
-    <!-- Demo Authentication Container -->
-    <div id="demo-auth-container" class="hidden">
-        <section class="hero">
-            <div class="hero-body">
-                <div class="container is-max-widescreen">
-                    <div class="columns is-centered">
-                        <div class="column is-half">
-                            <div class="demo-auth-section">
-                                <h1 class="demo-auth-title">Demo Access</h1>
-                                <p class="demo-auth-description">
-                                    This interactive demo showcases our Deep Space Weather Model's solar flare
-                                    prediction capabilities.
-                                    Please enter the password to access the demonstration.
-                                </p>
-                                <form id="demo-auth-form" class="demo-auth-form">
-                                    <input type="password" id="demo-password" class="demo-auth-input"
-                                        placeholder="Enter demo password" required>
-                                    <button type="submit" class="demo-auth-button">
-                                        Access Demo
-                                    </button>
-                                    <div id="auth-error" class="demo-auth-error" style="display: none;"></div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
 
-    <!-- Demo Content Container -->
-    <div id="demo-content-container" class="hidden">
-        <!-- Demo content will be loaded here dynamically -->
-        <div style="text-align: center; padding: 2rem; color: white;">
-            <div class="spinner"
-                style="border: 4px solid #f3f3f3; border-top: 4px solid #ff6b35; border-radius: 50%; width: 40px; height: 40px; animation: spin 2s linear infinite; margin: 0 auto;">
-            </div>
-            <p style="margin-top: 1rem;">Loading demo content...</p>
-        </div>
-    </div>
+
+
 
     <!-- Main Content Container -->
     <div id="main-content">

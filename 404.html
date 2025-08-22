@@ -14,22 +14,9 @@
 
         console.log('404 handler - Current path:', currentPath);
 
-        // Handle /demo route
-        if (currentPath.startsWith('/demo')) {
-            console.log('Redirecting /demo to index.html#demo');
-            window.location.replace('/index.html#demo' + currentSearch);
-        }
-        // Handle repository-based GitHub Pages URLs (e.g., /DeepSWM/demo)
-        else if (currentPath.includes('/demo')) {
-            const basePath = currentPath.split('/demo')[0];
-            console.log('Redirecting repo-based /demo to index.html#demo');
-            window.location.replace(basePath + '/index.html#demo' + currentSearch);
-        }
         // Handle other routes - redirect to home
-        else {
-            console.log('Redirecting to index.html');
-            window.location.replace('/index.html' + currentSearch + currentHash);
-        }
+        console.log('Redirecting to index.html');
+        window.location.replace('/index.html' + currentSearch + currentHash);
     </script>
 </head>
 
