@@ -1,0 +1,53 @@
+Starting inference execution at Sat Aug 23 07:58:58 UTC 2025
+=== Starting Inference Pipeline ===
+Current datetime: 082307
+Previous datetime: 082306
+Inference datetime: 20250823_070000
+[CURRENT] Fetching data for: 082307
+🚀 Starting data collection for: 2025-08-23 07:00 UTC
+✅ XRS updated: 2025082307 → 2.8012727852910757e-06
+✅ XRS updated: 2025082306 → 1.734241095618927e-06
+📡 Fetching solar observation data...
+  Fetching AIA 0094Å...
+    ✅ PNG saved: data/images/0823/07_aia_0094.png
+  Fetching AIA 0131Å...
+    ✅ PNG saved: data/images/0823/07_aia_0131.png
+  Fetching AIA 0171Å...
+    ✅ PNG saved: data/images/0823/07_aia_0171.png
+  Fetching AIA 0193Å...
+    ✅ PNG saved: data/images/0823/07_aia_0193.png
+  Fetching AIA 0211Å...
+    ✅ PNG saved: data/images/0823/07_aia_0211.png
+  Fetching AIA 0304Å...
+    ✅ PNG saved: data/images/0823/07_aia_0304.png
+  Fetching AIA 0335Å...
+    ✅ PNG saved: data/images/0823/07_aia_0335.png
+  Fetching AIA 1600Å...
+    ✅ PNG saved: data/images/0823/07_aia_1600.png
+  Fetching AIA 4500Å...
+    ✅ PNG saved: data/images/0823/07_aia_4500.png
+  Fetching HMI magnetogram...
+❌ HMI fetch/process failed: HTTPSConnectionPool(host='jsoc1.stanford.edu', port=443): Max retries exceeded with url: /data/hmi/images/2025/08/23/20250823_070000_M_1k.jpg (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f9028a05c90>, 'Connection to jsoc1.stanford.edu timed out. (connect timeout=30)'))
+    ⚠️  HMI data unavailable, skipping PNG
+💾 Saving H5 file for ML inference...
+✅ H5 saved: ./ml/datasets/all_data_hours/20250823_070000.h5
+🎉 Data collection completed for 2025-08-23 07:00 UTC
+[CURRENT] Data fetch successful for 082307
+[PREVIOUS] Fetching data for: 082306
+🚀 Starting data collection for: 2025-08-23 06:00 UTC
+✅ XRS updated: 2025082306 → 1.734241095618927e-06
+✅ XRS updated: 2025082305 → 1.4601770317312912e-06
+✅ All files already exist for 2025-08-23 06:00
+[PREVIOUS] Data fetch successful for 082306
+[FEATURES] Extracting features for: 20250823_070000
+Skip existing: /home/runner/work/DeepSWM/DeepSWM/ml/datasets/all_features/20250823_070000.h5
+[FEATURES] Feature extraction successful
+[INFERENCE] Running inference for: 20250823_070000
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/torch/amp/autocast_mode.py:250: UserWarning: User provided device_type of 'cuda', but CUDA is not available. Disabling
+  warnings.warn(
+Updated predictions: added 1 new, total 3457 timestamps in /home/runner/work/DeepSWM/DeepSWM/data/pred_24.json
+[INFERENCE] Inference successful
+=== Execution Summary ===
+Total errors encountered: 0
+Execution completed at: Sat Aug 23 07:59:46 UTC 2025
+✅ Workflow completed successfully with no errors
