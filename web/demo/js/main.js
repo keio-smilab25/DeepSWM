@@ -473,16 +473,18 @@ class SolarFlareDemo {
         try {
             console.log('Loading current forecast and images...');
             
-            // Load prediction data
-            const response = await fetch('../../data/pred_24.json');
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+            // Use the already loaded prediction data from PredictionManager
+            const data = this.predictionManager.predictionData;
+            if (!data || Object.keys(data).length === 0) {
+                throw new Error('No prediction data available');
             }
-            const data = await response.json();
-            console.log('Prediction data loaded:', Object.keys(data).length, 'entries');
+            
+            console.log('Using prediction data:', Object.keys(data).length, 'entries');
+            console.log('Sample keys:', Object.keys(data).slice(0, 5));
             
             // Find the latest available data that has corresponding images
             const sortedKeys = Object.keys(data).sort().reverse(); // Latest first
+            console.log('Latest keys:', sortedKeys.slice(0, 5));
             let selectedKey = null;
             let selectedTimestamp = null;
             
@@ -500,9 +502,11 @@ class SolarFlareDemo {
                 const dayStr = String(day).padStart(2, '0');
                 const hourStr = String(hour).padStart(2, '0');
                 
-                const imagePath = `../../data/images/${monthStr}${dayStr}/${hourStr}_aia_0304.png`;
+                const imagePath = `${this.solarImagesManager.basePath}/data/images/${monthStr}${dayStr}/${hourStr}_aia_0304.png`;
+                console.log('Checking image:', imagePath);
                 
                 const imageExists = await this.checkImageExists(imagePath);
+                console.log('Image exists:', imageExists, 'for', imagePath);
                 if (imageExists) {
                     selectedKey = key;
                     selectedTimestamp = timestamp;
@@ -565,13 +569,13 @@ class SolarFlareDemo {
         const maxProb = Math.max(xProb, mProb, cProb, oProb);
         
         if (maxProb === xProb && xProb > 0.1) {
-            return { level: 4, status: 'Major Flares', statusClass: 'status-major', flareClass: 'X class' };
+            return { level: 4, status: 'Major Flares', statusClass: 'status-major', flareClass: 'X-class' };
         } else if (maxProb === mProb && mProb > 0.05) {
-            return { level: 3, status: 'Active', statusClass: 'status-active', flareClass: 'M class' };
+            return { level: 3, status: 'Active', statusClass: 'status-active', flareClass: 'M-class' };
         } else if (maxProb === cProb && cProb > 0.1) {
-            return { level: 2, status: 'Eruptive', statusClass: 'status-eruptive', flareClass: 'C class' };
+            return { level: 2, status: 'Eruptive', statusClass: 'status-eruptive', flareClass: 'C-class' };
         } else {
-            return { level: 1, status: 'Quiet', statusClass: 'status-quiet', flareClass: 'O class' };
+            return { level: 1, status: 'Quiet', statusClass: 'status-quiet', flareClass: 'O-class' };
         }
     }
     
@@ -613,7 +617,7 @@ class SolarFlareDemo {
             const day = String(timestamp.getDate()).padStart(2, '0');
             const hour = String(timestamp.getHours()).padStart(2, '0');
             
-            const imagePath = `../../data/images/${month}${day}/${hour}_aia_0304.png`;
+            const imagePath = `${this.solarImagesManager.basePath}/data/images/${month}${day}/${hour}_aia_0304.png`;
             
             try {
                 const canvas = await this.loadAndProcessAIA304Image(imagePath);
