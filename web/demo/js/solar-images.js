@@ -3,15 +3,15 @@
 class SolarImagesManager {
     constructor() {
         this.wavelengths = [
-            { name: '94 Å', code: '0094', filename: 'aia_0094' },
-            { name: '131 Å', code: '0131', filename: 'aia_0131' },
-            { name: '171 Å', code: '0171', filename: 'aia_0171' },
-            { name: '193 Å', code: '0193', filename: 'aia_0193' },
-            { name: '211 Å', code: '0211', filename: 'aia_0211' },
-            { name: '304 Å', code: '0304', filename: 'aia_0304' },
-            { name: '335 Å', code: '0335', filename: 'aia_0335' },
-            { name: '1600 Å', code: '1600', filename: 'aia_1600' },
-            { name: '4500 Å', code: '4500', filename: 'aia_4500' },
+            { name: 'AIA 94 Å', code: '0094', filename: 'aia_0094' },
+            { name: 'AIA 131 Å', code: '0131', filename: 'aia_0131' },
+            { name: 'AIA 171 Å', code: '0171', filename: 'aia_0171' },
+            { name: 'AIA 193 Å', code: '0193', filename: 'aia_0193' },
+            { name: 'AIA 211 Å', code: '0211', filename: 'aia_0211' },
+            { name: 'AIA 304 Å', code: '0304', filename: 'aia_0304' },
+            { name: 'AIA 335 Å', code: '0335', filename: 'aia_0335' },
+            { name: 'AIA 1600 Å', code: '1600', filename: 'aia_1600' },
+            { name: 'AIA 4500 Å', code: '4500', filename: 'aia_4500' },
             { name: 'HMI', code: 'hmi', filename: 'hmi' }
         ];
         
@@ -110,7 +110,12 @@ class SolarImagesManager {
             label.className = 'channel-label';
             label.textContent = wavelength.name;
             
+            const copyright = document.createElement('div');
+            copyright.className = 'channel-copyright';
+            copyright.textContent = 'SDO©NASA';
+            
             container.appendChild(canvas);
+            container.appendChild(copyright);
             container.appendChild(label);
             grid.appendChild(container);
         }

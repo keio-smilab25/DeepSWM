@@ -26,6 +26,7 @@ class SolarFlareDemo {
         
         // Initialize theme and language
         this.initTheme();
+        this.languageToggleManager = new window.LanguageToggleManager(this.translationManager);
         
         // Load latest data automatically
         this.loadLatestData();

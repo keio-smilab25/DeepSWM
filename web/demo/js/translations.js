@@ -3,7 +3,7 @@
 const translations = {
     en: {
         title: "Deep Space Weather Model",
-        subtitle: "Interactive Solar Flare Prediction Demo",
+        subtitle: "Operational Solar Flare AI Prediction System",
         date_selection: "Date & Time Selection",
         solar_images: "Multi-wavelength Solar Images",
         prediction: "24-Hour Flare Prediction",
@@ -30,7 +30,7 @@ const translations = {
     },
     ja: {
         title: "深宇宙天気モデル",
-        subtitle: "インタラクティブ太陽フレア予測デモ",
+        subtitle: "太陽フレアAI予報システム",
         date_selection: "日時選択",
         solar_images: "多波長太陽画像",
         prediction: "24時間フレア予測",

@@ -135,19 +135,10 @@ class PredictionManager {
             ? this.translationManager.t('confidence')
             : 'Confidence';
         
-        // Get actual class if available
-        const actualClass = this.getActualClass(prediction);
-        const actualClassHtml = actualClass ? 
-            `<div class="actual-class ${actualClass.isCorrect ? 'correct' : 'incorrect'}" id="actual-class" 
-                  style="font-size: 0.9rem; margin-top: -0.14rem;">
-                Actual: <span class="actual-value">${actualClass.class}-Class</span>
-            </div>` : '';
-        
         resultDiv.innerHTML = `
             <div class="flare-class" style="margin-bottom: 0.00rem; font-size: 1.75rem;">${prediction.class}-Class</div>
             <div class="flare-description" style="margin-bottom: 0.00rem; font-size: 0.85rem;">${description}</div>
             <div class="confidence" style="font-size: 1rem;">${confidenceText}: ${(prediction.confidence * 100).toFixed(1)}%</div>
-            ${actualClassHtml}
         `;
         
         // Apply inline styling to the result div itself
@@ -257,29 +248,7 @@ class PredictionManager {
         return descriptions[flareClass] || 'Unknown flare class';
     }
     
-    getActualClass(prediction) {
-        // シミュレーション用: 実際のデータがある場合は、ここで実際のクラスを取得
-        // 現在はランダムに実際のクラスを生成（デモ用）
-        const classes = ['O', 'C', 'M', 'X'];
-        const weights = [0.6, 0.25, 0.12, 0.03]; // 実際の発生確率に基づく重み
-        
-        let random = Math.random();
-        let actualClass = 'O';
-        
-        for (let i = 0; i < classes.length; i++) {
-            if (random < weights.slice(0, i + 1).reduce((a, b) => a + b, 0)) {
-                actualClass = classes[i];
-                break;
-            }
-        }
-        
-        const isCorrect = actualClass === prediction.class;
-        
-        return {
-            class: actualClass,
-            isCorrect: isCorrect
-        };
-    }
+
     
     showLoadingPrediction() {
         const resultDiv = document.getElementById('prediction-result');

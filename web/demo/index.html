@@ -95,7 +95,15 @@
         <div class="header">
             <div class="header-content">
                 <div class="title-section">
-                    <h1 class="title">Deep Space Weather Model</h1>
+                    <div class="title-with-logo">
+                        <div class="title-content">
+                            <h1 class="title">Deep Space Weather Model</h1>
+                            <div class="authors">
+                                <p class="author-names">Shunya Nagashima and Komei Sugiura</p>
+                            </div>
+                        </div>
+                        <img src="../images/logo.png" alt="Logo" class="logo">
+                    </div>
                     <p class="subtitle" data-i18n="subtitle">Interactive Solar Flare Prediction Demo</p>
 
                     <!-- Publication Links -->
@@ -133,11 +141,20 @@
                         </span>
                     </div>
                 </div>
-                <div class="theme-toggle">
-                    <button id="theme-toggle-btn" class="theme-btn">
-                        <span class="theme-icon">🌙</span>
-                        <span class="theme-text">Space Mode</span>
-                    </button>
+                <div class="controls-section">
+                    <!-- Language Toggle -->
+                    <div class="language-toggle">
+                        <button class="lang-btn" data-lang="en">ENGLISH</button>
+                        <button class="lang-btn active" data-lang="ja">JAPANESE</button>
+                    </div>
+
+                    <!-- Theme Toggle -->
+                    <div class="theme-toggle">
+                        <button id="theme-toggle-btn" class="theme-btn">
+                            <span class="theme-icon">🌙</span>
+                            <span class="theme-text">Space Mode</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -164,9 +181,7 @@
                         <div class="flare-class">--</div>
                         <div class="flare-description" data-i18n="loading_prediction">Loading prediction...</div>
                         <div class="confidence">Confidence: --%</div>
-                        <div class="actual-class" id="actual-class" style="display: none;">
-                            Actual: <span class="actual-value">--</span>
-                        </div>
+
                         <div class="prediction-details" id="prediction-details">
                             <!-- Details will be populated here -->
                         </div>
@@ -234,6 +249,7 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="js/translations.js"></script>
+    <script src="js/language-toggle.js"></script>
     <script src="js/colormaps.js"></script>
     <script src="js/solar-images.js"></script>
     <script src="js/predictions.js"></script>
