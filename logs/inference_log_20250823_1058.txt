@@ -1,0 +1,95 @@
+Starting inference execution at Sat Aug 23 10:58:51 UTC 2025
+=== Starting Inference Pipeline ===
+Current datetime: 082310
+Previous datetime: 082309
+Inference datetime: 20250823_100000
+[CURRENT] Fetching data for: 082310
+🚀 Starting data collection for: 2025-08-23 10:00 UTC
+✅ XRS updated: 2025082310 → 2.0568434138112934e-06
+✅ XRS updated: 2025082309 → 1.726019149828062e-06
+📡 Fetching solar observation data...
+  Fetching AIA 0094Å...
+❌ AIA 0094 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2025/08/23/H1000/AIA20250823_100000_0094.fits
+    ⚠️  AIA 0094 data unavailable, skipping PNG
+  Fetching AIA 0131Å...
+❌ AIA 0131 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2025/08/23/H1000/AIA20250823_100000_0131.fits
+    ⚠️  AIA 0131 data unavailable, skipping PNG
+  Fetching AIA 0171Å...
+❌ AIA 0171 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2025/08/23/H1000/AIA20250823_100000_0171.fits
+    ⚠️  AIA 0171 data unavailable, skipping PNG
+  Fetching AIA 0193Å...
+❌ AIA 0193 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2025/08/23/H1000/AIA20250823_100000_0193.fits
+    ⚠️  AIA 0193 data unavailable, skipping PNG
+  Fetching AIA 0211Å...
+❌ AIA 0211 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2025/08/23/H1000/AIA20250823_100000_0211.fits
+    ⚠️  AIA 0211 data unavailable, skipping PNG
+  Fetching AIA 0304Å...
+❌ AIA 0304 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2025/08/23/H1000/AIA20250823_100000_0304.fits
+    ⚠️  AIA 0304 data unavailable, skipping PNG
+  Fetching AIA 0335Å...
+❌ AIA 0335 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2025/08/23/H1000/AIA20250823_100000_0335.fits
+    ⚠️  AIA 0335 data unavailable, skipping PNG
+  Fetching AIA 1600Å...
+❌ AIA 1600 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2025/08/23/H1000/AIA20250823_100000_1600.fits
+    ⚠️  AIA 1600 data unavailable, skipping PNG
+  Fetching AIA 4500Å...
+❌ AIA 4500 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2025/08/23/H1000/AIA20250823_100000_4500.fits
+    ⚠️  AIA 4500 data unavailable, skipping PNG
+  Fetching HMI magnetogram...
+❌ HMI fetch/process failed: HTTPSConnectionPool(host='jsoc1.stanford.edu', port=443): Max retries exceeded with url: /data/hmi/images/2025/08/23/20250823_100000_M_1k.jpg (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7faa82db2290>, 'Connection to jsoc1.stanford.edu timed out. (connect timeout=30)'))
+    ⚠️  HMI data unavailable, skipping PNG
+💾 Saving H5 file for ML inference...
+✅ H5 saved: ./ml/datasets/all_data_hours/20250823_100000.h5
+🎉 Data collection completed for 2025-08-23 10:00 UTC
+[CURRENT] Data fetch successful for 082310
+[PREVIOUS] Fetching data for: 082309
+🚀 Starting data collection for: 2025-08-23 09:00 UTC
+✅ XRS updated: 2025082309 → 1.726019149828062e-06
+✅ XRS updated: 2025082308 → 1.6788146695034811e-06
+📡 Fetching solar observation data...
+  Fetching AIA 0094Å...
+❌ AIA 0094 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2025/08/23/H0900/AIA20250823_090000_0094.fits
+    ⚠️  AIA 0094 data unavailable, skipping PNG
+  Fetching AIA 0131Å...
+❌ AIA 0131 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2025/08/23/H0900/AIA20250823_090000_0131.fits
+    ⚠️  AIA 0131 data unavailable, skipping PNG
+  Fetching AIA 0171Å...
+❌ AIA 0171 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2025/08/23/H0900/AIA20250823_090000_0171.fits
+    ⚠️  AIA 0171 data unavailable, skipping PNG
+  Fetching AIA 0193Å...
+❌ AIA 0193 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2025/08/23/H0900/AIA20250823_090000_0193.fits
+    ⚠️  AIA 0193 data unavailable, skipping PNG
+  Fetching AIA 0211Å...
+❌ AIA 0211 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2025/08/23/H0900/AIA20250823_090000_0211.fits
+    ⚠️  AIA 0211 data unavailable, skipping PNG
+  Fetching AIA 0304Å...
+❌ AIA 0304 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2025/08/23/H0900/AIA20250823_090000_0304.fits
+    ⚠️  AIA 0304 data unavailable, skipping PNG
+  Fetching AIA 0335Å...
+❌ AIA 0335 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2025/08/23/H0900/AIA20250823_090000_0335.fits
+    ⚠️  AIA 0335 data unavailable, skipping PNG
+  Fetching AIA 1600Å...
+❌ AIA 1600 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2025/08/23/H0900/AIA20250823_090000_1600.fits
+    ⚠️  AIA 1600 data unavailable, skipping PNG
+  Fetching AIA 4500Å...
+❌ AIA 4500 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2025/08/23/H0900/AIA20250823_090000_4500.fits
+    ⚠️  AIA 4500 data unavailable, skipping PNG
+  Fetching HMI magnetogram...
+❌ HMI fetch/process failed: HTTPSConnectionPool(host='jsoc1.stanford.edu', port=443): Max retries exceeded with url: /data/hmi/images/2025/08/23/20250823_090000_M_1k.jpg (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7fc408790850>, 'Connection to jsoc1.stanford.edu timed out. (connect timeout=30)'))
+    ⚠️  HMI data unavailable, skipping PNG
+💾 Saving H5 file for ML inference...
+✅ H5 saved: ./ml/datasets/all_data_hours/20250823_090000.h5
+🎉 Data collection completed for 2025-08-23 09:00 UTC
+[PREVIOUS] Data fetch successful for 082309
+[FEATURES] Extracting features for: 20250823_100000
+Skip existing: /home/runner/work/DeepSWM/DeepSWM/ml/datasets/all_features/20250823_100000.h5
+[FEATURES] Feature extraction successful
+[INFERENCE] Running inference for: 20250823_100000
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/torch/amp/autocast_mode.py:250: UserWarning: User provided device_type of 'cuda', but CUDA is not available. Disabling
+  warnings.warn(
+Updated predictions: added 1 new, total 3460 timestamps in /home/runner/work/DeepSWM/DeepSWM/data/pred_24.json
+[INFERENCE] Inference successful
+=== Execution Summary ===
+Total errors encountered: 0
+Execution completed at: Sat Aug 23 11:00:09 UTC 2025
+✅ Workflow completed successfully with no errors
