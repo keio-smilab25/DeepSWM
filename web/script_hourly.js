@@ -269,7 +269,7 @@ function loadImagesFromSelectedTime() {
       const container = document.getElementById('prediction-result');
       container.innerHTML = '';
 
-      const labels = ['O class','C class','M class','X class'];
+      const labels = ['O-class','C-class','M-class','X-class'];
       if (predData[keyTime]) {
         const probs = predData[keyTime];
         const maxIdx = probs.indexOf(Math.max(...probs));

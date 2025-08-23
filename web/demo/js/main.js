@@ -5,6 +5,7 @@ class SolarFlareDemo {
         this.translationManager = new window.TranslationManager();
         this.solarImagesManager = new window.SolarImagesManager();
         this.predictionManager = new window.PredictionManager();
+        this.goesChartManager = new window.GOESChartManager();
         this.predictionManager.setTranslationManager(this.translationManager);
         
         this.currentDate = null;
@@ -285,6 +286,11 @@ class SolarFlareDemo {
         this.updateTimestamp();
         this.solarImagesManager.loadImages(this.currentDate, this.currentHour);
         this.predictionManager.displayPrediction(this.currentDate, this.currentHour);
+        
+        // Update GOES chart with current date and hour
+        const baseTime = new Date(this.currentDate);
+        baseTime.setHours(this.currentHour, 0, 0, 0);
+        this.goesChartManager.updateChart(baseTime);
     }
     
     updateDateDisplay() {
@@ -373,6 +379,9 @@ class SolarFlareDemo {
         document.getElementById('night-sky').style.display = 'block';
         document.getElementById('starry-background').style.display = 'block';
         
+        // Update GOES chart theme
+        this.goesChartManager.updateTheme();
+        
         const themeBtn = document.getElementById('theme-toggle-btn');
         if (themeBtn) {
             themeBtn.innerHTML = `
@@ -386,6 +395,9 @@ class SolarFlareDemo {
         document.body.classList.remove('dark-theme');
         document.getElementById('night-sky').style.display = 'none';
         document.getElementById('starry-background').style.display = 'none';
+        
+        // Update GOES chart theme
+        this.goesChartManager.updateTheme();
         
         const themeBtn = document.getElementById('theme-toggle-btn');
         if (themeBtn) {

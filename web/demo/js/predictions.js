@@ -219,8 +219,8 @@ class PredictionManager {
             return `
                 <div class="prob-item ${colorClass} ${isPredicted ? 'predicted' : ''}" 
                      style="padding: 0.15rem; ${isPredicted ? `--class-color: ${classColors[cls]};` : ''}">
-                    <div class="prob-value" style="margin-bottom: 0.03rem; font-size: 1rem;">${(prob * 100).toFixed(1)}%</div>
-                    <div class="prob-label" style="font-size: 0.65rem; line-height: 1.2; color: #fff; font-weight: 600;">
+                    <div class="prob-value" style="margin-bottom: 0.03rem; font-size: 1rem; color: #333;">${(prob * 100).toFixed(1)}%</div>
+                    <div class="prob-label" style="font-size: 0.65rem; line-height: 1.2; color: #333; font-weight: 600;">
                         ${info.status}<br/>${info.level}
                     </div>
                 </div>
@@ -357,13 +357,13 @@ class PredictionManager {
         const maxProb = Math.max(xProb, mProb, cProb, oProb);
         
         if (maxProb === xProb && xProb > 0.1) {
-            return { level: 4, status: 'Major Flares', statusClass: 'status-major', flareClass: 'X class' };
+            return { level: 4, status: 'Major Flares', statusClass: 'status-major', flareClass: 'X-class' };
         } else if (maxProb === mProb && mProb > 0.05) {
-            return { level: 3, status: 'Active', statusClass: 'status-active', flareClass: 'M class' };
+            return { level: 3, status: 'Active', statusClass: 'status-active', flareClass: 'M-class' };
         } else if (maxProb === cProb && cProb > 0.1) {
-            return { level: 2, status: 'Eruptive', statusClass: 'status-eruptive', flareClass: 'C class' };
+            return { level: 2, status: 'Eruptive', statusClass: 'status-eruptive', flareClass: 'C-class' };
         } else {
-            return { level: 1, status: 'Quiet', statusClass: 'status-quiet', flareClass: 'O class' };
+            return { level: 1, status: 'Quiet', statusClass: 'status-quiet', flareClass: 'O-class' };
         }
     }
     

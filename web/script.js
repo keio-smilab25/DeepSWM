@@ -371,7 +371,7 @@ function loadImagesFromSelectedTime() {
       document.getElementById('prediction-header').textContent
         = `${Y}-${String(M).padStart(2,'0')}-${String(D).padStart(2,'0')} ${String(H).padStart(2,'0')}:00 UTC の ${predictionRange}時間先 推論結果`;
 
-      const labels = ['O class','C class','M class','X class'];
+      const labels = ['O-class','C-class','M-class','X-class'];
       if (predData[keyTime]) {
         const probs = predData[keyTime];
         const maxP = Math.max(...probs);

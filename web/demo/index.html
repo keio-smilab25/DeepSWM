@@ -424,16 +424,27 @@
                     </div>
                 </div>
             </div>
+
+            <!-- GOES X-ray Flux Chart Section -->
+            <div class="goes-chart-section">
+                <h3 class="section-title">X-ray Flux Transition (GOES)</h3>
+                <div class="goes-chart-container">
+                    <canvas id="goesChart" width="600" height="300"></canvas>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="js/translations.js"></script>
     <script src="js/language-toggle.js"></script>
     <script src="js/colormaps.js"></script>
     <script src="js/solar-images.js"></script>
     <script src="js/predictions.js"></script>
+    <script src="js/goes-chart.js"></script>
     <script src="js/main.js"></script>
 </body>
 
