@@ -28,6 +28,12 @@ class SolarFlareDemo {
         this.initTheme();
         this.languageToggleManager = new window.LanguageToggleManager(this.translationManager);
         
+        // Initialize expandable sections
+        this.initExpandableSections();
+        
+        // Initialize current forecast
+        this.initCurrentForecast();
+        
         // Load latest data automatically
         this.loadLatestData();
         
@@ -307,6 +313,18 @@ class SolarFlareDemo {
             const timeStr = `${String(this.currentHour).padStart(2, '0')}:00 UTC`;
             timestampEl.textContent = `${dateStr} ${timeStr}`;
         }
+        
+        // Update Multi-wavelength Solar Images title with time range
+        const solarTitleEl = document.querySelector('.section-title[data-i18n="solar_images"]');
+        if (solarTitleEl && this.solarImagesManager && this.solarImagesManager.loadedTimeRange) {
+            const { startTime, endTime } = this.solarImagesManager.loadedTimeRange;
+            solarTitleEl.textContent = `Multi-wavelength Solar Images ${startTime} - ${endTime} UTC`;
+        } else if (solarTitleEl && this.currentDate) {
+            const month = String(this.currentDate.getMonth() + 1).padStart(2, '0');
+            const day = String(this.currentDate.getDate()).padStart(2, '0');
+            const hour = String(this.currentHour).padStart(2, '0');
+            solarTitleEl.textContent = `Multi-wavelength Solar Images ${month}/${day} ${hour}:00 UTC`;
+        }
     }
     
     initTheme() {
@@ -386,6 +404,333 @@ class SolarFlareDemo {
             url.searchParams.delete('theme');
         }
         window.history.replaceState({}, '', url);
+    }
+    
+    initExpandableSections() {
+        const infoHeaders = document.querySelectorAll('.info-header');
+        
+        infoHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const section = header.parentElement;
+                const isExpanded = section.classList.contains('expanded');
+                
+                // Close all other sections
+                document.querySelectorAll('.info-section').forEach(otherSection => {
+                    if (otherSection !== section) {
+                        otherSection.classList.remove('expanded');
+                    }
+                });
+                
+                // Toggle current section
+                if (isExpanded) {
+                    section.classList.remove('expanded');
+                } else {
+                    section.classList.add('expanded');
+                    
+                    // Smooth scroll to the section after a short delay to allow animation
+                    setTimeout(() => {
+                        section.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start',
+                            inline: 'nearest'
+                        });
+                    }, 100);
+                }
+            });
+        });
+    }
+    
+    async initCurrentForecast() {
+        await this.loadCurrentForecastAndImages();
+    }
+    
+    updateDataTime(timestamp) {
+        const timeElement = document.getElementById('current-time-value');
+        if (timeElement && timestamp) {
+            const year = timestamp.getFullYear();
+            const month = String(timestamp.getMonth() + 1).padStart(2, '0');
+            const day = String(timestamp.getDate()).padStart(2, '0');
+            const hour = String(timestamp.getHours()).padStart(2, '0');
+            const minute = String(timestamp.getMinutes()).padStart(2, '0');
+            
+            timeElement.textContent = `${year}/${month}/${day} ${hour}:${minute}`;
+        }
+    }
+    
+    async loadCurrentForecastAndImages() {
+        try {
+            console.log('Loading current forecast and images...');
+            
+            // Load prediction data
+            const response = await fetch('../../data/pred_24.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            console.log('Prediction data loaded:', Object.keys(data).length, 'entries');
+            
+            // Find the latest available data that has corresponding images
+            const sortedKeys = Object.keys(data).sort().reverse(); // Latest first
+            let selectedKey = null;
+            let selectedTimestamp = null;
+            
+            for (const key of sortedKeys) {
+                // Parse timestamp from key (YYYYMMDDHH format)
+                const year = parseInt(key.substr(0, 4));
+                const month = parseInt(key.substr(4, 2));
+                const day = parseInt(key.substr(6, 2));
+                const hour = parseInt(key.substr(8, 2));
+                
+                const timestamp = new Date(year, month - 1, day, hour, 0, 0);
+                
+                // Check if images exist for this timestamp
+                const monthStr = String(month).padStart(2, '0');
+                const dayStr = String(day).padStart(2, '0');
+                const hourStr = String(hour).padStart(2, '0');
+                
+                const imagePath = `../../data/images/${monthStr}${dayStr}/${hourStr}_aia_0304.png`;
+                
+                const imageExists = await this.checkImageExists(imagePath);
+                if (imageExists) {
+                    selectedKey = key;
+                    selectedTimestamp = timestamp;
+                    console.log('Selected timestamp:', selectedKey, timestamp);
+                    break;
+                }
+            }
+            
+            if (selectedKey && selectedTimestamp) {
+                // Update the data time display
+                this.updateDataTime(selectedTimestamp);
+                
+                // Display the prediction
+                const predictionArray = data[selectedKey];
+                const predictionObj = {
+                    o_prob: predictionArray[0],
+                    c_prob: predictionArray[1], 
+                    m_prob: predictionArray[2],
+                    x_prob: predictionArray[3]
+                };
+                this.displayCurrentForecast(predictionObj);
+                
+                // Load 4 images going backwards from this timestamp
+                await this.loadAIA304ImagesFromTimestamp(selectedTimestamp);
+                
+            } else {
+                throw new Error('No data with corresponding images found');
+            }
+            
+        } catch (error) {
+            console.error('Error loading current forecast:', error);
+            this.displayCurrentForecastError();
+        }
+    }
+    
+    displayCurrentForecast(prediction) {
+        // Determine flare level and status based on prediction
+        const { level, status, statusClass, flareClass } = this.getFlareLevel(prediction);
+        
+        // Update level blocks
+        this.updateLevelBlocks(level);
+        
+        // Update status text
+        const statusElement = document.getElementById('flare-status');
+        if (statusElement) {
+            statusElement.className = `flare-status ${statusClass}`;
+            statusElement.querySelector('.status-text').textContent = status;
+            statusElement.querySelector('.level-text').textContent = `Lv.${level} (${flareClass})`;
+        }
+    }
+    
+    getFlareLevel(prediction) {
+        // Extract probabilities
+        const xProb = prediction.x_prob || 0;
+        const mProb = prediction.m_prob || 0;
+        const cProb = prediction.c_prob || 0;
+        const oProb = prediction.o_prob || 0;
+        
+        // Determine the highest probability class
+        const maxProb = Math.max(xProb, mProb, cProb, oProb);
+        
+        if (maxProb === xProb && xProb > 0.1) {
+            return { level: 4, status: 'Major Flares', statusClass: 'status-major', flareClass: 'X class' };
+        } else if (maxProb === mProb && mProb > 0.05) {
+            return { level: 3, status: 'Active', statusClass: 'status-active', flareClass: 'M class' };
+        } else if (maxProb === cProb && cProb > 0.1) {
+            return { level: 2, status: 'Eruptive', statusClass: 'status-eruptive', flareClass: 'C class' };
+        } else {
+            return { level: 1, status: 'Quiet', statusClass: 'status-quiet', flareClass: 'O class' };
+        }
+    }
+    
+    updateLevelBlocks(level) {
+        const blocksContainer = document.getElementById('flare-level-blocks');
+        if (!blocksContainer) return;
+        
+        // Clear existing blocks
+        blocksContainer.innerHTML = '';
+        blocksContainer.className = `flare-level-blocks level-${level}`;
+        
+        // Always show 4 blocks (from bottom to top: 1, 2, 3, 4)
+        for (let i = 4; i >= 1; i--) {
+            const block = document.createElement('div');
+            block.className = 'level-block';
+            
+            // Fill blocks up to the current level
+            if (i <= level) {
+                block.classList.add('filled');
+            }
+            
+            blocksContainer.appendChild(block);
+        }
+    }
+    
+    async loadAIA304ImagesFromTimestamp(baseTimestamp) {
+        const container = document.getElementById('aia-304-container');
+        if (!container) return;
+        
+        this.aia304Canvases = [];
+        this.loadedTimes = [];
+        
+        console.log('Loading AIA 304 images from timestamp:', baseTimestamp);
+        
+        // Load 4 images going backwards from the base timestamp
+        for (let i = 3; i >= 0; i--) { // Start from 3 hours back, go to current (oldest to newest)
+            const timestamp = new Date(baseTimestamp.getTime() - i * 60 * 60 * 1000); // Go back i hours
+            const month = String(timestamp.getMonth() + 1).padStart(2, '0');
+            const day = String(timestamp.getDate()).padStart(2, '0');
+            const hour = String(timestamp.getHours()).padStart(2, '0');
+            
+            const imagePath = `../../data/images/${month}${day}/${hour}_aia_0304.png`;
+            
+            try {
+                const canvas = await this.loadAndProcessAIA304Image(imagePath);
+                if (canvas) {
+                    this.aia304Canvases.push(canvas); // Add to end for chronological order (oldest first)
+                    this.loadedTimes.push(`${month}/${day} ${hour}:00`);
+                    console.log('Loaded and processed image:', imagePath);
+                }
+            } catch (error) {
+                console.log('Image not found:', imagePath);
+            }
+        }
+        
+        // Update title with time range (oldest to newest)
+        const titleElement = document.getElementById('aia-304-title');
+        if (titleElement && this.loadedTimes.length > 0) {
+            const startTime = this.loadedTimes[0]; // oldest
+            const endTime = this.loadedTimes[this.loadedTimes.length - 1]; // newest
+            titleElement.textContent = `Current Solar Surface ${startTime} - ${endTime} UTC`;
+        }
+        
+        // Display canvases
+        container.innerHTML = '';
+        
+        // Add copyright
+        const copyright = document.createElement('div');
+        copyright.className = 'aia-304-copyright';
+        copyright.textContent = 'SDO©NASA';
+        container.appendChild(copyright);
+        
+        this.aia304Canvases.forEach((canvas, index) => {
+            canvas.className = 'aia-304-canvas';
+            canvas.classList.toggle('active', index === 0);
+            container.appendChild(canvas);
+        });
+        
+        console.log('Total images loaded:', this.aia304Canvases.length);
+        
+        // Start automatic playback
+        if (this.aia304Canvases.length > 1) {
+            this.startAutoPlayback();
+        } else if (this.aia304Canvases.length === 0) {
+            container.innerHTML = '<div style="color: #6c757d; font-style: italic; text-align: center; padding: 2rem;">No AIA 304 Å images found</div>';
+        }
+    }
+    
+    async loadAndProcessAIA304Image(imagePath) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            
+            img.onload = () => {
+                try {
+                    // Use the colormap from solar-images.js
+                    if (window.AIAColormaps) {
+                        const coloredCanvas = window.AIAColormaps.apply(img, '0304');
+                        resolve(coloredCanvas);
+                    } else {
+                        // Fallback: create canvas without colormap
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        ctx.drawImage(img, 0, 0);
+                        resolve(canvas);
+                    }
+                } catch (error) {
+                    console.error('Error processing image:', error);
+                    resolve(null);
+                }
+            };
+            
+            img.onerror = () => {
+                resolve(null);
+            };
+            
+            img.src = imagePath;
+        });
+    }
+    
+    async checkImageExists(url) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => resolve(true);
+            img.onerror = () => resolve(false);
+            img.src = url;
+        });
+    }
+    
+    startAutoPlayback() {
+        if (this.aia304Canvases.length <= 1) return;
+        
+        this.currentFrame = 0;
+        this.autoPlayInterval = null;
+        
+        console.log('Starting auto playback with', this.aia304Canvases.length, 'canvases');
+        
+        // Start continuous loop
+        this.autoPlayInterval = setInterval(() => {
+            this.currentFrame = (this.currentFrame + 1) % this.aia304Canvases.length;
+            this.updateAutoDisplay();
+        }, 1000); // 1 FPS for smooth viewing
+    }
+    
+    updateAutoDisplay() {
+        // Update active canvas
+        this.aia304Canvases.forEach((canvas, index) => {
+            canvas.classList.toggle('active', index === this.currentFrame);
+        });
+        
+        console.log('Displaying frame:', this.currentFrame + 1, '/', this.aia304Canvases.length);
+    }
+    
+    stopAutoPlayback() {
+        if (this.autoPlayInterval) {
+            clearInterval(this.autoPlayInterval);
+            this.autoPlayInterval = null;
+        }
+    }
+    
+    displayCurrentForecastError() {
+        const statusElement = document.getElementById('flare-status');
+        if (statusElement) {
+            statusElement.className = 'flare-status status-quiet';
+            statusElement.querySelector('.status-text').textContent = 'Loading...';
+            statusElement.querySelector('.level-text').textContent = '--';
+        }
+        
+        this.updateLevelBlocks(1);
     }
 }
 

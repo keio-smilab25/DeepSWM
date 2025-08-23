@@ -117,32 +117,40 @@ class PredictionManager {
     
     updatePredictionDisplay(prediction) {
         const resultDiv = document.getElementById('prediction-result');
-        if (!resultDiv) return;
         
-        const classNames = ['loading', 'x-class', 'm-class', 'c-class', 'o-class'];
+        // Update the past prediction display with level blocks (this is the new main display)
+        this.updatePastPredictionDisplay(prediction);
         
-        // Remove all class names
-        classNames.forEach(cls => resultDiv.classList.remove(cls));
+        // Only update the old display if it exists (for backward compatibility)
+        if (resultDiv) {
+            const classNames = ['loading', 'x-class', 'm-class', 'c-class', 'o-class'];
+            
+            // Remove all class names
+            classNames.forEach(cls => resultDiv.classList.remove(cls));
+            
+            // Add appropriate class
+            resultDiv.classList.add(`${prediction.class.toLowerCase()}-class`);
+        }
         
-        // Add appropriate class
-        resultDiv.classList.add(`${prediction.class.toLowerCase()}-class`);
-        
-        const description = this.translationManager 
-            ? this.translationManager.t(`flare_desc_${prediction.class.toLowerCase()}`)
-            : this.getFlareDescription(prediction.class);
-        
-        const confidenceText = this.translationManager 
-            ? this.translationManager.t('confidence')
-            : 'Confidence';
-        
-        resultDiv.innerHTML = `
-            <div class="flare-class" style="margin-bottom: 0.00rem; font-size: 1.75rem;">${prediction.class}-Class</div>
-            <div class="flare-description" style="margin-bottom: 0.00rem; font-size: 0.85rem;">${description}</div>
-            <div class="confidence" style="font-size: 1rem;">${confidenceText}: ${(prediction.confidence * 100).toFixed(1)}%</div>
-        `;
-        
-        // Apply inline styling to the result div itself
-        resultDiv.style.padding = '0.2rem';
+        // Only update the old display elements if they exist
+        if (resultDiv) {
+            const description = this.translationManager 
+                ? this.translationManager.t(`flare_desc_${prediction.class.toLowerCase()}`)
+                : this.getFlareDescription(prediction.class);
+            
+            const confidenceText = this.translationManager 
+                ? this.translationManager.t('confidence')
+                : 'Confidence';
+            
+            resultDiv.innerHTML = `
+                <div class="flare-class" style="margin-bottom: 0.00rem; font-size: 1.75rem;">${prediction.class}-Class</div>
+                <div class="flare-description" style="margin-bottom: 0.00rem; font-size: 0.85rem;">${description}</div>
+                <div class="confidence" style="font-size: 1rem;">${confidenceText}: ${(prediction.confidence * 100).toFixed(1)}%</div>
+            `;
+            
+            // Apply inline styling to the result div itself
+            resultDiv.style.padding = '0.2rem';
+        }
         
         // Update prediction details separately with color coding
         const detailsDiv = document.getElementById('prediction-details');
@@ -193,18 +201,28 @@ class PredictionManager {
             'O': '#4caf50'
         };
         
+        const classInfo = {
+            'X': { status: 'Major Flares', level: 'Lv.4 (X-Class)' },
+            'M': { status: 'Active', level: 'Lv.3 (M-Class)' },
+            'C': { status: 'Eruptive', level: 'Lv.2 (C-Class)' },
+            'O': { status: 'Quiet', level: 'Lv.1 (O-Class)' }
+        };
+        
         const classes = ['X', 'M', 'C', 'O'];
         
         probSection.innerHTML = classes.map(cls => {
             const prob = prediction.probabilities[cls] || 0;
             const isPredicted = cls === prediction.class;
             const colorClass = cls.toLowerCase() + '-class';
+            const info = classInfo[cls];
             
             return `
                 <div class="prob-item ${colorClass} ${isPredicted ? 'predicted' : ''}" 
                      style="padding: 0.15rem; ${isPredicted ? `--class-color: ${classColors[cls]};` : ''}">
                     <div class="prob-value" style="margin-bottom: 0.03rem; font-size: 1rem;">${(prob * 100).toFixed(1)}%</div>
-                    <div class="prob-label" style="font-size: 0.75rem;">${cls}-Class</div>
+                    <div class="prob-label" style="font-size: 0.65rem; line-height: 1.2; color: #fff; font-weight: 600;">
+                        ${info.status}<br/>${info.level}
+                    </div>
                 </div>
             `;
         }).join('');
@@ -243,7 +261,7 @@ class PredictionManager {
             'X': 'Major solar flare - significant impact',
             'M': 'Moderate solar flare - possible effects', 
             'C': 'Minor solar flare - minimal space weather impact',
-            'O': 'No significant solar flare activity'
+            'O': 'Quiet'
         };
         return descriptions[flareClass] || 'Unknown flare class';
     }
@@ -251,35 +269,124 @@ class PredictionManager {
 
     
     showLoadingPrediction() {
-        const resultDiv = document.getElementById('prediction-result');
-        if (!resultDiv) return;
+        // Update the new level blocks display
+        const statusElement = document.getElementById('past-flare-status');
+        if (statusElement) {
+            statusElement.className = 'flare-status status-quiet';
+            statusElement.querySelector('.status-text').textContent = 'Loading...';
+            statusElement.querySelector('.level-text').textContent = '--';
+        }
         
-        resultDiv.className = 'prediction-result loading';
-        const loadingText = this.translationManager 
-            ? this.translationManager.t('loading_prediction')
-            : 'Loading prediction...';
-            
-        resultDiv.innerHTML = `
-            <div class="flare-class"><span class="loading-spinner"></span></div>
-            <div class="flare-description">${loadingText}</div>
-            <div class="confidence">Confidence: --%</div>
-        `;
+        // Clear level blocks
+        const blocksContainer = document.getElementById('past-flare-level-blocks');
+        if (blocksContainer) {
+            blocksContainer.innerHTML = '';
+        }
+        
+        // Update old display if it exists
+        const resultDiv = document.getElementById('prediction-result');
+        if (resultDiv) {
+            resultDiv.className = 'prediction-result loading';
+            const loadingText = this.translationManager 
+                ? this.translationManager.t('loading_prediction')
+                : 'Loading prediction...';
+                
+            resultDiv.innerHTML = `
+                <div class="flare-class"><span class="loading-spinner"></span></div>
+                <div class="flare-description">${loadingText}</div>
+                <div class="confidence">Confidence: --%</div>
+            `;
+        }
     }
     
     showNoPrediction() {
-        const resultDiv = document.getElementById('prediction-result');
-        if (!resultDiv) return;
+        // Update the new level blocks display
+        const statusElement = document.getElementById('past-flare-status');
+        if (statusElement) {
+            statusElement.className = 'flare-status status-quiet';
+            statusElement.querySelector('.status-text').textContent = 'No Data';
+            statusElement.querySelector('.level-text').textContent = '--';
+        }
         
-        resultDiv.className = 'prediction-result loading';
-        const noDataText = this.translationManager 
-            ? this.translationManager.t('no_prediction')
-            : 'No prediction data available for this date';
+        // Clear level blocks
+        const blocksContainer = document.getElementById('past-flare-level-blocks');
+        if (blocksContainer) {
+            blocksContainer.innerHTML = '';
+        }
+        
+        // Update old display if it exists
+        const resultDiv = document.getElementById('prediction-result');
+        if (resultDiv) {
+            resultDiv.className = 'prediction-result loading';
+            const noDataText = this.translationManager 
+                ? this.translationManager.t('no_prediction')
+                : 'No prediction data available for this date';
+                
+            resultDiv.innerHTML = `
+                <div class="flare-class">--</div>
+                <div class="flare-description">${noDataText}</div>
+                <div class="confidence">Confidence: --%</div>
+            `;
+        }
+    }
+    
+    updatePastPredictionDisplay(prediction) {
+        // Determine flare level and status based on prediction
+        const { level, status, statusClass, flareClass } = this.getFlareLevel(prediction);
+        
+        // Update level blocks
+        this.updatePastLevelBlocks(level);
+        
+        // Update status text
+        const statusElement = document.getElementById('past-flare-status');
+        if (statusElement) {
+            statusElement.className = `flare-status ${statusClass}`;
+            statusElement.querySelector('.status-text').textContent = status;
+            statusElement.querySelector('.level-text').textContent = `Lv.${level} (${flareClass})`;
+        }
+    }
+    
+    getFlareLevel(prediction) {
+        // Extract probabilities
+        const xProb = prediction.probabilities.X || 0;
+        const mProb = prediction.probabilities.M || 0;
+        const cProb = prediction.probabilities.C || 0;
+        const oProb = prediction.probabilities.O || 0;
+        
+        // Determine the highest probability class
+        const maxProb = Math.max(xProb, mProb, cProb, oProb);
+        
+        if (maxProb === xProb && xProb > 0.1) {
+            return { level: 4, status: 'Major Flares', statusClass: 'status-major', flareClass: 'X class' };
+        } else if (maxProb === mProb && mProb > 0.05) {
+            return { level: 3, status: 'Active', statusClass: 'status-active', flareClass: 'M class' };
+        } else if (maxProb === cProb && cProb > 0.1) {
+            return { level: 2, status: 'Eruptive', statusClass: 'status-eruptive', flareClass: 'C class' };
+        } else {
+            return { level: 1, status: 'Quiet', statusClass: 'status-quiet', flareClass: 'O class' };
+        }
+    }
+    
+    updatePastLevelBlocks(level) {
+        const blocksContainer = document.getElementById('past-flare-level-blocks');
+        if (!blocksContainer) return;
+        
+        // Clear existing blocks
+        blocksContainer.innerHTML = '';
+        blocksContainer.className = `flare-level-blocks level-${level}`;
+        
+        // Always show 4 blocks (from bottom to top: 1, 2, 3, 4)
+        for (let i = 4; i >= 1; i--) {
+            const block = document.createElement('div');
+            block.className = 'level-block';
             
-        resultDiv.innerHTML = `
-            <div class="flare-class">--</div>
-            <div class="flare-description">${noDataText}</div>
-            <div class="confidence">Confidence: --%</div>
-        `;
+            // Fill blocks up to the current level
+            if (i <= level) {
+                block.classList.add('filled');
+            }
+            
+            blocksContainer.appendChild(block);
+        }
     }
 }
 

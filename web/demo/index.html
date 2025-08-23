@@ -104,7 +104,7 @@
                         </div>
                         <img src="../images/logo.png" alt="Logo" class="logo">
                     </div>
-                    <p class="subtitle" data-i18n="subtitle">Interactive Solar Flare Prediction Demo</p>
+                    <p class="subtitle" data-i18n="subtitle">Operational Solar Flare AI Prediction Model</p>
 
                     <!-- Publication Links -->
                     <div class="publication-links">
@@ -159,87 +159,268 @@
             </div>
         </div>
 
-        <div class="main-layout">
-            <!-- Left Panel (7/10) -->
-            <div class="left-panel">
-                <!-- Prediction Results (Top 30%) -->
-                <div class="prediction-section">
-                    <!-- Section Headers -->
-                    <div class="section-headers">
-                        <div class="section-header">
-                            <span data-i18n="prediction_results">Prediction Results</span>
-                        </div>
-                        <div class="section-header">
-                            <span data-i18n="prediction_probabilities">Prediction Probabilities</span>
-                        </div>
-                        <div class="section-header">
-                            <span data-i18n="prediction_performance">Prediction Performance</span>
-                        </div>
-                    </div>
-
-                    <div class="prediction-result loading" id="prediction-result">
-                        <div class="flare-class">--</div>
-                        <div class="flare-description" data-i18n="loading_prediction">Loading prediction...</div>
-                        <div class="confidence">Confidence: --%</div>
-
-                        <div class="prediction-details" id="prediction-details">
-                            <!-- Details will be populated here -->
-                        </div>
-                    </div>
-
-                    <!-- Prediction Probabilities -->
-                    <div class="probabilities-section" id="probabilities-section">
-                        <div class="prob-item">
-                            <div class="prob-value">--%</div>
-                            <div class="prob-label">X-Class</div>
-                        </div>
-                        <div class="prob-item">
-                            <div class="prob-value">--%</div>
-                            <div class="prob-label">M-Class</div>
-                        </div>
-                        <div class="prob-item">
-                            <div class="prob-value">--%</div>
-                            <div class="prob-label">C-Class</div>
-                        </div>
-                        <div class="prob-item">
-                            <div class="prob-value">--%</div>
-                            <div class="prob-label">O-Class</div>
-                        </div>
-                    </div>
-
-                    <!-- Binary Classification -->
-                    <div class="binary-section" id="binary-section">
-                        <div class="binary-item">
-                            <div class="binary-value">87.3%</div>
-                            <div class="binary-label" data-i18n="classification">O+C vs M+X</div>
-                            <div class="binary-period">Since April 2025</div>
-                        </div>
-                    </div>
+        <!-- Expandable Information Sections -->
+        <div class="info-sections">
+            <!-- About Solar Flares Section -->
+            <div class="info-section">
+                <div class="info-header" data-section="solar-flares">
+                    <h3 class="info-title">About Solar Flares</h3>
+                    <span class="expand-icon">▼</span>
                 </div>
+                <div class="info-content" id="solar-flares-content">
+                    <div class="info-body">
+                        <div class="content-grid">
+                            <div class="text-content">
+                                <p>Solar flares are intense bursts of electromagnetic radiation from the Sun's surface,
+                                    caused by the sudden release of magnetic energy stored in the solar atmosphere.
+                                    These powerful events can have significant impacts on Earth and space-based
+                                    technology.</p>
 
-                <!-- Solar Images (Bottom 70%) -->
-                <div class="solar-section">
-                    <h3 class="section-title" data-i18n="solar_images">Multi-wavelength Solar Images</h3>
-                    <div class="solar-grid" id="solar-grid">
-                        <!-- Solar images will be populated here -->
+                                <p>Solar flares are classified by their X-ray intensity into different classes:</p>
+                                <ul>
+                                    <li><strong>X-class:</strong> The most intense flares that can cause planet-wide
+                                        radio blackouts and long-lasting radiation storms</li>
+                                    <li><strong>M-class:</strong> Medium-sized flares that can cause brief radio
+                                        blackouts affecting polar regions</li>
+                                    <li><strong>C-class:</strong> Small flares with few noticeable consequences on Earth
+                                    </li>
+                                    <li><strong>B and A-class (O-class):</strong> Background-level flares with minimal
+                                        impact</li>
+                                </ul>
+
+                                <p>Understanding and predicting solar flares is crucial for protecting astronauts,
+                                    satellites, power grids, and communication systems from space weather effects.</p>
+
+                                <!-- Related Links -->
+                                <div class="related-links">
+                                    <h4>Related Links</h4>
+                                    <div class="link-chips">
+                                        <a href="https://science.nasa.gov/sun/solar-storms-and-flares/" target="_blank"
+                                            class="link-chip">
+                                            <span class="chip-icon">🚀</span>
+                                            <span>NASA Solar Storms & Flares</span>
+                                        </a>
+                                        <a href="https://defn.nict.go.jp/top_eng.html" target="_blank"
+                                            class="link-chip">
+                                            <span class="chip-icon">🌞</span>
+                                            <span>NICT Deep Flare Net</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="video-content">
+                                <div class="video-container">
+                                    <video controls autoplay muted loop poster="../images/video-poster.jpg">
+                                        <source src="../videos/introduction.mp4" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                    <p class="video-caption">
+                                        <a href="https://svs.gsfc.nasa.gov/12706/" target="_blank" class="video-link">
+                                            A Powerful Sequence of Flares Start September 2017
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Panel (3/10) - Calendar -->
-            <div class="right-panel">
-                <div class="calendar-section">
-                    <div class="timestamp" id="timestamp">
-                        <span>2025-08-22 12:00 UTC</span>
+            <!-- About Deep Space Weather Model Section -->
+            <div class="info-section">
+                <div class="info-header" data-section="system-info">
+                    <h3 class="info-title">About Deep Space Weather Model (DeepSWM)</h3>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="info-content" id="system-info-content">
+                    <div class="info-body">
+                        <div class="content-grid">
+                            <div class="text-content">
+                                <p><strong>Deep Space Weather Model (Deep SWM)</strong> is an AI model
+                                    for predicting solar flare activity, accepted at <strong>ICCV 2025</strong>.</p>
+
+                                <p>Our model accurately and reliably predicts solar flares by capturing long-range
+                                    spatio-temporal dependencies and fine-grained features in multi-channel solar image
+                                    series, utilizing <strong>672 hours (28 days) of observation data</strong>.</p>
+
+                                <p><strong>Key Technical Innovations:</strong></p>
+                                <ul>
+                                    <li><strong>Solar Spatial Encoder (SSE):</strong> Features Depth-wise Channel
+                                        Selective Module and Spatio-Temporal State-Space Module for multi-wavelength
+                                        analysis</li>
+                                    <li><strong>Long-range Temporal SSM:</strong> Models temporal dependencies exceeding
+                                        the solar rotation period</li>
+                                    <li><strong>Sparse Masked Autoencoder:</strong> Novel pretraining strategy with
+                                        two-phase masking to preserve crucial regions like sunspots</li>
+                                    <li><strong>Multi-wavelength Integration:</strong> Processes ten-channel solar
+                                        observations (AIA + HMI) simultaneously</li>
+                                </ul>
+
+                                <p><strong>Performance:</strong> Our method outperforms all baseline approaches and even
+                                    <strong>surpasses human expert performance</strong> on standard metrics,
+                                    representing a significant
+                                    advancement in space weather prediction capabilities.
+                                </p>
+
+                                <!-- Related Links -->
+                                <div class="related-links">
+                                    <h4>Related Links</h4>
+                                    <div class="link-chips">
+                                        <a href="https://arxiv.org/abs/2508.07847" target="_blank" class="link-chip">
+                                            <span class="icon">
+                                                <i class="ai ai-arxiv"></i>
+                                            </span>
+                                            <span>arXiv</span>
+                                        </a>
+                                        <a href="https://keio-smilab25.github.io/DeepSWM/" target="_blank"
+                                            class="link-chip">
+                                            <span class="chip-icon">🌐</span>
+                                            <span>Project Page</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="model-content">
+                                <div class="model-images">
+                                    <div class="model-image-container">
+                                        <img src="../images/eye-catch_white.png" alt="Deep Space Weather Model Overview"
+                                            class="model-image">
+                                        <p class="image-caption">Deep SWM Architecture Overview</p>
+                                    </div>
+                                    <div class="model-image-container">
+                                        <img src="../images/model_white.png" alt="Model Architecture Diagram"
+                                            class="model-image">
+                                        <p class="image-caption">Model Architecture</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="time-selector">
-                        <label for="time-select" data-i18n="time_label">Time (UTC)</label>
-                        <select id="time-select" class="time-select">
-                            <!-- Time options will be populated by JavaScript -->
-                        </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Forecast Section -->
+        <div class="current-forecast-section">
+            <div class="current-forecast-header">
+                <h2 class="section-main-title">Current Forecast</h2>
+                <div class="current-time" id="current-time">
+                    <span class="time-label">Data Time (UTC):</span>
+                    <span class="time-value" id="current-time-value">--:--</span>
+                </div>
+            </div>
+            <div class="current-forecast-content">
+                <!-- AIA 304 Å Time Series -->
+                <div class="aia-304-panel">
+                    <h3 class="subsection-title" id="aia-304-title">Current Solar Surface</h3>
+                    <div class="aia-304-container" id="aia-304-container">
+                        <!-- AIA 304 images will be populated here -->
                     </div>
-                    <div id="custom-calendar">
-                        <!-- Custom calendar will be inserted here -->
+                </div>
+
+                <!-- Current Prediction Display -->
+                <div class="current-prediction-panel">
+                    <h3 class="subsection-title">Solar Flare Forecast Over the Next 24 Hours</h3>
+                    <div class="prediction-display" id="current-prediction-display">
+                        <div class="flare-level-blocks" id="flare-level-blocks">
+                            <!-- Level blocks will be populated here -->
+                        </div>
+                        <div class="flare-status" id="flare-status">
+                            <div class="status-text">Quiet</div>
+                            <div class="level-text">Lv.1</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Past Forecasts Section -->
+        <div class="past-forecasts-section">
+            <h2 class="section-main-title">Past Forecasts</h2>
+            <div class="main-layout">
+                <!-- Left Panel (7/10) -->
+                <div class="left-panel">
+                    <!-- Prediction Results (Top 30%) -->
+                    <div class="prediction-section">
+                        <!-- Section Headers -->
+                        <div class="section-headers">
+                            <div class="section-header">
+                                <span data-i18n="prediction_results">Prediction Results</span>
+                            </div>
+                            <div class="section-header">
+                                <span data-i18n="prediction_probabilities">Prediction Probabilities</span>
+                            </div>
+                            <div class="section-header">
+                                <span data-i18n="prediction_performance">Prediction Performance</span>
+                            </div>
+                        </div>
+
+                        <div class="past-prediction-panel">
+                            <div class="prediction-display" id="past-prediction-display">
+                                <div class="flare-level-blocks" id="past-flare-level-blocks">
+                                    <!-- Level blocks will be populated here -->
+                                </div>
+                                <div class="flare-status" id="past-flare-status">
+                                    <div class="status-text">Loading...</div>
+                                    <div class="level-text">--</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Prediction Probabilities -->
+                        <div class="probabilities-section" id="probabilities-section">
+                            <div class="prob-item">
+                                <div class="prob-value">--%</div>
+                                <div class="prob-label">X-Class</div>
+                            </div>
+                            <div class="prob-item">
+                                <div class="prob-value">--%</div>
+                                <div class="prob-label">M-Class</div>
+                            </div>
+                            <div class="prob-item">
+                                <div class="prob-value">--%</div>
+                                <div class="prob-label">C-Class</div>
+                            </div>
+                            <div class="prob-item">
+                                <div class="prob-value">--%</div>
+                                <div class="prob-label">O-Class</div>
+                            </div>
+                        </div>
+
+                        <!-- Binary Classification -->
+                        <div class="binary-section" id="binary-section">
+                            <div class="binary-item">
+                                <div class="binary-value">87.3%</div>
+                                <div class="binary-label" data-i18n="classification">O+C vs M+X</div>
+                                <div class="binary-period">Since April 2025</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Solar Images (Bottom 70%) -->
+                    <div class="solar-section">
+                        <h3 class="section-title" data-i18n="solar_images">Multi-wavelength Solar Images</h3>
+                        <div class="solar-grid" id="solar-grid">
+                            <!-- Solar images will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel (3/10) - Calendar -->
+                <div class="right-panel">
+                    <div class="calendar-section">
+                        <div class="timestamp" id="timestamp">
+                            <span>2025-08-22 12:00 UTC</span>
+                        </div>
+                        <div class="time-selector">
+                            <label for="time-select" data-i18n="time_label">Time (UTC)</label>
+                            <select id="time-select" class="time-select">
+                                <!-- Time options will be populated by JavaScript -->
+                            </select>
+                        </div>
+                        <div id="custom-calendar">
+                            <!-- Custom calendar will be inserted here -->
+                        </div>
                     </div>
                 </div>
             </div>

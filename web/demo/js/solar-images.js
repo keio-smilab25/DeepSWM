@@ -94,6 +94,7 @@ class SolarImagesManager {
         
         grid.innerHTML = '';
         this.animationFrames = [];
+        this.loadedTimeRange = null;
         
         // Timestamp display removed
         
@@ -156,6 +157,21 @@ class SolarImagesManager {
             
             this.animationFrames.push(frameCanvases);
         }
+        
+        // Calculate and store time range
+        const startHour = hour - (this.frameCount - 1);
+        const startDate = new Date(date);
+        if (startHour < 0) {
+            startDate.setDate(startDate.getDate() - 1);
+            startDate.setHours(24 + startHour);
+        } else {
+            startDate.setHours(startHour);
+        }
+        
+        const startTime = `${String(startDate.getMonth() + 1).padStart(2, '0')}/${String(startDate.getDate()).padStart(2, '0')} ${String(startDate.getHours()).padStart(2, '0')}:00`;
+        const endTime = `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')} ${String(hour).padStart(2, '0')}:00`;
+        
+        this.loadedTimeRange = { startTime, endTime };
         
         // Display the latest frame initially
         this.currentFrame = this.animationFrames.length - 1;

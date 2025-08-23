@@ -3,7 +3,7 @@
 const translations = {
     en: {
         title: "Deep Space Weather Model",
-        subtitle: "Operational Solar Flare AI Prediction System",
+        subtitle: "Operational Solar Flare AI Prediction Model",
         date_selection: "Date & Time Selection",
         solar_images: "Multi-wavelength Solar Images",
         prediction: "24-Hour Flare Prediction",
@@ -16,7 +16,7 @@ const translations = {
         flare_desc_x: "Major solar flare - significant impact",
         flare_desc_m: "Moderate solar flare - possible effects",
         flare_desc_c: "Minor solar flare - minimal space weather impact",
-        flare_desc_o: "No significant solar flare activity",
+        flare_desc_o: "Quiet",
         binary_accuracy: "Binary Accuracy",
         no_prediction: "No prediction data available for this date",
         time_label: "Time (UTC)",
