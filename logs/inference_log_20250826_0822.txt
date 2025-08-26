@@ -1,0 +1,53 @@
+Starting inference execution at Tue Aug 26 08:22:14 UTC 2025
+=== Starting Inference Pipeline ===
+Current datetime: 082608
+Previous datetime: 082607
+Inference datetime: 20250826_080000
+[CURRENT] Fetching data for: 082608
+🚀 Starting data collection for: 2025-08-26 08:00 UTC
+✅ XRS updated: 2025082608 → 1.0523291166464332e-05
+✅ XRS updated: 2025082607 → 1.2658671039389446e-05
+📡 Fetching solar observation data...
+  Fetching AIA 0094Å...
+    ✅ PNG saved: data/images/0826/08_aia_0094.png
+  Fetching AIA 0131Å...
+    ✅ PNG saved: data/images/0826/08_aia_0131.png
+  Fetching AIA 0171Å...
+    ✅ PNG saved: data/images/0826/08_aia_0171.png
+  Fetching AIA 0193Å...
+    ✅ PNG saved: data/images/0826/08_aia_0193.png
+  Fetching AIA 0211Å...
+    ✅ PNG saved: data/images/0826/08_aia_0211.png
+  Fetching AIA 0304Å...
+    ✅ PNG saved: data/images/0826/08_aia_0304.png
+  Fetching AIA 0335Å...
+    ✅ PNG saved: data/images/0826/08_aia_0335.png
+  Fetching AIA 1600Å...
+    ✅ PNG saved: data/images/0826/08_aia_1600.png
+  Fetching AIA 4500Å...
+    ✅ PNG saved: data/images/0826/08_aia_4500.png
+  Fetching HMI magnetogram...
+❌ HMI fetch/process failed: 404 Client Error: Not Found for url: https://jsoc1.stanford.edu/data/hmi/images/2025/08/26/20250826_080000_M_1k.jpg
+    ⚠️  HMI data unavailable, skipping PNG
+💾 Saving H5 file for ML inference...
+✅ H5 saved: ./ml/datasets/all_data_hours/20250826_080000.h5
+🎉 Data collection completed for 2025-08-26 08:00 UTC
+[CURRENT] Data fetch successful for 082608
+[PREVIOUS] Fetching data for: 082607
+🚀 Starting data collection for: 2025-08-26 07:00 UTC
+✅ XRS updated: 2025082607 → 1.2658671039389446e-05
+✅ XRS updated: 2025082606 → 4.524970427155495e-05
+✅ All files already exist for 2025-08-26 07:00
+[PREVIOUS] Data fetch successful for 082607
+[FEATURES] Extracting features for: 20250826_080000
+Saved features: /home/runner/work/DeepSWM/DeepSWM/ml/datasets/all_features/20250826_080000.h5
+[FEATURES] Feature extraction successful
+[INFERENCE] Running inference for: 20250826_080000
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/torch/amp/autocast_mode.py:250: UserWarning: User provided device_type of 'cuda', but CUDA is not available. Disabling
+  warnings.warn(
+Updated predictions: added 1 new, total 3522 timestamps in /home/runner/work/DeepSWM/DeepSWM/data/pred_24.json
+[INFERENCE] Inference successful
+=== Execution Summary ===
+Total errors encountered: 0
+Execution completed at: Tue Aug 26 08:22:35 UTC 2025
+✅ Workflow completed successfully with no errors
