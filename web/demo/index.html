@@ -322,22 +322,29 @@
                 <!-- Current Prediction Display -->
                 <div class="current-prediction-panel">
                     <h3 class="subsection-title">Solar Flare Forecast Over the Next 24 Hours</h3>
-                    <div class="prediction-display" id="current-prediction-display">
-                        <div class="flare-level-blocks" id="flare-level-blocks">
-                            <!-- Level blocks will be populated here -->
+                    <div class="forecast-blocks-container">
+                        <div class="forecast-block-column" id="left-forecast-column">
+                            <div class="flare-level-blocks" id="flare-level-blocks">
+                                <!-- Level blocks will be populated here -->
+                            </div>
                         </div>
-                        <div class="flare-status" id="flare-status">
-                            <div class="status-text">Quiet</div>
-                            <div class="level-text">Lv.1</div>
+                        <div class="forecast-block-column" id="right-forecast-column">
+                            <div class="flare-level-blocks" id="current-probabilities-display">
+                                <!-- Probabilities will be populated here -->
+                            </div>
                         </div>
+                    </div>
+                    <div class="flare-status" id="flare-status">
+                        <div class="status-text">Quiet</div>
+                        <div class="level-text">Lv.1</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Past Forecasts Section -->
+        <!-- Arxiv Section -->
         <div class="past-forecasts-section">
-            <h2 class="section-main-title">Past Forecasts</h2>
+            <h2 class="section-main-title">Arxiv</h2>
             <div class="main-layout">
                 <!-- Left Panel (7/10) -->
                 <div class="left-panel">
@@ -346,54 +353,34 @@
                         <!-- Section Headers -->
                         <div class="section-headers">
                             <div class="section-header">
-                                <span data-i18n="prediction_results">Prediction Results</span>
+                                <span data-i18n="model_performance_week">Model Performance (Past Week)</span>
                             </div>
                             <div class="section-header">
-                                <span data-i18n="prediction_probabilities">Prediction Probabilities</span>
+                                <span data-i18n="model_performance_month">Model Performance (Past Month)</span>
                             </div>
                             <div class="section-header">
-                                <span data-i18n="prediction_performance">Prediction Performance</span>
+                                <span data-i18n="model_performance_all">Model Performance (All Period)</span>
                             </div>
                         </div>
 
-                        <div class="past-prediction-panel">
-                            <div class="prediction-display" id="past-prediction-display">
-                                <div class="flare-level-blocks" id="past-flare-level-blocks">
-                                    <!-- Level blocks will be populated here -->
-                                </div>
-                                <div class="flare-status" id="past-flare-status">
-                                    <div class="status-text">Loading...</div>
-                                    <div class="level-text">--</div>
-                                </div>
+                        <!-- Model Performance (Past Week) -->
+                        <div class="performance-section" id="week-performance-section">
+                            <div class="performance-display">
+                                <!-- Week performance will be populated here -->
                             </div>
                         </div>
 
-                        <!-- Prediction Probabilities -->
-                        <div class="probabilities-section" id="probabilities-section">
-                            <div class="prob-item">
-                                <div class="prob-value">--%</div>
-                                <div class="prob-label">X-Class</div>
-                            </div>
-                            <div class="prob-item">
-                                <div class="prob-value">--%</div>
-                                <div class="prob-label">M-Class</div>
-                            </div>
-                            <div class="prob-item">
-                                <div class="prob-value">--%</div>
-                                <div class="prob-label">C-Class</div>
-                            </div>
-                            <div class="prob-item">
-                                <div class="prob-value">--%</div>
-                                <div class="prob-label">O-Class</div>
+                        <!-- Model Performance (Past Month) -->
+                        <div class="performance-section" id="month-performance-section">
+                            <div class="performance-display">
+                                <!-- Month performance will be populated here -->
                             </div>
                         </div>
 
-                        <!-- Binary Classification -->
-                        <div class="binary-section" id="binary-section">
-                            <div class="binary-item">
-                                <div class="binary-value">87.3%</div>
-                                <div class="binary-label" data-i18n="classification">O+C vs M+X</div>
-                                <div class="binary-period">Since April 2025</div>
+                        <!-- Model Performance All Period -->
+                        <div class="performance-section" id="all-performance-section">
+                            <div class="performance-display">
+                                <!-- All period performance will be populated here -->
                             </div>
                         </div>
                     </div>

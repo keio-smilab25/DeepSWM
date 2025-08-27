@@ -3,6 +3,7 @@
 class PredictionManager {
     constructor() {
         this.predictionData = null;
+        this.xrsData = null;
         this.basePath = this.getBasePath();
         this.translationManager = null;
     }
@@ -23,19 +24,32 @@ class PredictionManager {
     
     async loadPredictionData() {
         try {
-            const response = await fetch(`${this.basePath}/data/pred_24.json`);
-            if (response.ok) {
-                this.predictionData = await response.json();
+            const [predResponse, xrsResponse] = await Promise.all([
+                fetch(`${this.basePath}/data/pred_24.json`),
+                fetch(`${this.basePath}/data/xrs.json`)
+            ]);
+            
+            if (predResponse.ok) {
+                this.predictionData = await predResponse.json();
                 console.log('Prediction data loaded:', Object.keys(this.predictionData).length, 'entries');
-                return true;
             } else {
-                console.warn('Failed to load prediction data:', response.status);
+                console.warn('Failed to load prediction data:', predResponse.status);
                 this.predictionData = {};
-                return false;
             }
+            
+            if (xrsResponse.ok) {
+                this.xrsData = await xrsResponse.json();
+                console.log('XRS data loaded:', Object.keys(this.xrsData).length, 'entries');
+            } else {
+                console.warn('Failed to load XRS data:', xrsResponse.status);
+                this.xrsData = {};
+            }
+            
+            return this.predictionData && this.xrsData;
         } catch (error) {
-            console.warn('Error loading prediction data:', error);
+            console.warn('Error loading data:', error);
             this.predictionData = {};
+            this.xrsData = {};
             return false;
         }
     }
@@ -83,6 +97,9 @@ class PredictionManager {
             return;
         }
         
+        // Update performance displays instead of individual predictions
+        this.updatePerformanceDisplays(date);
+        
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
@@ -92,7 +109,17 @@ class PredictionManager {
         if (this.predictionData[dataKey]) {
             const probs = this.predictionData[dataKey];
             const prediction = this.getPredictionFromProbs(probs);
-            this.updatePredictionDisplay(prediction);
+            
+            // Hide old prediction displays
+            const resultDiv = document.getElementById('prediction-result');
+            if (resultDiv) {
+                resultDiv.style.display = 'none';
+            }
+            
+            const detailsDiv = document.getElementById('prediction-details');
+            if (detailsDiv) {
+                detailsDiv.style.display = 'none';
+            }
         } else {
             this.showNoPrediction();
         }
@@ -115,77 +142,7 @@ class PredictionManager {
         };
     }
     
-    updatePredictionDisplay(prediction) {
-        const resultDiv = document.getElementById('prediction-result');
-        
-        // Update the past prediction display with level blocks (this is the new main display)
-        this.updatePastPredictionDisplay(prediction);
-        
-        // Only update the old display if it exists (for backward compatibility)
-        if (resultDiv) {
-            const classNames = ['loading', 'x-class', 'm-class', 'c-class', 'o-class'];
-            
-            // Remove all class names
-            classNames.forEach(cls => resultDiv.classList.remove(cls));
-            
-            // Add appropriate class
-            resultDiv.classList.add(`${prediction.class.toLowerCase()}-class`);
-        }
-        
-        // Only update the old display elements if they exist
-        if (resultDiv) {
-            const description = this.translationManager 
-                ? this.translationManager.t(`flare_desc_${prediction.class.toLowerCase()}`)
-                : this.getFlareDescription(prediction.class);
-            
-            const confidenceText = this.translationManager 
-                ? this.translationManager.t('confidence')
-                : 'Confidence';
-            
-            resultDiv.innerHTML = `
-                <div class="flare-class" style="margin-bottom: 0.00rem; font-size: 1.75rem;">${prediction.class}-Class</div>
-                <div class="flare-description" style="margin-bottom: 0.00rem; font-size: 0.85rem;">${description}</div>
-                <div class="confidence" style="font-size: 1rem;">${confidenceText}: ${(prediction.confidence * 100).toFixed(1)}%</div>
-            `;
-            
-            // Apply inline styling to the result div itself
-            resultDiv.style.padding = '0.2rem';
-        }
-        
-        // Update prediction details separately with color coding
-        const detailsDiv = document.getElementById('prediction-details');
-        if (detailsDiv) {
-            // Apply inline styling to the details div itself
-            detailsDiv.style.gap = '0.15rem';
-            
-            const classColors = {
-                'X': '#ff6b6b',
-                'M': '#ffa726', 
-                'C': '#81c784',
-                'O': '#4caf50'
-            };
-            
-            detailsDiv.innerHTML = Object.entries(prediction.probabilities).map(([cls, prob]) => {
-                const isActive = cls === prediction.class;
-                const bgColor = isActive ? classColors[cls] : '#f8f9fa';
-                const textColor = isActive ? '#fff' : '#333';
-                const borderColor = classColors[cls];
-                
-                return `
-                    <div class="detail-item ${isActive ? 'active' : ''}" 
-                         style="background: ${bgColor}; color: ${textColor}; border: 2px solid ${borderColor}; padding: 0.2rem; font-size: 0.875rem;">
-                        ${cls}: ${(prob * 100).toFixed(1)}%
-                    </div>
-                `;
-            }).join('');
-        }
-        
-        // Update probabilities section
-        this.updateProbabilitiesSection(prediction);
-        
-        // Update binary classification
-        this.updateBinaryClassification(prediction);
-    }
+
     
     updateProbabilitiesSection(prediction) {
         const probSection = document.getElementById('probabilities-section');
@@ -269,64 +226,38 @@ class PredictionManager {
 
     
     showLoadingPrediction() {
-        // Update the new level blocks display
-        const statusElement = document.getElementById('past-flare-status');
-        if (statusElement) {
-            statusElement.className = 'flare-status status-quiet';
-            statusElement.querySelector('.status-text').textContent = 'Loading...';
-            statusElement.querySelector('.level-text').textContent = '--';
-        }
+        // Show loading state for performance displays
+        this.updateWeekPerformanceDisplay(null);
+        this.updateMonthPerformanceDisplay(null);
+        this.updateAllPerformanceDisplay(null);
         
-        // Clear level blocks
-        const blocksContainer = document.getElementById('past-flare-level-blocks');
-        if (blocksContainer) {
-            blocksContainer.innerHTML = '';
-        }
-        
-        // Update old display if it exists
+        // Hide old displays
         const resultDiv = document.getElementById('prediction-result');
         if (resultDiv) {
-            resultDiv.className = 'prediction-result loading';
-            const loadingText = this.translationManager 
-                ? this.translationManager.t('loading_prediction')
-                : 'Loading prediction...';
-                
-            resultDiv.innerHTML = `
-                <div class="flare-class"><span class="loading-spinner"></span></div>
-                <div class="flare-description">${loadingText}</div>
-                <div class="confidence">Confidence: --%</div>
-            `;
+            resultDiv.style.display = 'none';
+        }
+        
+        const detailsDiv = document.getElementById('prediction-details');
+        if (detailsDiv) {
+            detailsDiv.style.display = 'none';
         }
     }
     
     showNoPrediction() {
-        // Update the new level blocks display
-        const statusElement = document.getElementById('past-flare-status');
-        if (statusElement) {
-            statusElement.className = 'flare-status status-quiet';
-            statusElement.querySelector('.status-text').textContent = 'No Data';
-            statusElement.querySelector('.level-text').textContent = '--';
-        }
+        // Show no data state for performance displays
+        this.updateWeekPerformanceDisplay(null);
+        this.updateMonthPerformanceDisplay(null);
+        this.updateAllPerformanceDisplay(null);
         
-        // Clear level blocks
-        const blocksContainer = document.getElementById('past-flare-level-blocks');
-        if (blocksContainer) {
-            blocksContainer.innerHTML = '';
-        }
-        
-        // Update old display if it exists
+        // Hide old displays
         const resultDiv = document.getElementById('prediction-result');
         if (resultDiv) {
-            resultDiv.className = 'prediction-result loading';
-            const noDataText = this.translationManager 
-                ? this.translationManager.t('no_prediction')
-                : 'No prediction data available for this date';
-                
-            resultDiv.innerHTML = `
-                <div class="flare-class">--</div>
-                <div class="flare-description">${noDataText}</div>
-                <div class="confidence">Confidence: --%</div>
-            `;
+            resultDiv.style.display = 'none';
+        }
+        
+        const detailsDiv = document.getElementById('prediction-details');
+        if (detailsDiv) {
+            detailsDiv.style.display = 'none';
         }
     }
     
@@ -387,6 +318,182 @@ class PredictionManager {
             
             blocksContainer.appendChild(block);
         }
+    }
+    
+    // Convert XRS flux to flare class based on the table
+    getFlareClassFromFlux(flux) {
+        // Handle missing data (null, undefined, 0, or negative values)
+        if (flux === null || flux === undefined || flux <= 0) {
+            return null; // Missing or invalid data
+        }
+        
+        if (flux > 1e-4) return 'X';
+        if (flux > 1e-5) return 'M';
+        if (flux > 1e-6) return 'C';
+        return 'O';
+    }
+    
+    // Get predicted class from prediction probabilities
+    getPredictedClassFromProbs(probs) {
+        const classes = ['O', 'C', 'M', 'X'];
+        const maxIndex = probs.indexOf(Math.max(...probs));
+        return classes[maxIndex];
+    }
+    
+    // Convert classes to binary (M+X vs C+O)
+    getBinaryClass(flareClass) {
+        return (flareClass === 'M' || flareClass === 'X') ? 'MX' : 'CO';
+    }
+    
+    // Calculate actual performance for a given period
+    calculatePerformanceForPeriod(currentDate, days) {
+        if (!this.predictionData || !this.xrsData) return null;
+        
+        const endDate = new Date(currentDate);
+        const startDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
+        
+        let correct = 0;
+        let total = 0;
+        
+        // Iterate through all prediction data entries
+        for (const [key, probs] of Object.entries(this.predictionData)) {
+            // Parse date from key (YYYYMMDDHH format)
+            const year = parseInt(key.substr(0, 4));
+            const month = parseInt(key.substr(4, 2));
+            const day = parseInt(key.substr(6, 2));
+            const hour = parseInt(key.substr(8, 2));
+            
+            const entryDate = new Date(year, month - 1, day, hour);
+            
+            // Check if entry is within the specified period
+            if (entryDate >= startDate && entryDate <= endDate) {
+                // Get corresponding XRS data - exclude missing data
+                const xrsFlux = this.xrsData[key];
+                
+                // Only process if XRS data exists, is not null/undefined, and is greater than 0
+                if (xrsFlux !== null && xrsFlux !== undefined && xrsFlux > 0) {
+                    const actualClass = this.getFlareClassFromFlux(xrsFlux);
+                    const predictedClass = this.getPredictedClassFromProbs(probs);
+                    
+                    // Only count if both actual and predicted classes are valid
+                    if (actualClass && predictedClass) {
+                        total++;
+                        
+                        // Convert to binary classification (M+X vs C+O)
+                        const actualBinary = this.getBinaryClass(actualClass);
+                        const predictedBinary = this.getBinaryClass(predictedClass);
+                        
+                        if (actualBinary === predictedBinary) {
+                            correct++;
+                        }
+                    }
+                }
+            }
+        }
+        
+        if (total === 0) return null;
+        
+        const accuracy = correct / total;
+        return { accuracy, total, correct };
+    }
+    
+    // Update performance displays for different periods
+    updatePerformanceDisplays(currentDate) {
+        if (!currentDate) return;
+        
+        // Calculate performance for different periods
+        const weekPerformance = this.calculatePerformanceForPeriod(currentDate, 7);
+        const monthPerformance = this.calculatePerformanceForPeriod(currentDate, 30);
+        const allPerformance = this.calculatePerformanceForPeriod(currentDate, 365); // All available data
+        
+        // Update displays using the existing UI structure
+        this.updateWeekPerformanceDisplay(weekPerformance);
+        this.updateMonthPerformanceDisplay(monthPerformance);
+        this.updateAllPerformanceDisplay(allPerformance);
+    }
+    
+    // Update week performance display - unified design
+    updateWeekPerformanceDisplay(performance) {
+        const performanceContainer = document.querySelector('#week-performance-section .performance-display');
+        if (!performanceContainer) return;
+        
+        // Check if dark theme is active
+        const isDarkTheme = document.body.classList.contains('dark-theme');
+        const primaryColor = isDarkTheme ? '#ffffff' : '#212529';
+        const secondaryColor = isDarkTheme ? '#cbd5e1' : '#666';
+        
+        if (!performance) {
+            performanceContainer.innerHTML = `
+                <div style="font-size: 3rem; font-weight: 800; color: ${primaryColor}; margin-bottom: 0.5rem;">--%</div>
+                <div style="font-size: 1rem; color: ${secondaryColor}; font-weight: 600;">Past Week</div>
+                <div style="font-size: 0.8rem; color: ${secondaryColor}; margin-top: 0.25rem;">No data</div>
+            `;
+            return;
+        }
+        
+        const accuracyPercent = (performance.accuracy * 100).toFixed(1);
+        
+        performanceContainer.innerHTML = `
+            <div style="font-size: 3rem; font-weight: 800; color: ${primaryColor}; margin-bottom: 0.5rem;">${accuracyPercent}%</div>
+            <div style="font-size: 1rem; color: ${secondaryColor}; font-weight: 600;">M≥ Accuracy</div>
+            <div style="font-size: 0.8rem; color: ${secondaryColor}; margin-top: 0.25rem;">${performance.total} predictions</div>
+        `;
+    }
+    
+    // Update month performance display - unified design
+    updateMonthPerformanceDisplay(performance) {
+        const performanceContainer = document.querySelector('#month-performance-section .performance-display');
+        if (!performanceContainer) return;
+        
+        // Check if dark theme is active
+        const isDarkTheme = document.body.classList.contains('dark-theme');
+        const primaryColor = isDarkTheme ? '#ffffff' : '#212529';
+        const secondaryColor = isDarkTheme ? '#cbd5e1' : '#666';
+        
+        if (!performance) {
+            performanceContainer.innerHTML = `
+                <div style="font-size: 3rem; font-weight: 800; color: ${primaryColor}; margin-bottom: 0.5rem;">--%</div>
+                <div style="font-size: 1rem; color: ${secondaryColor}; font-weight: 600;">Past Month</div>
+                <div style="font-size: 0.8rem; color: ${secondaryColor}; margin-top: 0.25rem;">No data</div>
+            `;
+            return;
+        }
+        
+        const accuracyPercent = (performance.accuracy * 100).toFixed(1);
+        
+        performanceContainer.innerHTML = `
+            <div style="font-size: 3rem; font-weight: 800; color: ${primaryColor}; margin-bottom: 0.5rem;">${accuracyPercent}%</div>
+            <div style="font-size: 1rem; color: ${secondaryColor}; font-weight: 600;">M≥ Accuracy</div>
+            <div style="font-size: 0.8rem; color: ${secondaryColor}; margin-top: 0.25rem;">${performance.total} predictions</div>
+        `;
+    }
+    
+    // Update all period performance display - unified design
+    updateAllPerformanceDisplay(performance) {
+        const performanceContainer = document.querySelector('#all-performance-section .performance-display');
+        if (!performanceContainer) return;
+        
+        // Check if dark theme is active
+        const isDarkTheme = document.body.classList.contains('dark-theme');
+        const primaryColor = isDarkTheme ? '#ffffff' : '#212529';
+        const secondaryColor = isDarkTheme ? '#cbd5e1' : '#666';
+        
+        if (!performance) {
+            performanceContainer.innerHTML = `
+                <div style="font-size: 3rem; font-weight: 800; color: ${primaryColor}; margin-bottom: 0.5rem;">--%</div>
+                <div style="font-size: 1rem; color: ${secondaryColor}; font-weight: 600;">M≥ Accuracy</div>
+                <div style="font-size: 0.8rem; color: ${secondaryColor}; margin-top: 0.25rem;">Since April 2025</div>
+            `;
+            return;
+        }
+        
+        const accuracyPercent = (performance.accuracy * 100).toFixed(1);
+        
+        performanceContainer.innerHTML = `
+            <div style="font-size: 3rem; font-weight: 800; color: ${primaryColor}; margin-bottom: 0.5rem;">${accuracyPercent}%</div>
+            <div style="font-size: 1rem; color: ${secondaryColor}; font-weight: 600;">M≥ Accuracy</div>
+            <div style="font-size: 0.8rem; color: ${secondaryColor}; margin-top: 0.25rem;">Since April 2025</div>
+        `;
     }
 }
 

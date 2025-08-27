@@ -24,6 +24,9 @@ const translations = {
         prediction_results: "Forecast Result",
         prediction_probabilities: "Probability of Flares", 
         prediction_performance: "Model Performance",
+        model_performance_week: "Model Performance (Past Week)",
+        model_performance_month: "Model Performance (Past Month)",
+        model_performance_all: "Model Performance (All Period)",
         since_april_2025: "Since April 2025",
         japanese: "日本語",
         english: "English"
@@ -51,6 +54,9 @@ const translations = {
         prediction_results: "予報結果",
         prediction_probabilities: "予報確率",
         prediction_performance: "モデル性能",
+        model_performance_week: "モデル性能 (直近1週間)",
+        model_performance_month: "モデル性能 (直近1ヶ月)",
+        model_performance_all: "モデル性能 (全期間)",
         since_april_2025: "2025年4月から",
         japanese: "日本語",
         english: "English"
