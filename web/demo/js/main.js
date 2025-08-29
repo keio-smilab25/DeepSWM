@@ -132,6 +132,9 @@ class SolarFlareDemo {
         }
         
         // Current month days
+        const today = new Date();
+        today.setHours(23, 59, 59, 999); // Set to end of today for comparison
+        
         for (let day = 1; day <= daysInMonth; day++) {
             const date = new Date(this.currentYear, this.currentMonth, day);
             const dateStr = `${this.currentYear}-${String(this.currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
@@ -140,10 +143,12 @@ class SolarFlareDemo {
                 this.currentDate.getMonth() === this.currentMonth && 
                 this.currentDate.getFullYear() === this.currentYear;
             const hasData = this.predictionManager.hasDataForDate(date);
+            const isFutureDate = date > today;
             
             let classes = 'custom-calendar-day';
             if (isSelected) classes += ' selected';
             if (hasData) classes += ' has-data';
+            if (isFutureDate) classes += ' disabled';
             
             daysHTML += `<div class="${classes}" data-date="${dateStr}">${day}</div>`;
         }
@@ -206,7 +211,9 @@ class SolarFlareDemo {
         
         if (daysContainer) {
             daysContainer.addEventListener('click', (e) => {
-                if (e.target.classList.contains('custom-calendar-day') && !e.target.classList.contains('other-month')) {
+                if (e.target.classList.contains('custom-calendar-day') && 
+                    !e.target.classList.contains('other-month') && 
+                    !e.target.classList.contains('disabled')) {
                     const dateStr = e.target.getAttribute('data-date');
                     if (dateStr) {
                         this.currentDate = new Date(dateStr + 'T00:00:00Z');

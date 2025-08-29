@@ -831,6 +831,18 @@ body {
     background: #f8f9fa;
 }
 
+.custom-calendar-day.disabled {
+    color: #adb5bd;
+    background: #f8f9fa;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.custom-calendar-day.disabled:hover {
+    background: #f8f9fa;
+    border-color: #e9ecef;
+}
+
 /* Flare class colors - matching attached image */
 .x-class {
     background: #ff6b6b !important;
@@ -1115,6 +1127,18 @@ body.dark-theme {
 .dark-theme .custom-calendar-day.other-month {
     color: #64748b;
     background: rgba(51, 65, 85, 0.3);
+}
+
+.dark-theme .custom-calendar-day.disabled {
+    color: #64748b;
+    background: rgba(51, 65, 85, 0.3);
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.dark-theme .custom-calendar-day.disabled:hover {
+    background: rgba(51, 65, 85, 0.3);
+    border-color: rgba(148, 163, 184, 0.3);
 }
 
 .dark-theme .flare-description,
