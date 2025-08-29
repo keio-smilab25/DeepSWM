@@ -28,6 +28,8 @@ const translations = {
         model_performance_month: "Model Performance (Past Month)",
         model_performance_all: "Model Performance (All Period)",
         since_april_2025: "Since April 2025",
+        disclaimer_title: "Disclaimer",
+        disclaimer_text: "This system is provided for research and educational purposes only. The solar flare predictions are experimental and should not be used as the sole basis for operational decisions. The authors and affiliated institutions assume no responsibility for any damages or losses that may result from the use of this information. Users are advised to consult official space weather services for operational forecasts.",
         japanese: "日本語",
         english: "English"
     },
@@ -58,6 +60,8 @@ const translations = {
         model_performance_month: "モデル性能 (直近1ヶ月)",
         model_performance_all: "モデル性能 (全期間)",
         since_april_2025: "2025年4月から",
+        disclaimer_title: "免責事項",
+        disclaimer_text: "本システムは研究・教育目的でのみ提供されています。太陽フレアの予測は実験的なものであり、運用上の意思決定の唯一の根拠として使用すべきではありません。作成者および関連機関は、この情報の使用によって生じる可能性のある損害や損失について一切の責任を負いません。運用予報については、公式の宇宙天気サービスにご相談ください。",
         japanese: "日本語",
         english: "English"
     }

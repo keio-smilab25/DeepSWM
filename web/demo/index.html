@@ -301,72 +301,68 @@
             </div>
         </div>
 
-        <!-- Current Forecast Section -->
+        <!-- Solar Flare Section -->
         <div class="current-forecast-section">
             <div class="current-forecast-header">
-                <h2 class="section-main-title">Current Forecast</h2>
+                <h2 class="section-main-title">Solar Flare</h2>
                 <div class="current-time" id="current-time">
                     <span class="time-label">Data Time (UTC):</span>
                     <span class="time-value" id="current-time-value">--:--</span>
                 </div>
             </div>
             <div class="current-forecast-content">
-                <!-- AIA 304 Å Time Series -->
-                <div class="aia-304-panel">
-                    <h3 class="subsection-title" id="aia-304-title">Current Solar Surface</h3>
+                <!-- Solar Surface Panel -->
+                <div class="panel solar-surface-panel">
+                    <h3 class="panel-title" id="solar-activity-title">Current Solar Surface</h3>
+                    <h4 class="panel-subtitle" id="solar-activity-period">--</h4>
                     <div class="aia-304-container" id="aia-304-container">
                         <!-- AIA 304 images will be populated here -->
                     </div>
                 </div>
 
-                <!-- Current Prediction Display -->
-                <div class="current-prediction-panel">
-                    <h3 class="subsection-title">Solar Flare Forecast Over the Next 24 Hours</h3>
-                    <div class="forecast-blocks-container">
-                        <div class="forecast-block-column" id="left-forecast-column">
-                            <div class="flare-level-blocks" id="flare-level-blocks">
-                                <!-- Level blocks will be populated here -->
-                            </div>
-                        </div>
-                        <div class="forecast-block-column" id="right-forecast-column">
-                            <div class="flare-level-blocks" id="current-probabilities-display">
-                                <!-- Probabilities will be populated here -->
-                            </div>
-                        </div>
+                <!-- Current Status Panel -->
+                <div class="panel current-status-panel">
+                    <h3 class="panel-title">Current Solar Flare Status</h3>
+                    <h4 class="panel-subtitle" id="current-status-time">--</h4>
+                    <div class="status-level-blocks" id="current-level-blocks">
+                        <!-- Level blocks will be populated here -->
                     </div>
-                    <div class="flare-status" id="flare-status">
-                        <div class="status-text">Quiet</div>
-                        <div class="level-text">Lv.1</div>
+                    <div class="panel-status" id="current-status">
+                        <div class="status-text">Loading...</div>
+                        <div class="level-text">--</div>
+                    </div>
+                </div>
+
+                <!-- 24-Hour Forecast Panel -->
+                <div class="panel forecast-panel">
+                    <h3 class="panel-title">Solar Flare Forecast Over the Next 24 Hours</h3>
+                    <h4 class="panel-subtitle" id="forecast-period">--</h4>
+                    <div class="forecast-level-blocks" id="forecast-level-blocks">
+                        <!-- Level blocks will be populated here -->
+                    </div>
+                    <div class="panel-status" id="forecast-status">
+                        <div class="status-text">Loading...</div>
+                        <div class="level-text">--</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Arxiv Section -->
+        <!-- Archive Section -->
         <div class="past-forecasts-section">
-            <h2 class="section-main-title">Arxiv</h2>
+            <h2 class="section-main-title">Archive</h2>
             <div class="main-layout">
                 <!-- Left Panel (7/10) -->
                 <div class="left-panel">
                     <!-- Prediction Results (Top 30%) -->
                     <div class="prediction-section">
                         <!-- Section Headers -->
-                        <div class="section-headers">
-                            <div class="section-header">
-                                <span data-i18n="model_performance_week">Model Performance (Past Week)</span>
-                            </div>
+                        <div class="section-headers-two">
                             <div class="section-header">
                                 <span data-i18n="model_performance_month">Model Performance (Past Month)</span>
                             </div>
                             <div class="section-header">
                                 <span data-i18n="model_performance_all">Model Performance (All Period)</span>
-                            </div>
-                        </div>
-
-                        <!-- Model Performance (Past Week) -->
-                        <div class="performance-section" id="week-performance-section">
-                            <div class="performance-display">
-                                <!-- Week performance will be populated here -->
                             </div>
                         </div>
 
@@ -419,6 +415,20 @@
                 <div class="goes-chart-container">
                     <canvas id="goesChart" width="600" height="300"></canvas>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Disclaimer Section -->
+    <div class="disclaimer-section">
+        <div class="disclaimer-content">
+            <h3 class="disclaimer-title" data-i18n="disclaimer_title">Disclaimer</h3>
+            <div class="disclaimer-text">
+                <p data-i18n="disclaimer_text">The solar flare predictions are experimental and should not be used as
+                    the sole basis for operational
+                    decisions. The authors and affiliated institutions assume no responsibility for any damages or
+                    losses that may result from the use of this information. Users are advised to consult official space
+                    weather services for operational forecasts.</p>
             </div>
         </div>
     </div>

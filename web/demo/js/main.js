@@ -209,7 +209,7 @@ class SolarFlareDemo {
                 if (e.target.classList.contains('custom-calendar-day') && !e.target.classList.contains('other-month')) {
                     const dateStr = e.target.getAttribute('data-date');
                     if (dateStr) {
-                        this.currentDate = new Date(dateStr + 'T00:00:00');
+                        this.currentDate = new Date(dateStr + 'T00:00:00Z');
                         this.renderCalendar();
                         this.updateDisplay();
                     }
@@ -295,7 +295,7 @@ class SolarFlareDemo {
         
         // Update GOES chart with current date and hour
         const baseTime = new Date(this.currentDate);
-        baseTime.setHours(this.currentHour, 0, 0, 0);
+        baseTime.setUTCHours(this.currentHour, 0, 0, 0);
         this.goesChartManager.updateChart(baseTime);
     }
     
@@ -460,6 +460,31 @@ class SolarFlareDemo {
     
     async initCurrentForecast() {
         await this.loadCurrentForecastAndImages();
+        
+        // Initialize the new panel structure
+        this.initializePanels();
+    }
+    
+    initializePanels() {
+        // Initialize current status panel (no percentages) with loading state
+        this.updateLevelBlocksNew(1, null, 'current-level-blocks');
+        
+        // Initialize forecast panel (with percentages when data is available) with loading state
+        this.updateLevelBlocksNew(1, null, 'forecast-level-blocks');
+        
+        // Set default loading states
+        const currentStatus = document.getElementById('current-status');
+        const forecastStatus = document.getElementById('forecast-status');
+        
+        if (currentStatus) {
+            currentStatus.querySelector('.status-text').textContent = 'Loading...';
+            currentStatus.querySelector('.level-text').textContent = '--';
+        }
+        
+        if (forecastStatus) {
+            forecastStatus.querySelector('.status-text').textContent = 'Loading...';
+            forecastStatus.querySelector('.level-text').textContent = '--';
+        }
     }
     
     updateDataTime(timestamp) {
@@ -592,8 +617,8 @@ class SolarFlareDemo {
         // Determine flare level and status based on prediction
         const { level, status, statusClass, flareClass, icon, color } = this.getFlareLevel(prediction);
         
-        // Update level blocks
-        this.updateLevelBlocks(level);
+        // Update level blocks with prediction data
+        this.updateLevelBlocks(level, prediction);
         
         // Update status text with icon
         const statusElement = document.getElementById('flare-status');
@@ -605,9 +630,6 @@ class SolarFlareDemo {
             // Apply color to the icon
             statusElement.querySelector('.status-text').style.color = color;
         }
-        
-        // Update probabilities display
-        this.displayCurrentForecastProbabilities(prediction);
     }
     
     getFlareLevel(prediction) {
@@ -631,7 +653,7 @@ class SolarFlareDemo {
         }
     }
     
-    updateLevelBlocks(level) {
+    updateLevelBlocks(level, prediction = null) {
         const blocksContainer = document.getElementById('flare-level-blocks');
         if (!blocksContainer) return;
         
@@ -639,13 +661,11 @@ class SolarFlareDemo {
         blocksContainer.innerHTML = '';
         blocksContainer.className = `flare-level-blocks level-${level}`;
         
-        // Let CSS handle the styling for consistency
-        
         const levelInfo = [
-            { label: 'Major', level: 'Lv.4 (X-class)', className: 'x-class' },
-            { label: 'Active', level: 'Lv.3 (M-class)', className: 'm-class' },
-            { label: 'Eruptive', level: 'Lv.2 (C-class)', className: 'c-class' },
-            { label: 'Quiet', level: 'Lv.1 (O-class)', className: 'o-class' }
+            { label: 'Major Flares', level: 'Lv.4 (X-class)', className: 'x-class', key: 'x_prob', baseColor: [255, 107, 107] },
+            { label: 'Active', level: 'Lv.3 (M-class)', className: 'm-class', key: 'm_prob', baseColor: [255, 167, 38] },
+            { label: 'Eruptive', level: 'Lv.2 (C-class)', className: 'c-class', key: 'c_prob', baseColor: [129, 199, 132] },
+            { label: 'Quiet', level: 'Lv.1 (O-class)', className: 'o-class', key: 'o_prob', baseColor: [76, 175, 80] }
         ];
         
         // Always show 4 blocks (from top to bottom: 4, 3, 2, 1)
@@ -658,35 +678,38 @@ class SolarFlareDemo {
                 block.classList.add('filled');
             }
             
-            // Let CSS handle most styling, only set specific colors
+            const info = levelInfo[4-i];
+            const isCurrentLevel = i === level;
+            const textColor = isCurrentLevel ? '#fff' : 'rgba(255, 255, 255, 0.3)';
+            const textShadow = isCurrentLevel ? '1px 1px 2px rgba(0, 0, 0, 0.8)' : 'none';
+            
+            // Set border width - thicker for current level
+            const borderWidth = isCurrentLevel ? '4px' : '2px';
+            block.style.setProperty('border-width', borderWidth, 'important');
             
             // Apply appropriate background colors
             if (i <= level) {
-                // For filled blocks, keep the original class colors (don't override with gray)
-                // The CSS classes will handle the appropriate colors
+                // For filled blocks, use appropriate colors
+                const [r, g, b] = info.baseColor;
+                block.style.background = `rgba(${r}, ${g}, ${b}, 0.8)`;
+                block.style.borderColor = `rgb(${r}, ${g}, ${b})`;
             } else {
                 // For unfilled blocks, use gray background
                 block.style.background = 'rgba(248, 249, 250, 0.3)';
                 block.style.borderColor = '#e9ecef';
             }
             
-            // Add text content with level info for non-current levels
-            const info = levelInfo[4-i];
-            const isCurrentLevel = i === level; // Only the exact current level is bright
-            const textColor = isCurrentLevel ? '#fff' : 'rgba(255, 255, 255, 0.3)';
-            const textShadow = isCurrentLevel ? '1px 1px 2px rgba(0, 0, 0, 0.8)' : 'none';
-            
-            // Set border width - thicker for current level to match right side
-            const borderWidth = isCurrentLevel ? '4px' : '2px';
-            block.style.setProperty('border-width', borderWidth, 'important');
-            
-            // Create level text like "Quiet (Lv. 1)"
-            const levelNumber = i;
-            const displayText = `${info.label} (Lv. ${levelNumber})`;
+            // Get percentage for this level if prediction is available
+            let percentageText = '';
+            if (prediction && prediction[info.key] !== undefined) {
+                const percentage = (prediction[info.key] * 100).toFixed(1);
+                percentageText = `${percentage}%`;
+            }
             
             block.innerHTML = `
-                <div style="display: flex; align-items: center; justify-content: center; height: 100%; width: 100%; text-align: center;">
-                    <span style="font-size: 1.2rem; font-weight: 700; color: ${textColor}; text-shadow: ${textShadow}; line-height: 1;">${displayText}</span>
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; height: 100%;">
+                    <span style="font-size: 1rem; font-weight: 700; color: ${textColor}; text-shadow: ${textShadow}; line-height: 1;">${info.label} (${info.level})</span>
+                    <span style="font-size: 1.2rem; font-weight: 800; color: ${textColor}; text-shadow: ${textShadow}; line-height: 1;">${percentageText}</span>
                 </div>
             `;
             
@@ -724,13 +747,8 @@ class SolarFlareDemo {
             }
         }
         
-        // Update title with time range (oldest to newest)
-        const titleElement = document.getElementById('aia-304-title');
-        if (titleElement && this.loadedTimes.length > 0) {
-            const startTime = this.loadedTimes[0]; // oldest
-            const endTime = this.loadedTimes[this.loadedTimes.length - 1]; // newest
-            titleElement.innerHTML = `Current Solar Surface<br>(${startTime} - ${endTime} UTC)`;
-        }
+        // Update solar activity period display
+        this.updateSolarActivityPeriod();
         
         // Display canvases
         container.innerHTML = '';
@@ -754,6 +772,15 @@ class SolarFlareDemo {
             this.startAutoPlayback();
         } else if (this.aia304Canvases.length === 0) {
             container.innerHTML = '<div style="color: #6c757d; font-style: italic; text-align: center; padding: 2rem;">No AIA 304 Å images found</div>';
+        }
+    }
+    
+    updateSolarActivityPeriod() {
+        const periodElement = document.getElementById('solar-activity-period');
+        if (periodElement && this.loadedTimes.length > 0) {
+            const startTime = this.loadedTimes[0]; // oldest
+            const endTime = this.loadedTimes[this.loadedTimes.length - 1]; // newest
+            periodElement.textContent = `(${startTime} - ${endTime} UTC)`;
         }
     }
     
@@ -845,8 +872,14 @@ class SolarFlareDemo {
     updateCurrentForecast(date, hour) {
         // Update the data time display
         const timestamp = new Date(date);
-        timestamp.setHours(hour, 0, 0, 0);
+        timestamp.setUTCHours(hour, 0, 0, 0);
         this.updateDataTime(timestamp);
+        
+        // Update forecast period display
+        this.updateForecastPeriod(timestamp);
+        
+        // Update current status time display
+        this.updateCurrentStatusTime(timestamp);
         
         // Get prediction data for the selected date/hour
         const year = date.getFullYear();
@@ -855,6 +888,13 @@ class SolarFlareDemo {
         const hourStr = String(hour).padStart(2, '0');
         const dataKey = `${year}${month}${day}${hourStr}`;
         
+        // Update current status from XRS data
+        this.updateCurrentStatus(dataKey);
+        
+        // Update current status time period (24 hours range)
+        this.updateCurrentStatusTimePeriod(timestamp);
+        
+        // Update 24-hour forecast
         if (this.predictionManager.predictionData && this.predictionManager.predictionData[dataKey]) {
             const predictionArray = this.predictionManager.predictionData[dataKey];
             const predictionObj = {
@@ -863,79 +903,252 @@ class SolarFlareDemo {
                 m_prob: predictionArray[2],
                 x_prob: predictionArray[3]
             };
-            this.displayCurrentForecast(predictionObj);
-            this.displayCurrentForecastProbabilities(predictionObj);
+            this.updateForecastPanel(predictionObj);
             
             // Load AIA 304 images for this timestamp
             this.loadAIA304ImagesFromTimestamp(timestamp);
         } else {
-            this.displayCurrentForecastError();
+            this.displayForecastError();
         }
     }
     
-    displayCurrentForecastProbabilities(prediction) {
-        const probContainer = document.getElementById('current-probabilities-display');
-        if (!probContainer) return;
-        
-        // Clear existing content
-        probContainer.innerHTML = '';
-        
-        // Create the exact same structure as the left side
-        probContainer.className = 'flare-level-blocks'; // Same base class as left
-        
-        // Let CSS handle the styling for consistency
-        
-        const levelInfo = [
-            { label: 'Major Flares', level: 'Lv.4 (X-class)', className: 'x-class', key: 'x_prob', baseColor: [255, 107, 107] },
-            { label: 'Active', level: 'Lv.3 (M-class)', className: 'm-class', key: 'm_prob', baseColor: [255, 167, 38] },
-            { label: 'Eruptive', level: 'Lv.2 (C-class)', className: 'c-class', key: 'c_prob', baseColor: [129, 199, 132] },
-            { label: 'Quiet', level: 'Lv.1 (O-class)', className: 'o-class', key: 'o_prob', baseColor: [76, 175, 80] }
-        ];
-        
-        // Get current level for highlighting
-        const currentLevelFromPrediction = this.getFlareLevel(prediction).level;
-        
-        // Always show 4 blocks (from top to bottom: 4, 3, 2, 1) - exactly like left side
-        for (let i = 4; i >= 1; i--) {
-            const block = document.createElement('div');
-            block.className = 'level-block'; // Same class as left side
-            
-            // Get info for this block
-            const info = levelInfo[4-i];
-            const prob = prediction[info.key] || 0;
-            const percentage = (prob * 100).toFixed(1);
-            
-            // Check if this is the current level
-            const isCurrentLevel = i === currentLevelFromPrediction;
-            
-            if (isCurrentLevel) {
-                console.log(`Highlighting right side block: ${info.label} (${percentage}%) with white border`);
-            }
-            
-            // Calculate dynamic colors
-            const opacity = Math.max(0.3, Math.min(1.0, prob * 2.5 + 0.2));
-            const [r, g, b] = info.baseColor;
-            const backgroundColor = `rgba(${r}, ${g}, ${b}, ${opacity})`;
-            const borderColor = isCurrentLevel ? '#fff' : '#6c757d'; // Use darker gray like left side for non-current levels
-            const borderWidth = isCurrentLevel ? '3px' : '2px';
-            
-            // Apply dynamic colors with gradient
-            const gradientWidth = Math.max(15, prob * 100); // Minimum 15% width for better visibility
-            block.style.background = `linear-gradient(to right, ${backgroundColor} ${gradientWidth}%, rgba(248, 249, 250, 0.4) ${gradientWidth}%)`;
-            block.style.setProperty('border-color', borderColor, 'important');
-            block.style.setProperty('border-width', borderWidth, 'important');
-            block.style.setProperty('border-style', 'solid', 'important');
-            
-            // Simplified structure - only percentage
-            block.innerHTML = `
-                <div style="display: flex; align-items: center; justify-content: center; height: 100%; width: 100%; text-align: center;">
-                    <span style="font-size: 1.4rem; font-weight: 800; color: #fff; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); line-height: 1;">${percentage}%</span>
-                </div>
-            `;
-            
-            probContainer.appendChild(block);
+    updateCurrentStatusTime(timestamp) {
+        const statusTimeEl = document.getElementById('current-status-time');
+        if (statusTimeEl) {
+            const timeStr = this.formatTimeForDisplay(timestamp);
+            statusTimeEl.textContent = `(${timeStr} UTC)`;
         }
     }
+    
+    updateForecastPeriod(timestamp) {
+        // Update 24-hour forecast period
+        const startTime = new Date(timestamp);
+        const endTime = new Date(timestamp.getTime() + 24 * 60 * 60 * 1000);
+        
+        const startStr = this.formatTimeForDisplay(startTime);
+        const endStr = this.formatTimeForDisplay(endTime);
+        
+        const forecastPeriodEl = document.getElementById('forecast-period');
+        if (forecastPeriodEl) {
+            forecastPeriodEl.textContent = `(${startStr} - ${endStr} UTC)`;
+        }
+    }
+    
+    formatTimeForDisplay(timestamp) {
+        const month = String(timestamp.getMonth() + 1);
+        const day = String(timestamp.getDate());
+        const hour = String(timestamp.getHours()).padStart(2, '0');
+        return `${month}/${day} ${hour}:00`;
+    }
+    
+    updateCurrentStatus(dataKey) {
+        // Get XRS data for current status - use 24-hour maximum
+        const xrsData = this.predictionManager.xrsData;
+        if (xrsData) {
+            const maxFlux = this.get24HourMaxXRS(dataKey, xrsData);
+            const flareClass = this.getFlareClassFromFlux(maxFlux);
+            const statusInfo = this.getStatusFromFlareClass(flareClass);
+            
+            // Update current status display
+            this.updateStatusPanel(statusInfo, 'current');
+        } else {
+            // Default to quiet status if no data
+            const defaultStatus = {
+                level: 1,
+                status: 'Quiet',
+                statusClass: 'status-quiet',
+                flareClass: 'O-class',
+                icon: '🟢',
+                color: '#4caf50'
+            };
+            this.updateStatusPanel(defaultStatus, 'current');
+        }
+    }
+    
+    get24HourMaxXRS(currentDataKey, xrsData) {
+        // Parse current timestamp
+        const year = parseInt(currentDataKey.substr(0, 4));
+        const month = parseInt(currentDataKey.substr(4, 2));
+        const day = parseInt(currentDataKey.substr(6, 2));
+        const hour = parseInt(currentDataKey.substr(8, 2));
+        
+        const currentTime = new Date(year, month - 1, day, hour, 0, 0);
+        const startTime = new Date(currentTime.getTime() - 24 * 60 * 60 * 1000); // 24 hours ago
+        
+        let maxFlux = 0;
+        
+        // Check all data points in the past 24 hours
+        for (let i = 0; i <= 24; i++) {
+            const checkTime = new Date(startTime.getTime() + i * 60 * 60 * 1000); // Each hour
+            const checkKey = `${checkTime.getFullYear()}${String(checkTime.getMonth() + 1).padStart(2, '0')}${String(checkTime.getDate()).padStart(2, '0')}${String(checkTime.getHours()).padStart(2, '0')}`;
+            
+            if (xrsData[checkKey] !== undefined) {
+                maxFlux = Math.max(maxFlux, xrsData[checkKey]);
+            }
+        }
+        
+        return maxFlux;
+    }
+    
+    updateCurrentStatusTimePeriod(timestamp) {
+        const statusTimeEl = document.getElementById('current-status-time');
+        if (statusTimeEl) {
+            const endTime = new Date(timestamp);
+            const startTime = new Date(timestamp.getTime() - 24 * 60 * 60 * 1000);
+            
+            const startStr = this.formatTimeForDisplay(startTime);
+            const endStr = this.formatTimeForDisplay(endTime);
+            
+            statusTimeEl.textContent = `(${startStr} - ${endStr} UTC)`;
+        }
+    }
+    
+    getFlareClassFromFlux(flux) {
+        if (flux >= 1e-4) return 'X';
+        if (flux >= 1e-5) return 'M';
+        if (flux >= 1e-6) return 'C';
+        return 'O';
+    }
+    
+    getStatusFromFlareClass(flareClass) {
+        switch (flareClass) {
+            case 'X':
+                return { level: 4, status: 'Major Flares', statusClass: 'status-major', flareClass: 'X-class', icon: '🔴', color: '#ff6b6b' };
+            case 'M':
+                return { level: 3, status: 'Active', statusClass: 'status-active', flareClass: 'M-class', icon: '🟡', color: '#ffa726' };
+            case 'C':
+                return { level: 2, status: 'Eruptive', statusClass: 'status-eruptive', flareClass: 'C-class', icon: '🟢', color: '#81c784' };
+            default:
+                return { level: 1, status: 'Quiet', statusClass: 'status-quiet', flareClass: 'O-class', icon: '🟢', color: '#4caf50' };
+        }
+    }
+    
+    updateStatusPanel(statusInfo, panelType) {
+        const prefix = panelType === 'current' ? 'current' : 'forecast';
+        const blocksId = `${prefix}-level-blocks`;
+        const statusId = `${prefix}-status`;
+        
+        // Update level blocks
+        this.updateLevelBlocksNew(statusInfo.level, null, blocksId);
+        
+        // Update status display
+        const statusElement = document.getElementById(statusId);
+        if (statusElement) {
+            statusElement.className = `panel-status ${statusInfo.statusClass}`;
+            statusElement.querySelector('.status-text').innerHTML = `${statusInfo.icon} ${statusInfo.status}`;
+            statusElement.querySelector('.level-text').textContent = `Lv.${statusInfo.level} (${statusInfo.flareClass})`;
+            
+            // Apply color to the icon
+            statusElement.querySelector('.status-text').style.color = statusInfo.color;
+        }
+    }
+    
+    updateForecastPanel(prediction) {
+        // Determine flare level and status based on prediction
+        const { level, status, statusClass, flareClass, icon, color } = this.getFlareLevel(prediction);
+        
+        // Update level blocks with prediction data
+        this.updateLevelBlocksNew(level, prediction, 'forecast-level-blocks');
+        
+        // Update status display
+        const statusElement = document.getElementById('forecast-status');
+        if (statusElement) {
+            statusElement.className = `panel-status ${statusClass}`;
+            statusElement.querySelector('.status-text').innerHTML = `${icon} ${status}`;
+            statusElement.querySelector('.level-text').textContent = `Lv.${level} (${flareClass})`;
+            
+            // Apply color to the icon
+            statusElement.querySelector('.status-text').style.color = color;
+        }
+    }
+    
+    updateLevelBlocksNew(level, prediction = null, containerId) {
+        const blocksContainer = document.getElementById(containerId);
+        if (!blocksContainer) return;
+        
+        // Clear existing blocks
+        blocksContainer.innerHTML = '';
+        
+        const levelInfo = [
+            { label: 'Major Flares', level: 'Lv.4', className: 'x-class', key: 'x_prob', baseColor: [255, 107, 107] },
+            { label: 'Active', level: 'Lv.3', className: 'm-class', key: 'm_prob', baseColor: [255, 167, 38] },
+            { label: 'Eruptive', level: 'Lv.2', className: 'c-class', key: 'c_prob', baseColor: [129, 199, 132] },
+            { label: 'Quiet', level: 'Lv.1', className: 'o-class', key: 'o_prob', baseColor: [76, 175, 80] }
+        ];
+        
+        // Create 4 blocks (from top to bottom: 4, 3, 2, 1)
+        for (let i = 4; i >= 1; i--) {
+            const block = document.createElement('div');
+            block.className = 'level-block';
+            
+            // Fill blocks up to the current level
+            if (i <= level) {
+                block.classList.add('filled');
+            }
+            
+            const info = levelInfo[4-i];
+            
+            // For filled blocks, use the color of the current level
+            // This makes all filled blocks the same color (e.g., all yellow for Active level)
+            let colorInfo;
+            if (i <= level) {
+                colorInfo = levelInfo[4-level]; // Use current level's color for all filled blocks
+            } else {
+                colorInfo = info; // Use individual color for unfilled blocks
+            }
+            const [r, g, b] = colorInfo.baseColor;
+            
+            // Apply appropriate background colors
+            if (i <= level) {
+                block.style.background = `rgba(${r}, ${g}, ${b}, 0.8)`;
+                // If this is the current level, use white border, otherwise use the color border
+                if (i === level) {
+                    block.style.borderColor = '#fff';
+                    block.style.borderWidth = '3px';
+                    block.style.color = '#fff';
+                } else {
+                    block.style.borderColor = `rgb(${r}, ${g}, ${b})`;
+                    block.style.borderWidth = '2px';
+                    block.style.color = 'rgba(255, 255, 255, 0.6)';
+                }
+            } else {
+                block.style.background = 'rgba(248, 249, 250, 0.1)';
+                block.style.borderColor = '#666';
+                block.style.borderWidth = '2px';
+                block.style.color = '#999';
+            }
+            
+            // Get percentage for this level if prediction is available
+            let percentageText = '';
+            if (prediction && prediction[info.key] !== undefined) {
+                const percentage = (prediction[info.key] * 100).toFixed(1);
+                percentageText = `${percentage}%`;
+            }
+            
+            // Determine text color based on level
+            const textColor = (i === level) ? '#fff' : (i <= level) ? 'rgba(255, 255, 255, 0.6)' : '#999';
+            
+            block.innerHTML = `
+                <span style="font-size: 1.2rem; font-weight: 600; color: ${textColor};">${info.label} (${info.level})</span>
+                <span style="font-size: 1.3rem; font-weight: 700; color: ${textColor};">${percentageText}</span>
+            `;
+            
+            blocksContainer.appendChild(block);
+        }
+    }
+    
+    displayForecastError() {
+        const statusElement = document.getElementById('forecast-status');
+        if (statusElement) {
+            statusElement.className = 'panel-status status-quiet';
+            statusElement.querySelector('.status-text').textContent = 'Loading...';
+            statusElement.querySelector('.level-text').textContent = '--';
+        }
+        
+        this.updateLevelBlocksNew(1, null, 'forecast-level-blocks');
+    }
+    
+
 }
 
 // Initialize demo when DOM is loaded

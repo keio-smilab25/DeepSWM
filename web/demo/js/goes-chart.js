@@ -67,16 +67,16 @@ class GOESChartManager {
         console.log('Getting XRS data for base time:', baseTime.toISOString());
         console.log('Available XRS keys:', Object.keys(this.xrsDataMap).slice(0, 10), '... (showing first 10)');
         
-        // Load data for 24 hours from selected time
-        for (let i = 0; i < 24; i++) {
-            const t = new Date(baseTime.getTime() + i * 3600 * 1000);
+        // Load data for 72 hours going backwards from selected time
+        for (let i = 71; i >= 0; i--) {
+            const t = new Date(baseTime.getTime() - i * 3600 * 1000);
             const key = `${t.getUTCFullYear()}${String(t.getUTCMonth() + 1).padStart(2, '0')}` +
                        `${String(t.getUTCDate()).padStart(2, '0')}${String(t.getUTCHours()).padStart(2, '0')}`;
             const flux = this.xrsDataMap[key];
             data.push(flux != null ? flux : null);
             
-            if (i < 3) { // Log first few entries for debugging
-                console.log(`Hour ${i}: key=${key}, flux=${flux}`);
+            if (i >= 69) { // Log first few entries for debugging (most recent)
+                console.log(`Hour -${i}: key=${key}, flux=${flux}`);
             }
         }
         
@@ -101,7 +101,7 @@ class GOESChartManager {
         }
         
         const flareData = this.getXRSDataForTimeRange(baseTime);
-        const labels = Array.from({ length: 24 }, (_, i) => `+${i}h`);
+        const labels = Array.from({ length: 72 }, (_, i) => `-${71-i}h`);
         
         // Generate point colors based on flux values
         const pointColors = flareData.map(v => {
@@ -126,7 +126,7 @@ class GOESChartManager {
             this.chartInstance.data.labels = labels;
             this.chartInstance.data.datasets[0].data = flareData;
             this.chartInstance.data.datasets[0].pointBackgroundColor = pointColors;
-            this.chartInstance.options.plugins.annotation.annotations.startTimeLine.label.content = formattedTime;
+            this.chartInstance.options.plugins.annotation.annotations.currentTimeLine.label.content = formattedTime;
             this.chartInstance.options.scales.y.ticks = this.chartInstance.options.scales.y.ticks || {};
             this.chartInstance.options.scales.y.ticks.display = this.getYAxisTicksDisplay();
             this.chartInstance.update();
@@ -181,7 +181,7 @@ class GOESChartManager {
                         x: {
                             title: {
                                 display: true,
-                                text: 'Time (hours from current)',
+                                text: 'Time (hours before current)',
                                 color: document.body.classList.contains('dark-theme') ? '#f1f5f9' : '#333'
                             },
                             ticks: {
@@ -271,17 +271,17 @@ class GOESChartManager {
                                         font: { weight: 'bold', size: 14 } 
                                     }
                                 },
-                                // Current time line (start time)
-                                startTimeLine: {
+                                // Current time line (end time)
+                                currentTimeLine: {
                                     type: 'line',
                                     scaleID: 'x', 
-                                    value: 0,
+                                    value: 71,
                                     borderColor: 'black', 
                                     borderWidth: 3,
                                     label: { 
                                         enabled: true, 
                                         content: formattedTime, 
-                                        position: 'start', 
+                                        position: 'end', 
                                         backgroundColor: 'black', 
                                         color: 'white', 
                                         font: { weight: 'bold', size: 12 } 
@@ -344,14 +344,14 @@ class GOESChartManager {
         
         // Reset point radius to show animation
         const dataset = this.chartInstance.data.datasets[0];
-        dataset.pointRadius = Array(24).fill(2);
+        dataset.pointRadius = Array(72).fill(2);
         
         console.log('GOES animation started');
         
         this.animationTimer = setInterval(() => {
             // Highlight current frame
-            dataset.pointRadius = Array(24).fill(2);
-            if (this.currentFrame < 24) {
+            dataset.pointRadius = Array(72).fill(2);
+            if (this.currentFrame < 72) {
                 dataset.pointRadius[this.currentFrame] = 8;
             }
             
@@ -360,10 +360,10 @@ class GOESChartManager {
             this.currentFrame++;
             
             // Loop animation
-            if (this.currentFrame >= 24) {
+            if (this.currentFrame >= 72) {
                 this.currentFrame = 0;
             }
-        }, 500); // 500ms per frame
+        }, 200); // 200ms per frame (faster for more data points)
     }
     
     stopAnimation() {
@@ -376,7 +376,7 @@ class GOESChartManager {
         // Reset point radius
         if (this.chartInstance) {
             const dataset = this.chartInstance.data.datasets[0];
-            dataset.pointRadius = Array(24).fill(2);
+            dataset.pointRadius = Array(72).fill(2);
             this.chartInstance.update('none');
         }
     }

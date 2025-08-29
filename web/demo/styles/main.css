@@ -283,7 +283,7 @@ body {
 /* Prediction Section (Top 30% of left panel) */
 .prediction-section {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     grid-template-rows: auto 1fr;
     gap: 0.25rem;
     height: 32%;
@@ -296,6 +296,15 @@ body {
     grid-column: 1 / -1;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.25rem;
+    margin-bottom: 0;
+}
+
+/* Section Headers for Two Columns */
+.section-headers-two {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 0.25rem;
     margin-bottom: 0;
 }
@@ -474,11 +483,6 @@ body {
 
 .performance-section:nth-child(3) {
     grid-column: 2;
-    grid-row: 2;
-}
-
-.performance-section:nth-child(4) {
-    grid-column: 3;
     grid-row: 2;
 }
 
@@ -1578,9 +1582,10 @@ body.dark-theme {
 
 .current-forecast-content {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    align-items: start;
+    grid-template-columns: 0.7fr 1fr 1fr;
+    gap: 1rem;
+    align-items: stretch;
+    height: 450px;
 }
 
 .subsection-title {
@@ -1598,7 +1603,139 @@ body.dark-theme {
     color: #f1f5f9;
 }
 
-/* AIA 304 Å Panel */
+/* Unified Panel Styling */
+.panel {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 1rem 1rem 1rem 1rem;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.panel-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin: 0 0 0.5rem 0;
+    text-align: center;
+    font-family: "Kanit", sans-serif;
+    line-height: 1.1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 0.2rem;
+    min-height: 2.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Specific styling for long forecast title */
+.forecast-panel .panel-title {
+    font-size: 0.95rem;
+}
+
+.panel-subtitle {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #cbd5e1;
+    margin: 0 0 1rem 0;
+    text-align: center;
+    font-family: "Kanit", sans-serif;
+    min-height: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Solar Surface Panel */
+.solar-surface-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.solar-surface-panel .aia-304-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    max-height: calc(100% - 6rem);
+}
+
+/* Status and Forecast Panels */
+.current-status-panel,
+.forecast-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.current-status-panel .status-level-blocks,
+.forecast-panel .forecast-level-blocks {
+    flex: 0 1 auto;
+    max-height: 220px;
+    overflow: hidden;
+}
+
+.status-level-blocks,
+.forecast-level-blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem 0.5rem;
+}
+
+.status-level-blocks .level-block,
+.forecast-level-blocks .level-block {
+    width: 100%;
+    height: 52px;
+    min-height: 52px;
+    max-height: 52px;
+    border-radius: 4px;
+    border: 2px solid;
+    padding: 0.4rem 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    flex: 0 0 55px;
+}
+
+.panel-status {
+    text-align: center;
+    padding: 0.3rem 0.5rem;
+    margin-top: auto;
+    flex: 0 0 auto;
+    background: rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.panel-status .status-text {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+    font-family: "Kanit", sans-serif;
+}
+
+.panel-status .level-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #fff;
+    font-family: "Kanit", sans-serif;
+}
+
+/* Keep original AIA panel for backwards compatibility */
 .aia-304-panel {
     background: #1a1a1a;
     border: 1px solid #333;
@@ -1638,20 +1775,26 @@ body.dark-theme {
     position: relative;
     background: #110000;
     border-radius: 4px;
-    width: 300px;
-    height: 300px;
+    width: 100%;
+    height: auto;
+    max-width: 200px;
+    max-height: 150px;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     margin: 0 auto;
     flex-shrink: 0;
+    aspect-ratio: 1;
 }
 
 .aia-304-canvas {
     width: 100%;
     height: 100%;
+    max-width: 320px;
+    max-height: 320px;
     display: none;
+    object-fit: contain;
 }
 
 .aia-304-canvas.active {
@@ -1686,6 +1829,29 @@ body.dark-theme {
     height: 420px; /* Increase height to accommodate extra padding */
     overflow: hidden;
     box-sizing: border-box;
+}
+
+/* Current Forecast Title */
+.current-forecast-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    font-family: "Kanit", sans-serif;
+}
+
+/* Single column layout for forecast */
+.forecast-single-column {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    flex: 1;
 }
 
 /* Current Forecast specific styling - unified with probability boxes */
@@ -1940,6 +2106,38 @@ body.dark-theme {
     color: #94a3b8;
 }
 
+/* Responsive Design for Panels */
+@media (max-width: 1200px) {
+    .current-forecast-content {
+        grid-template-columns: 1fr 1fr;
+        height: auto;
+    }
+    
+    .solar-surface-panel {
+        grid-column: 1 / -1;
+        height: 300px;
+    }
+    
+    .panel-title {
+        font-size: 1rem;
+    }
+    
+    .forecast-panel .panel-title {
+        font-size: 0.9rem;
+    }
+    
+    .status-level-blocks .level-block,
+    .forecast-level-blocks .level-block {
+        height: 40px;
+        padding: 0.3rem;
+    }
+    
+    .status-level-blocks .level-block span,
+    .forecast-level-blocks .level-block span {
+        font-size: 0.9rem;
+    }
+}
+
 /* Responsive Design for Info Sections */
 @media (max-width: 768px) {
     .content-grid {
@@ -1971,11 +2169,40 @@ body.dark-theme {
     .current-forecast-content {
         grid-template-columns: 1fr;
         gap: 1rem;
+        height: auto;
     }
     
-    .aia-304-image {
-        width: 120px;
-        height: 120px;
+    .panel {
+        height: 380px;
+    }
+    
+    .solar-surface-panel .aia-304-container {
+        max-width: 160px;
+        max-height: 160px;
+        margin: 0 auto;
+    }
+    
+    .solar-surface-panel .aia-304-canvas {
+        max-width: 160px;
+        max-height: 160px;
+    }
+    
+    .status-level-blocks .level-block,
+    .forecast-level-blocks .level-block {
+        height: 40px;
+        padding: 0.25rem;
+    }
+    
+    .panel-title {
+        font-size: 1rem;
+    }
+    
+    .forecast-panel .panel-title {
+        font-size: 0.85rem;
+    }
+    
+    .panel-subtitle {
+        font-size: 0.8rem;
     }
 }
 
@@ -2018,33 +2245,10 @@ body.dark-theme {
     }
 }
 
-/* Forecast Blocks Container - Perfect 50/50 Split */
-.forecast-blocks-container {
-    display: flex;
-    width: 100%;
-    height: 280px;
-    gap: 1rem;
-    padding: 0.5rem;
-    box-sizing: border-box;
-    align-items: stretch;
-}
-
-.forecast-block-column {
-    flex: 1;
-    width: 50%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-    overflow: hidden;
-}
-
 /* Remove old prediction display rules - using new structure */
 
-/* Force both left and right containers to use identical styling */
-.forecast-block-column .flare-level-blocks {
+/* Single column forecast styling */
+.forecast-single-column .flare-level-blocks {
     display: flex !important;
     flex-direction: column !important;
     gap: 0.4rem !important;
@@ -2058,8 +2262,8 @@ body.dark-theme {
     flex: 1 !important;
 }
 
-/* Force all level blocks to have identical sizes */
-.forecast-block-column .level-block {
+/* Level blocks with percentage display */
+.forecast-single-column .level-block {
     height: 45px !important;
     width: 100% !important;
     border-radius: 4px !important;
@@ -2068,7 +2272,7 @@ body.dark-theme {
     margin: 0 !important;
     box-sizing: border-box !important;
     display: flex !important;
-    justify-content: center !important;
+    justify-content: space-between !important;
     align-items: center !important;
     transition: all 0.3s ease !important;
     flex-shrink: 0 !important;
@@ -2080,62 +2284,101 @@ body.dark-theme {
 
 /* Responsive adjustments for current forecast */
 @media (max-width: 1200px) {
-    .forecast-blocks-container {
-        height: 240px;
-        gap: 0.5rem;
-    }
-    
-    .forecast-block-column .level-block {
+    .forecast-single-column .level-block {
         height: 35px !important;
         padding: 0.3rem 0.5rem !important;
+        font-size: 0.85rem !important;
     }
     
-    .forecast-block-column .level-block span:first-child {
-        font-size: 0.7rem !important;
+    .forecast-single-column .level-block span:first-child {
+        font-size: 0.8rem !important;
     }
     
-    .forecast-block-column .level-block span:last-child {
-        font-size: 0.5rem !important;
+    .forecast-single-column .level-block span:last-child {
+        font-size: 1rem !important;
     }
 }
 
 @media (max-width: 900px) {
-    .forecast-blocks-container {
-        flex-direction: column;
-        height: auto;
-        gap: 1rem;
-    }
-    
-    .forecast-block-column {
-        width: 100%;
+    .forecast-single-column {
         height: 200px;
     }
     
-    .forecast-block-column .level-block {
+    .forecast-single-column .level-block {
         height: 40px !important;
         padding: 0.35rem 0.55rem !important;
     }
     
-    .forecast-block-column .level-block span:first-child {
-        font-size: 0.8rem !important;
+    .forecast-single-column .level-block span:first-child {
+        font-size: 0.75rem !important;
     }
     
-    .forecast-block-column .level-block span:last-child {
-        font-size: 0.6rem !important;
+    .forecast-single-column .level-block span:last-child {
+        font-size: 0.9rem !important;
     }
 }
 
 @media (max-width: 768px) {
-    .forecast-block-column .level-block {
+    .forecast-single-column .level-block {
         height: 45px !important;
         padding: 0.4rem 0.6rem !important;
     }
     
-    .forecast-block-column .level-block span:first-child {
-        font-size: 0.9rem !important;
+    .forecast-single-column .level-block span:first-child {
+        font-size: 0.8rem !important;
     }
     
-    .forecast-block-column .level-block span:last-child {
-        font-size: 0.7rem !important;
+    .forecast-single-column .level-block span:last-child {
+        font-size: 1rem !important;
     }
+}
+
+/* Disclaimer Section */
+.disclaimer-section {
+    background: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    padding: 2rem 0;
+    margin-top: 2rem;
+}
+
+.disclaimer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.disclaimer-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-family: "Kanit", sans-serif;
+}
+
+.disclaimer-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #6c757d;
+    text-align: center;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.disclaimer-text p {
+    margin-bottom: 0;
+}
+
+/* Dark theme for disclaimer */
+.dark-theme .disclaimer-section {
+    background: rgba(15, 23, 42, 0.9);
+    border-top-color: rgba(148, 163, 184, 0.3);
+}
+
+.dark-theme .disclaimer-title {
+    color: #f1f5f9;
+}
+
+.dark-theme .disclaimer-text {
+    color: #94a3b8;
 }

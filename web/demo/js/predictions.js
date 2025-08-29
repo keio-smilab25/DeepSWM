@@ -74,7 +74,7 @@ class PredictionManager {
     
     getLatestAvailableDate() {
         if (!this.predictionData || Object.keys(this.predictionData).length === 0) {
-            return new Date();
+            return this.createUTCDateToday();
         }
         
         const keys = Object.keys(this.predictionData);
@@ -85,10 +85,15 @@ class PredictionManager {
             const year = parseInt(latestKey.slice(0, 4));
             const month = parseInt(latestKey.slice(4, 6)) - 1;
             const day = parseInt(latestKey.slice(6, 8));
-            return new Date(year, month, day);
+            return new Date(Date.UTC(year, month, day));
         }
         
-        return new Date();
+        return this.createUTCDateToday();
+    }
+    
+    createUTCDateToday() {
+        const now = new Date();
+        return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
     }
     
     displayPrediction(date, hour) {
@@ -227,7 +232,6 @@ class PredictionManager {
     
     showLoadingPrediction() {
         // Show loading state for performance displays
-        this.updateWeekPerformanceDisplay(null);
         this.updateMonthPerformanceDisplay(null);
         this.updateAllPerformanceDisplay(null);
         
@@ -245,7 +249,6 @@ class PredictionManager {
     
     showNoPrediction() {
         // Show no data state for performance displays
-        this.updateWeekPerformanceDisplay(null);
         this.updateMonthPerformanceDisplay(null);
         this.updateAllPerformanceDisplay(null);
         
@@ -402,12 +405,10 @@ class PredictionManager {
         if (!currentDate) return;
         
         // Calculate performance for different periods
-        const weekPerformance = this.calculatePerformanceForPeriod(currentDate, 7);
         const monthPerformance = this.calculatePerformanceForPeriod(currentDate, 30);
         const allPerformance = this.calculatePerformanceForPeriod(currentDate, 365); // All available data
         
         // Update displays using the existing UI structure
-        this.updateWeekPerformanceDisplay(weekPerformance);
         this.updateMonthPerformanceDisplay(monthPerformance);
         this.updateAllPerformanceDisplay(allPerformance);
     }

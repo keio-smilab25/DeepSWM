@@ -127,14 +127,14 @@ class SolarImagesManager {
             const frameDate = new Date(date);
             
             if (frameHour < 0) {
-                frameDate.setDate(frameDate.getDate() - 1);
-                frameDate.setHours(24 + frameHour);
+                frameDate.setUTCDate(frameDate.getUTCDate() - 1);
+                frameDate.setUTCHours(24 + frameHour);
             } else {
-                frameDate.setHours(frameHour);
+                frameDate.setUTCHours(frameHour);
             }
             
-            const frameDateStr = `${String(frameDate.getMonth() + 1).padStart(2, '0')}${String(frameDate.getDate()).padStart(2, '0')}`;
-            const frameHourStr = String(frameDate.getHours()).padStart(2, '0');
+            const frameDateStr = `${String(frameDate.getUTCMonth() + 1).padStart(2, '0')}${String(frameDate.getUTCDate()).padStart(2, '0')}`;
+            const frameHourStr = String(frameDate.getUTCHours()).padStart(2, '0');
             
             const frameCanvases = [];
             
@@ -162,14 +162,14 @@ class SolarImagesManager {
         const startHour = hour - (this.frameCount - 1);
         const startDate = new Date(date);
         if (startHour < 0) {
-            startDate.setDate(startDate.getDate() - 1);
-            startDate.setHours(24 + startHour);
+            startDate.setUTCDate(startDate.getUTCDate() - 1);
+            startDate.setUTCHours(24 + startHour);
         } else {
-            startDate.setHours(startHour);
+            startDate.setUTCHours(startHour);
         }
         
-        const startTime = `${String(startDate.getMonth() + 1).padStart(2, '0')}/${String(startDate.getDate()).padStart(2, '0')} ${String(startDate.getHours()).padStart(2, '0')}:00`;
-        const endTime = `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')} ${String(hour).padStart(2, '0')}:00`;
+        const startTime = `${String(startDate.getUTCMonth() + 1).padStart(2, '0')}/${String(startDate.getUTCDate()).padStart(2, '0')} ${String(startDate.getUTCHours()).padStart(2, '0')}:00`;
+        const endTime = `${String(date.getUTCMonth() + 1).padStart(2, '0')}/${String(date.getUTCDate()).padStart(2, '0')} ${String(hour).padStart(2, '0')}:00`;
         
         this.loadedTimeRange = { startTime, endTime };
         
@@ -215,10 +215,10 @@ class SolarImagesManager {
         
         for (let hoursBack = 1; hoursBack <= maxHoursBack; hoursBack++) {
             const fallbackDate = new Date(targetDate);
-            fallbackDate.setHours(fallbackDate.getHours() - hoursBack);
+            fallbackDate.setUTCHours(fallbackDate.getUTCHours() - hoursBack);
             
-            const fallbackDateStr = `${String(fallbackDate.getMonth() + 1).padStart(2, '0')}${String(fallbackDate.getDate()).padStart(2, '0')}`;
-            const fallbackHourStr = String(fallbackDate.getHours()).padStart(2, '0');
+            const fallbackDateStr = `${String(fallbackDate.getUTCMonth() + 1).padStart(2, '0')}${String(fallbackDate.getUTCDate()).padStart(2, '0')}`;
+            const fallbackHourStr = String(fallbackDate.getUTCHours()).padStart(2, '0');
             const fallbackUrl = `${this.basePath}/data/images/${fallbackDateStr}/${fallbackHourStr}_${wavelength.filename}.png`;
             
             try {
