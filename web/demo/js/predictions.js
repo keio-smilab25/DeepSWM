@@ -203,8 +203,8 @@ class PredictionManager {
             : 'O+C vs M+X';
             
         const sincePeriod = this.translationManager 
-            ? this.translationManager.t('since_april_2025')
-            : 'Since April 2025';
+            ? this.translationManager.t('since_may_2025')
+            : 'Since May 2025';
             
         // Apply inline styling to the binary section itself
         binarySection.style.gap = '0.3rem';
@@ -353,7 +353,11 @@ class PredictionManager {
         if (!this.predictionData || !this.xrsData) return null;
         
         const endDate = new Date(currentDate);
-        const startDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
+        const calculatedStartDate = new Date(currentDate.getTime() - days * 24 * 60 * 60 * 1000);
+        
+        // Ensure we don't go before May 1, 2025
+        const mayFirst2025 = new Date(2025, 4, 1); // May is month 4 (0-indexed)
+        const startDate = calculatedStartDate > mayFirst2025 ? calculatedStartDate : mayFirst2025;
         
         let correct = 0;
         let total = 0;
@@ -483,7 +487,7 @@ class PredictionManager {
             performanceContainer.innerHTML = `
                 <div style="font-size: 3rem; font-weight: 800; color: ${primaryColor}; margin-bottom: 0.5rem;">--%</div>
                 <div style="font-size: 1rem; color: ${secondaryColor}; font-weight: 600;">M≥ Accuracy</div>
-                <div style="font-size: 0.8rem; color: ${secondaryColor}; margin-top: 0.25rem;">Since April 2025</div>
+                <div style="font-size: 0.8rem; color: ${secondaryColor}; margin-top: 0.25rem;">Since May 2025</div>
             `;
             return;
         }
@@ -493,7 +497,7 @@ class PredictionManager {
         performanceContainer.innerHTML = `
             <div style="font-size: 3rem; font-weight: 800; color: ${primaryColor}; margin-bottom: 0.5rem;">${accuracyPercent}%</div>
             <div style="font-size: 1rem; color: ${secondaryColor}; font-weight: 600;">M≥ Accuracy</div>
-            <div style="font-size: 0.8rem; color: ${secondaryColor}; margin-top: 0.25rem;">Since April 2025</div>
+            <div style="font-size: 0.8rem; color: ${secondaryColor}; margin-top: 0.25rem;">Since May 2025</div>
         `;
     }
 }

@@ -15,7 +15,7 @@ class GOESChartManager {
             X: 1e-4,
             M: 1e-5,
             C: 1e-6,
-            O: 1e-9
+            O: 1e-7
         };
         
         this.flareColors = {
@@ -155,7 +155,7 @@ class GOESChartManager {
                     scales: {
                         y: {
                             type: 'logarithmic',
-                            min: 1e-9,
+                            min: 1e-7,
                             max: 1e-3,
                             title: { 
                                 display: true, 
@@ -259,7 +259,7 @@ class GOESChartManager {
                                 },
                                 flareBandO: {
                                     type: 'box',
-                                    yMin: 1e-9, yMax: 1e-6,
+                                    yMin: 1e-7, yMax: 1e-6,
                                     backgroundColor: this.flareColors.O,
                                     label: { 
                                         enabled: true, 
@@ -299,7 +299,7 @@ class GOESChartManager {
                             { from: 1e-4, to: 1e-3, color: this.flareColors.X },
                             { from: 1e-5, to: 1e-4, color: this.flareColors.M },
                             { from: 1e-6, to: 1e-5, color: this.flareColors.C },
-                            { from: 1e-9, to: 1e-6, color: this.flareColors.O }
+                            { from: 1e-7, to: 1e-6, color: this.flareColors.O }
                         ];
                         zones.forEach(z => {
                             const y1 = scales.y.getPixelForValue(z.from);
