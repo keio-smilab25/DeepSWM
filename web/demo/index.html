@@ -100,7 +100,7 @@
                         <div class="title-content">
                             <h1 class="title">Deep Space Weather Model</h1>
                             <div class="authors">
-                                <p class="author-names">Shunya Nagashima and Komei Sugiura</p>
+                                <p class="author-names" data-i18n="author_names">Shunya Nagashima and Komei Sugiura</p>
                             </div>
                         </div>
                         <img src="../images/logo.png" alt="Logo" class="logo">
@@ -165,49 +165,14 @@
             <!-- About Solar Flares Section -->
             <div class="info-section">
                 <div class="info-header" data-section="solar-flares">
-                    <h3 class="info-title">About Solar Flares</h3>
+                    <h3 class="info-title" data-i18n="about_solar_flares">About Solar Flares</h3>
                     <span class="expand-icon">▼</span>
                 </div>
                 <div class="info-content" id="solar-flares-content">
                     <div class="info-body">
                         <div class="content-grid">
-                            <div class="text-content">
-                                <p>Solar flares are intense bursts of electromagnetic radiation from the Sun's surface,
-                                    caused by the sudden release of magnetic energy stored in the solar atmosphere.
-                                    These powerful events can have significant impacts on Earth and space-based
-                                    technology.</p>
-
-                                <p>Solar flares are classified by their X-ray intensity into different classes:</p>
-                                <ul>
-                                    <li><strong>X-class:</strong> The most intense flares that can cause planet-wide
-                                        radio blackouts and long-lasting radiation storms</li>
-                                    <li><strong>M-class:</strong> Medium-sized flares that can cause brief radio
-                                        blackouts affecting polar regions</li>
-                                    <li><strong>C-class:</strong> Small flares with few noticeable consequences on Earth
-                                    </li>
-                                    <li><strong>B and A-class (O-class):</strong> Background-level flares with minimal
-                                        impact</li>
-                                </ul>
-
-                                <p>Understanding and predicting solar flares is crucial for protecting astronauts,
-                                    satellites, power grids, and communication systems from space weather effects.</p>
-
-                                <!-- Related Links -->
-                                <div class="related-links">
-                                    <h4>Related Links</h4>
-                                    <div class="link-chips">
-                                        <a href="https://science.nasa.gov/sun/solar-storms-and-flares/" target="_blank"
-                                            class="link-chip">
-                                            <span class="chip-icon">🚀</span>
-                                            <span>NASA Solar Storms & Flares</span>
-                                        </a>
-                                        <a href="https://defn.nict.go.jp/top_eng.html" target="_blank"
-                                            class="link-chip">
-                                            <span class="chip-icon">🌞</span>
-                                            <span>NICT Deep Flare Net</span>
-                                        </a>
-                                    </div>
-                                </div>
+                            <div id="solar-flares-content-text">
+                                <!-- Content will be loaded dynamically by ContentLoader -->
                             </div>
                             <div class="video-content">
                                 <div class="video-container">
@@ -230,56 +195,14 @@
             <!-- About Deep Space Weather Model Section -->
             <div class="info-section">
                 <div class="info-header" data-section="system-info">
-                    <h3 class="info-title">About Deep Space Weather Model (DeepSWM)</h3>
+                    <h3 class="info-title" data-i18n="about_deepswm">About Deep Space Weather Model (DeepSWM)</h3>
                     <span class="expand-icon">▼</span>
                 </div>
                 <div class="info-content" id="system-info-content">
                     <div class="info-body">
                         <div class="content-grid">
-                            <div class="text-content">
-                                <p><strong>Deep Space Weather Model (Deep SWM)</strong> is an AI model
-                                    for predicting solar flare activity, accepted at <strong>ICCV 2025</strong>.</p>
-
-                                <p>Our model accurately and reliably predicts solar flares by capturing long-range
-                                    spatio-temporal dependencies and fine-grained features in multi-channel solar image
-                                    series, utilizing <strong>672 hours (28 days) of observation data</strong>.</p>
-
-                                <p><strong>Key Technical Innovations:</strong></p>
-                                <ul>
-                                    <li><strong>Solar Spatial Encoder (SSE):</strong> Features Depth-wise Channel
-                                        Selective Module and Spatio-Temporal State-Space Module for multi-wavelength
-                                        analysis</li>
-                                    <li><strong>Long-range Temporal SSM:</strong> Models temporal dependencies exceeding
-                                        the solar rotation period</li>
-                                    <li><strong>Sparse Masked Autoencoder:</strong> Novel pretraining strategy with
-                                        two-phase masking to preserve crucial regions like sunspots</li>
-                                    <li><strong>Multi-wavelength Integration:</strong> Processes ten-channel solar
-                                        observations (AIA + HMI) simultaneously</li>
-                                </ul>
-
-                                <p><strong>Performance:</strong> Our method outperforms all baseline approaches and even
-                                    <strong>surpasses human expert performance</strong> on standard metrics,
-                                    representing a significant
-                                    advancement in space weather prediction capabilities.
-                                </p>
-
-                                <!-- Related Links -->
-                                <div class="related-links">
-                                    <h4>Related Links</h4>
-                                    <div class="link-chips">
-                                        <a href="https://arxiv.org/abs/2508.07847" target="_blank" class="link-chip">
-                                            <span class="icon">
-                                                <i class="ai ai-arxiv"></i>
-                                            </span>
-                                            <span>arXiv</span>
-                                        </a>
-                                        <a href="https://keio-smilab25.github.io/DeepSWM/" target="_blank"
-                                            class="link-chip">
-                                            <span class="chip-icon">🌐</span>
-                                            <span>Project Page</span>
-                                        </a>
-                                    </div>
-                                </div>
+                            <div id="deepswm-content-text">
+                                <!-- Content will be loaded dynamically by ContentLoader -->
                             </div>
                             <div class="model-content">
                                 <div class="model-images">
@@ -304,16 +227,17 @@
         <!-- Solar Flare Section -->
         <div class="current-forecast-section">
             <div class="current-forecast-header">
-                <h2 class="section-main-title">Solar Flare</h2>
+                <h2 class="section-main-title" data-i18n="solar_flare">Solar Flare</h2>
                 <div class="current-time" id="current-time">
-                    <span class="time-label">Data Time (UTC):</span>
+                    <span class="time-label" data-i18n="data_time_utc">Data Time (UTC):</span>
                     <span class="time-value" id="current-time-value">--:--</span>
                 </div>
             </div>
             <div class="current-forecast-content">
                 <!-- Solar Surface Panel -->
                 <div class="panel solar-surface-panel">
-                    <h3 class="panel-title" id="solar-activity-title">Current Solar Surface</h3>
+                    <h3 class="panel-title" id="solar-activity-title" data-i18n="current_solar_surface">Current Solar
+                        Surface</h3>
                     <h4 class="panel-subtitle" id="solar-activity-period">--</h4>
                     <div class="aia-304-container" id="aia-304-container">
                         <!-- AIA 304 images will be populated here -->
@@ -322,26 +246,27 @@
 
                 <!-- Current Status Panel -->
                 <div class="panel current-status-panel">
-                    <h3 class="panel-title">Current Solar Flare Status</h3>
+                    <h3 class="panel-title" data-i18n="current_solar_flare_status">Current Solar Flare Status</h3>
                     <h4 class="panel-subtitle" id="current-status-time">--</h4>
                     <div class="status-level-blocks" id="current-level-blocks">
                         <!-- Level blocks will be populated here -->
                     </div>
                     <div class="panel-status" id="current-status">
-                        <div class="status-text">Loading...</div>
+                        <div class="status-text" data-i18n="loading">Loading...</div>
                         <div class="level-text">--</div>
                     </div>
                 </div>
 
                 <!-- 24-Hour Forecast Panel -->
                 <div class="panel forecast-panel">
-                    <h3 class="panel-title">Solar Flare Forecast Over the Next 24 Hours</h3>
+                    <h3 class="panel-title" data-i18n="solar_flare_forecast_24h">Solar Flare Forecast Over the Next 24
+                        Hours</h3>
                     <h4 class="panel-subtitle" id="forecast-period">--</h4>
                     <div class="forecast-level-blocks" id="forecast-level-blocks">
                         <!-- Level blocks will be populated here -->
                     </div>
                     <div class="panel-status" id="forecast-status">
-                        <div class="status-text">Loading...</div>
+                        <div class="status-text" data-i18n="loading">Loading...</div>
                         <div class="level-text">--</div>
                     </div>
                 </div>
@@ -350,7 +275,7 @@
 
         <!-- Archive Section -->
         <div class="past-forecasts-section">
-            <h2 class="section-main-title">Archive</h2>
+            <h2 class="section-main-title" data-i18n="archive">Archive</h2>
             <div class="main-layout">
                 <!-- Left Panel (7/10) -->
                 <div class="left-panel">
@@ -411,7 +336,7 @@
 
             <!-- GOES X-ray Flux Chart Section -->
             <div class="goes-chart-section">
-                <h3 class="section-title">X-ray Flux Transition (GOES)</h3>
+                <h3 class="section-title" data-i18n="xray_flux_transition">X-ray Flux Transition (GOES)</h3>
                 <div class="goes-chart-container">
                     <canvas id="goesChart" width="600" height="300"></canvas>
                 </div>
@@ -439,6 +364,7 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="js/translations.js"></script>
     <script src="js/language-toggle.js"></script>
+    <script src="js/content-loader.js"></script>
     <script src="js/colormaps.js"></script>
     <script src="js/solar-images.js"></script>
     <script src="js/predictions.js"></script>

@@ -3,6 +3,7 @@
 class SolarFlareDemo {
     constructor() {
         this.translationManager = new window.TranslationManager();
+        this.contentLoader = new window.ContentLoader(this.translationManager);
         this.solarImagesManager = new window.SolarImagesManager();
         this.predictionManager = new window.PredictionManager();
         this.goesChartManager = new window.GOESChartManager();
@@ -28,6 +29,15 @@ class SolarFlareDemo {
         // Initialize theme and language
         this.initTheme();
         this.languageToggleManager = new window.LanguageToggleManager(this.translationManager);
+        
+        // Listen for language change events
+        window.addEventListener('languageChanged', () => {
+            this.renderCalendar();
+            // Refresh dynamic content after language change
+            setTimeout(() => {
+                this.refreshDynamicContent();
+            }, 100); // Small delay to ensure translation manager is updated
+        });
         
         // Initialize expandable sections
         this.initExpandableSections();
@@ -64,12 +74,12 @@ class SolarFlareDemo {
         const calendarContainer = document.getElementById('custom-calendar');
         if (!calendarContainer) return;
         
-        const monthNames = [
+        const monthNames = this.translationManager.t('months') || [
             'January', 'February', 'March', 'April', 'May', 'June',
             'July', 'August', 'September', 'October', 'November', 'December'
         ];
         
-        const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const weekdays = this.translationManager.t('weekdays') || ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         
         calendarContainer.innerHTML = `
             <div class="custom-calendar-header">
@@ -337,12 +347,14 @@ class SolarFlareDemo {
         const solarTitleEl = document.querySelector('.section-title[data-i18n="solar_images"]');
         if (solarTitleEl && this.solarImagesManager && this.solarImagesManager.loadedTimeRange) {
             const { startTime, endTime } = this.solarImagesManager.loadedTimeRange;
-            solarTitleEl.textContent = `Multi-wavelength Solar Images ${startTime} - ${endTime} UTC`;
+            const solarImagesText = this.translationManager.t('solar_images');
+            solarTitleEl.textContent = `${solarImagesText} ${startTime} - ${endTime} UTC`;
         } else if (solarTitleEl && this.currentDate) {
             const month = String(this.currentDate.getMonth() + 1).padStart(2, '0');
             const day = String(this.currentDate.getDate()).padStart(2, '0');
             const hour = String(this.currentHour).padStart(2, '0');
-            solarTitleEl.textContent = `Multi-wavelength Solar Images ${month}/${day} ${hour}:00 UTC`;
+            const solarImagesText = this.translationManager.t('solar_images');
+            solarTitleEl.textContent = `${solarImagesText} ${month}/${day} ${hour}:00 UTC`;
         }
     }
     
@@ -483,13 +495,15 @@ class SolarFlareDemo {
         const currentStatus = document.getElementById('current-status');
         const forecastStatus = document.getElementById('forecast-status');
         
+        const loadingText = this.translationManager.t('loading');
+        
         if (currentStatus) {
-            currentStatus.querySelector('.status-text').textContent = 'Loading...';
+            currentStatus.querySelector('.status-text').textContent = loadingText;
             currentStatus.querySelector('.level-text').textContent = '--';
         }
         
         if (forecastStatus) {
-            forecastStatus.querySelector('.status-text').textContent = 'Loading...';
+            forecastStatus.querySelector('.status-text').textContent = loadingText;
             forecastStatus.querySelector('.level-text').textContent = '--';
         }
     }
@@ -649,14 +663,19 @@ class SolarFlareDemo {
         // Determine the highest probability class
         const maxProb = Math.max(xProb, mProb, cProb, oProb);
         
+        const majorStatus = this.translationManager.t('flare_status_major');
+        const activeStatus = this.translationManager.t('flare_status_active');
+        const eruptiveStatus = this.translationManager.t('flare_status_eruptive');
+        const quietStatus = this.translationManager.t('flare_status_quiet');
+        
         if (maxProb === xProb && xProb > 0.1) {
-            return { level: 4, status: 'Major Flares', statusClass: 'status-major', flareClass: 'X-class', icon: '🔴', color: '#ff6b6b' };
+            return { level: 4, status: majorStatus, statusClass: 'status-major', flareClass: 'X-class', icon: '🔴', color: '#ff6b6b' };
         } else if (maxProb === mProb && mProb > 0.05) {
-            return { level: 3, status: 'Active', statusClass: 'status-active', flareClass: 'M-class', icon: '🟡', color: '#ffa726' };
+            return { level: 3, status: activeStatus, statusClass: 'status-active', flareClass: 'M-class', icon: '🟡', color: '#ffa726' };
         } else if (maxProb === cProb && cProb > 0.1) {
-            return { level: 2, status: 'Eruptive', statusClass: 'status-eruptive', flareClass: 'C-class', icon: '🟢', color: '#81c784' };
+            return { level: 2, status: eruptiveStatus, statusClass: 'status-eruptive', flareClass: 'C-class', icon: '🟢', color: '#81c784' };
         } else {
-            return { level: 1, status: 'Quiet', statusClass: 'status-quiet', flareClass: 'O-class', icon: '🟢', color: '#4caf50' };
+            return { level: 1, status: quietStatus, statusClass: 'status-quiet', flareClass: 'O-class', icon: '🟢', color: '#4caf50' };
         }
     }
     
@@ -669,10 +688,26 @@ class SolarFlareDemo {
         blocksContainer.className = `flare-level-blocks level-${level}`;
         
         const levelInfo = [
-            { label: 'Major Flares', level: 'Lv.4 (X-class)', className: 'x-class', key: 'x_prob', baseColor: [255, 107, 107] },
-            { label: 'Active', level: 'Lv.3 (M-class)', className: 'm-class', key: 'm_prob', baseColor: [255, 167, 38] },
-            { label: 'Eruptive', level: 'Lv.2 (C-class)', className: 'c-class', key: 'c_prob', baseColor: [129, 199, 132] },
-            { label: 'Quiet', level: 'Lv.1 (O-class)', className: 'o-class', key: 'o_prob', baseColor: [76, 175, 80] }
+            { 
+                label: this.translationManager.t('flare_status_major'), 
+                level: this.translationManager.t('flare_level_x'), 
+                className: 'x-class', key: 'x_prob', baseColor: [255, 107, 107] 
+            },
+            { 
+                label: this.translationManager.t('flare_status_active'), 
+                level: this.translationManager.t('flare_level_m'), 
+                className: 'm-class', key: 'm_prob', baseColor: [255, 167, 38] 
+            },
+            { 
+                label: this.translationManager.t('flare_status_eruptive'), 
+                level: this.translationManager.t('flare_level_c'), 
+                className: 'c-class', key: 'c_prob', baseColor: [129, 199, 132] 
+            },
+            { 
+                label: this.translationManager.t('flare_status_quiet'), 
+                level: this.translationManager.t('flare_level_o'), 
+                className: 'o-class', key: 'o_prob', baseColor: [76, 175, 80] 
+            }
         ];
         
         // Always show 4 blocks (from top to bottom: 4, 3, 2, 1)
@@ -869,7 +904,7 @@ class SolarFlareDemo {
         const statusElement = document.getElementById('flare-status');
         if (statusElement) {
             statusElement.className = 'flare-status status-quiet';
-            statusElement.querySelector('.status-text').textContent = 'Loading...';
+            statusElement.querySelector('.status-text').textContent = this.translationManager.t('loading');
             statusElement.querySelector('.level-text').textContent = '--';
         }
         
@@ -1018,15 +1053,20 @@ class SolarFlareDemo {
     }
     
     getStatusFromFlareClass(flareClass) {
+        const majorStatus = this.translationManager.t('flare_status_major');
+        const activeStatus = this.translationManager.t('flare_status_active');
+        const eruptiveStatus = this.translationManager.t('flare_status_eruptive');
+        const quietStatus = this.translationManager.t('flare_status_quiet');
+        
         switch (flareClass) {
             case 'X':
-                return { level: 4, status: 'Major Flares', statusClass: 'status-major', flareClass: 'X-class', icon: '🔴', color: '#ff6b6b' };
+                return { level: 4, status: majorStatus, statusClass: 'status-major', flareClass: 'X-class', icon: '🔴', color: '#ff6b6b' };
             case 'M':
-                return { level: 3, status: 'Active', statusClass: 'status-active', flareClass: 'M-class', icon: '🟡', color: '#ffa726' };
+                return { level: 3, status: activeStatus, statusClass: 'status-active', flareClass: 'M-class', icon: '🟡', color: '#ffa726' };
             case 'C':
-                return { level: 2, status: 'Eruptive', statusClass: 'status-eruptive', flareClass: 'C-class', icon: '🟢', color: '#81c784' };
+                return { level: 2, status: eruptiveStatus, statusClass: 'status-eruptive', flareClass: 'C-class', icon: '🟢', color: '#81c784' };
             default:
-                return { level: 1, status: 'Quiet', statusClass: 'status-quiet', flareClass: 'O-class', icon: '🟢', color: '#4caf50' };
+                return { level: 1, status: quietStatus, statusClass: 'status-quiet', flareClass: 'O-class', icon: '🟢', color: '#4caf50' };
         }
     }
     
@@ -1077,10 +1117,26 @@ class SolarFlareDemo {
         blocksContainer.innerHTML = '';
         
         const levelInfo = [
-            { label: 'Major Flares', level: 'Lv.4', className: 'x-class', key: 'x_prob', baseColor: [255, 107, 107] },
-            { label: 'Active', level: 'Lv.3', className: 'm-class', key: 'm_prob', baseColor: [255, 167, 38] },
-            { label: 'Eruptive', level: 'Lv.2', className: 'c-class', key: 'c_prob', baseColor: [129, 199, 132] },
-            { label: 'Quiet', level: 'Lv.1', className: 'o-class', key: 'o_prob', baseColor: [76, 175, 80] }
+            { 
+                label: this.translationManager.t('flare_status_major'), 
+                level: 'Lv.4', 
+                className: 'x-class', key: 'x_prob', baseColor: [255, 107, 107] 
+            },
+            { 
+                label: this.translationManager.t('flare_status_active'), 
+                level: 'Lv.3', 
+                className: 'm-class', key: 'm_prob', baseColor: [255, 167, 38] 
+            },
+            { 
+                label: this.translationManager.t('flare_status_eruptive'), 
+                level: 'Lv.2', 
+                className: 'c-class', key: 'c_prob', baseColor: [129, 199, 132] 
+            },
+            { 
+                label: this.translationManager.t('flare_status_quiet'), 
+                level: 'Lv.1', 
+                className: 'o-class', key: 'o_prob', baseColor: [76, 175, 80] 
+            }
         ];
         
         // Create 4 blocks (from top to bottom: 4, 3, 2, 1)
@@ -1148,13 +1204,27 @@ class SolarFlareDemo {
         const statusElement = document.getElementById('forecast-status');
         if (statusElement) {
             statusElement.className = 'panel-status status-quiet';
-            statusElement.querySelector('.status-text').textContent = 'Loading...';
+            statusElement.querySelector('.status-text').textContent = this.translationManager.t('loading');
             statusElement.querySelector('.level-text').textContent = '--';
         }
         
         this.updateLevelBlocksNew(1, null, 'forecast-level-blocks');
     }
     
+    refreshDynamicContent() {
+        // Refresh performance displays
+        if (this.predictionManager && this.currentDate) {
+            this.predictionManager.updatePerformanceDisplays(this.currentDate);
+        }
+        
+        // Refresh current forecast displays if available
+        if (this.currentDate && this.currentHour) {
+            this.updateCurrentForecast(this.currentDate, this.currentHour);
+        }
+        
+        // Update page content with current translations
+        this.updatePageContent();
+    }
 
 }
 

@@ -29,9 +29,32 @@ const translations = {
         model_performance_all: "Model Performance (All Period)",
         since_may_2025: "Since May 2025",
         disclaimer_title: "Disclaimer",
-        disclaimer_text: "This system is provided for research and educational purposes only. The solar flare predictions are experimental and should not be used as the sole basis for operational decisions. The authors and affiliated institutions assume no responsibility for any damages or losses that may result from the use of this information. Users are advised to consult official space weather services for operational forecasts.",
+        disclaimer_text: "This system is provided for research and educational purposes only. The solar flare predictions are experimental and should not be used as the sole basis for operational decisions. The authors and affiliated institutions assume no responsibility for any damages or losses that may result from the use of this information.",
         japanese: "日本語",
-        english: "English"
+        english: "English",
+        about_solar_flares: "About Solar Flares",
+        about_deepswm: "About Deep Space Weather Model (DeepSWM)",
+        current_solar_surface: "Current Solar Surface",
+        current_solar_flare_status: "Current Solar Flare Status",
+        solar_flare_forecast_24h: "Solar Flare Forecast Over the Next 24 Hours",
+        archive: "Archive",
+        xray_flux_transition: "X-ray Flux Transition (GOES)",
+        solar_flare: "Solar Flare",
+        data_time_utc: "Data Time (UTC)",
+        author_names: "Shunya Nagashima and Komei Sugiura",
+        loading: "Loading...",
+        m_accuracy: "M≥ Accuracy",
+        months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+        weekdays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+        flare_status_major: "Major Flares",
+        flare_status_active: "Active", 
+        flare_status_eruptive: "Eruptive",
+        flare_status_quiet: "Quiet",
+        flare_level_x: "Lv.4 (X-Class)",
+        flare_level_m: "Lv.3 (M-Class)",
+        flare_level_c: "Lv.2 (C-Class)",
+        flare_level_o: "Lv.1 (O-Class)",
+        predictions: "predictions"
     },
     ja: {
         title: "深宇宙天気モデル",
@@ -40,11 +63,11 @@ const translations = {
         solar_images: "多波長太陽画像",
         prediction: "24時間フレア予測",
         select_date_msg: "日付を選択して太陽画像を表示",
-        loading_prediction: "予測データを読み込み中...",
-        performance: "モデル性能",
+        loading_prediction: "読み込み中...",
+        performance: "予報的中率",
         since_date: "2025年4月1日以降",
         accuracy: "二値精度",
-        classification: "O+C vs M+X",
+        classification: "M≥での精度",
         flare_desc_x: "大規模太陽フレア - 重大な影響",
         flare_desc_m: "中規模太陽フレア - 影響の可能性",
         flare_desc_c: "小規模太陽フレア - 最小限の宇宙天気への影響",
@@ -55,21 +78,44 @@ const translations = {
         confidence: "信頼度",
         prediction_results: "予報結果",
         prediction_probabilities: "予報確率",
-        prediction_performance: "モデル性能",
-        model_performance_week: "モデル性能 (直近1週間)",
-        model_performance_month: "モデル性能 (直近1ヶ月)",
-        model_performance_all: "モデル性能 (全期間)",
-        since_may_2025: "2025年5月から",
+        prediction_performance: "予報的中率",
+        model_performance_week: "予報的中率 (直近1週間)",
+        model_performance_month: "予報的中率 (直近1ヶ月)",
+        model_performance_all: "予報的中率 (全期間)",
+        since_may_2025: "2025年5月〜",
         disclaimer_title: "免責事項",
-        disclaimer_text: "本システムは研究・教育目的でのみ提供されています。太陽フレアの予測は実験的なものであり、運用上の意思決定の唯一の根拠として使用すべきではありません。作成者および関連機関は、この情報の使用によって生じる可能性のある損害や損失について一切の責任を負いません。運用予報については、公式の宇宙天気サービスにご相談ください。",
+        disclaimer_text: "本システムは研究・教育目的で提供されています。太陽フレアの予測は実験的なものであり、実用的な判断の唯一の根拠として使用しないでください。本情報の利用により生じた損害について、開発者および関連機関は一切の責任を負いかねます。",
         japanese: "日本語",
-        english: "English"
+        english: "English",
+        about_solar_flares: "太陽フレアについて",
+        about_deepswm: "Deep Space Weather Model (DeepSWM)について",
+        current_solar_surface: "現在の太陽表面",
+        current_solar_flare_status: "現在の太陽フレア状況",
+        solar_flare_forecast_24h: "今後24時間の太陽フレア予報",
+        archive: "アーカイブ",
+        xray_flux_transition: "X線フラックス推移 (GOES)",
+        solar_flare: "太陽フレア",
+        data_time_utc: "データ時刻 (UTC)",
+        author_names: "長嶋隼矢, 杉浦孔明",
+        loading: "読み込み中...",
+        m_accuracy: "M≥での精度",
+        months: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+        weekdays: ["日", "月", "火", "水", "木", "金", "土"],
+        flare_status_major: "大規模フレア",
+        flare_status_active: "中規模フレア", 
+        flare_status_eruptive: "小規模フレア",
+        flare_status_quiet: "静穏",
+        flare_level_x: "Lv.4 (Xクラス)",
+        flare_level_m: "Lv.3 (Mクラス)",
+        flare_level_c: "Lv.2 (Cクラス)",
+        flare_level_o: "Lv.1 (Oクラス)",
+        predictions: "件の予測"
     }
 };
 
 class TranslationManager {
     constructor() {
-        this.currentLang = 'en';
+        this.currentLang = 'ja';
         this.init();
     }
     
@@ -79,6 +125,9 @@ class TranslationManager {
         const lang = urlParams.get('lang');
         if (lang && translations[lang]) {
             this.currentLang = lang;
+        } else if (!lang) {
+            // Default to Japanese if no language parameter is specified
+            this.currentLang = 'ja';
         }
         
         // Apply translations

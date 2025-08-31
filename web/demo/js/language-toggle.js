@@ -48,8 +48,8 @@ class LanguageToggleManager {
     
     updateURLLanguage(lang) {
         const url = new URL(window.location);
-        if (lang === 'ja') {
-            url.searchParams.set('lang', 'ja');
+        if (lang === 'en') {
+            url.searchParams.set('lang', 'en');
         } else {
             url.searchParams.delete('lang');
         }

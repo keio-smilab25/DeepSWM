@@ -6,10 +6,20 @@ class PredictionManager {
         this.xrsData = null;
         this.basePath = this.getBasePath();
         this.translationManager = null;
+        this.currentDate = null;
     }
     
     setTranslationManager(manager) {
         this.translationManager = manager;
+        
+        // Listen for language change events to refresh displays
+        window.addEventListener('languageChanged', () => {
+            setTimeout(() => {
+                // Update with current date if available, otherwise use today
+                const currentDate = this.currentDate || new Date();
+                this.updatePerformanceDisplays(currentDate);
+            }, 150); // Delay to ensure translation manager is updated
+        });
     }
     
     getBasePath() {
@@ -97,6 +107,9 @@ class PredictionManager {
     }
     
     displayPrediction(date, hour) {
+        // Store current date for language change updates
+        this.currentDate = date;
+        
         if (!this.predictionData) {
             this.showLoadingPrediction();
             return;
@@ -164,10 +177,22 @@ class PredictionManager {
         };
         
         const classInfo = {
-            'X': { status: 'Major Flares', level: 'Lv.4 (X-Class)' },
-            'M': { status: 'Active', level: 'Lv.3 (M-Class)' },
-            'C': { status: 'Eruptive', level: 'Lv.2 (C-Class)' },
-            'O': { status: 'Quiet', level: 'Lv.1 (O-Class)' }
+            'X': { 
+                status: this.translationManager ? this.translationManager.t('flare_status_major') : 'Major Flares', 
+                level: this.translationManager ? this.translationManager.t('flare_level_x') : 'Lv.4 (X-Class)' 
+            },
+            'M': { 
+                status: this.translationManager ? this.translationManager.t('flare_status_active') : 'Active', 
+                level: this.translationManager ? this.translationManager.t('flare_level_m') : 'Lv.3 (M-Class)' 
+            },
+            'C': { 
+                status: this.translationManager ? this.translationManager.t('flare_status_eruptive') : 'Eruptive', 
+                level: this.translationManager ? this.translationManager.t('flare_level_c') : 'Lv.2 (C-Class)' 
+            },
+            'O': { 
+                status: this.translationManager ? this.translationManager.t('flare_status_quiet') : 'Quiet', 
+                level: this.translationManager ? this.translationManager.t('flare_level_o') : 'Lv.1 (O-Class)' 
+            }
         };
         
         const classes = ['X', 'M', 'C', 'O'];
@@ -290,14 +315,19 @@ class PredictionManager {
         // Determine the highest probability class
         const maxProb = Math.max(xProb, mProb, cProb, oProb);
         
+        const majorStatus = this.translationManager ? this.translationManager.t('flare_status_major') : 'Major Flares';
+        const activeStatus = this.translationManager ? this.translationManager.t('flare_status_active') : 'Active';
+        const eruptiveStatus = this.translationManager ? this.translationManager.t('flare_status_eruptive') : 'Eruptive';
+        const quietStatus = this.translationManager ? this.translationManager.t('flare_status_quiet') : 'Quiet';
+        
         if (maxProb === xProb && xProb > 0.1) {
-            return { level: 4, status: 'Major Flares', statusClass: 'status-major', flareClass: 'X-class' };
+            return { level: 4, status: majorStatus, statusClass: 'status-major', flareClass: 'X-class' };
         } else if (maxProb === mProb && mProb > 0.05) {
-            return { level: 3, status: 'Active', statusClass: 'status-active', flareClass: 'M-class' };
+            return { level: 3, status: activeStatus, statusClass: 'status-active', flareClass: 'M-class' };
         } else if (maxProb === cProb && cProb > 0.1) {
-            return { level: 2, status: 'Eruptive', statusClass: 'status-eruptive', flareClass: 'C-class' };
+            return { level: 2, status: eruptiveStatus, statusClass: 'status-eruptive', flareClass: 'C-class' };
         } else {
-            return { level: 1, status: 'Quiet', statusClass: 'status-quiet', flareClass: 'O-class' };
+            return { level: 1, status: quietStatus, statusClass: 'status-quiet', flareClass: 'O-class' };
         }
     }
     
@@ -437,11 +467,12 @@ class PredictionManager {
         }
         
         const accuracyPercent = (performance.accuracy * 100).toFixed(1);
+        const mAccuracyText = this.translationManager ? this.translationManager.t('m_accuracy') : 'M≥ Accuracy';
         
         performanceContainer.innerHTML = `
             <div style="font-size: 3rem; font-weight: 800; color: ${primaryColor}; margin-bottom: 0.5rem;">${accuracyPercent}%</div>
-            <div style="font-size: 1rem; color: ${secondaryColor}; font-weight: 600;">M≥ Accuracy</div>
-            <div style="font-size: 0.8rem; color: ${secondaryColor}; margin-top: 0.25rem;">${performance.total} predictions</div>
+            <div style="font-size: 1rem; color: ${secondaryColor}; font-weight: 600;">${mAccuracyText}</div>
+            <div style="font-size: 0.8rem; color: ${secondaryColor}; margin-top: 0.25rem;">${performance.total} ${this.translationManager ? this.translationManager.t('predictions') : 'predictions'}</div>
         `;
     }
     
@@ -465,11 +496,12 @@ class PredictionManager {
         }
         
         const accuracyPercent = (performance.accuracy * 100).toFixed(1);
+        const mAccuracyText = this.translationManager ? this.translationManager.t('m_accuracy') : 'M≥ Accuracy';
         
         performanceContainer.innerHTML = `
             <div style="font-size: 3rem; font-weight: 800; color: ${primaryColor}; margin-bottom: 0.5rem;">${accuracyPercent}%</div>
-            <div style="font-size: 1rem; color: ${secondaryColor}; font-weight: 600;">M≥ Accuracy</div>
-            <div style="font-size: 0.8rem; color: ${secondaryColor}; margin-top: 0.25rem;">${performance.total} predictions</div>
+            <div style="font-size: 1rem; color: ${secondaryColor}; font-weight: 600;">${mAccuracyText}</div>
+            <div style="font-size: 0.8rem; color: ${secondaryColor}; margin-top: 0.25rem;">${performance.total} ${this.translationManager ? this.translationManager.t('predictions') : 'predictions'}</div>
         `;
     }
     
@@ -483,11 +515,14 @@ class PredictionManager {
         const primaryColor = isDarkTheme ? '#ffffff' : '#212529';
         const secondaryColor = isDarkTheme ? '#cbd5e1' : '#666';
         
+        const mAccuracyText = this.translationManager ? this.translationManager.t('m_accuracy') : 'M≥ Accuracy';
+        const sinceMayText = this.translationManager ? this.translationManager.t('since_may_2025') : 'Since May 2025';
+        
         if (!performance) {
             performanceContainer.innerHTML = `
                 <div style="font-size: 3rem; font-weight: 800; color: ${primaryColor}; margin-bottom: 0.5rem;">--%</div>
-                <div style="font-size: 1rem; color: ${secondaryColor}; font-weight: 600;">M≥ Accuracy</div>
-                <div style="font-size: 0.8rem; color: ${secondaryColor}; margin-top: 0.25rem;">Since May 2025</div>
+                <div style="font-size: 1rem; color: ${secondaryColor}; font-weight: 600;">${mAccuracyText}</div>
+                <div style="font-size: 0.8rem; color: ${secondaryColor}; margin-top: 0.25rem;">${sinceMayText}</div>
             `;
             return;
         }
@@ -496,8 +531,8 @@ class PredictionManager {
         
         performanceContainer.innerHTML = `
             <div style="font-size: 3rem; font-weight: 800; color: ${primaryColor}; margin-bottom: 0.5rem;">${accuracyPercent}%</div>
-            <div style="font-size: 1rem; color: ${secondaryColor}; font-weight: 600;">M≥ Accuracy</div>
-            <div style="font-size: 0.8rem; color: ${secondaryColor}; margin-top: 0.25rem;">Since May 2025</div>
+            <div style="font-size: 1rem; color: ${secondaryColor}; font-weight: 600;">${mAccuracyText}</div>
+            <div style="font-size: 0.8rem; color: ${secondaryColor}; margin-top: 0.25rem;">${sinceMayText}</div>
         `;
     }
 }
