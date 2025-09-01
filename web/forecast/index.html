@@ -5,7 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deep Space Weather Model - Interactive Demo</title>
-    <link rel="icon" type="image/png" href="web/images/logo.png">
+    <link rel="icon" type="image/png" href="../images/logo.png">
+
+    <script>
+        (function () {
+            const parts = window.location.pathname.split('/').filter(Boolean);
+            const repoPrefix = window.location.hostname.includes('github.io') ? ('/' + (parts[0] || '')) : '';
+            const baseHref = `${repoPrefix}/web/forecast/`;
+            var base = document.createElement('base');
+            base.href = baseHref;
+            document.head.appendChild(base);
+        })();
+    </script>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,16 +29,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
     <!-- Bulma CSS for buttons -->
-    <link rel="stylesheet" href="web/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
 
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
 
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="web/forecast/styles/main.css">
-    <link rel="stylesheet" href="web/css/stars.css">
-    <link rel="stylesheet" href="web/css/shooting-stars.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="../css/stars.css">
+    <link rel="stylesheet" href="../css/shooting-stars.css">
 </head>
 
 <body>
@@ -103,7 +114,7 @@
                                 <p class="author-names" data-i18n="author_names">Shunya Nagashima and Komei Sugiura</p>
                             </div>
                         </div>
-                        <img src="web/images/logo.png" alt="Logo" class="logo">
+                        <img src="../images/logo.png" alt="Logo" class="logo">
                     </div>
                     <p class="subtitle" data-i18n="subtitle">Operational Solar Flare AI Prediction Model</p>
 
@@ -176,8 +187,8 @@
                             </div>
                             <div class="video-content">
                                 <div class="video-container">
-                                    <video controls autoplay muted loop poster="web/images/video-poster.jpg">
-                                        <source src="web/videos/introduction.mp4" type="video/mp4">
+                                    <video controls autoplay muted loop poster="../images/video-poster.jpg">
+                                        <source src="../videos/introduction.mp4" type="video/mp4">
                                         Your browser does not support the video tag.
                                     </video>
                                     <p class="video-caption">
@@ -207,12 +218,12 @@
                             <div class="model-content">
                                 <div class="model-images">
                                     <div class="model-image-container">
-                                        <img src="web/images/eye-catch_white.png"
-                                            alt="Deep Space Weather Model Overview" class="model-image">
+                                        <img src="../images/eye-catch_white.png" alt="Deep Space Weather Model Overview"
+                                            class="model-image">
                                         <p class="image-caption">Deep SWM Architecture Overview</p>
                                     </div>
                                     <div class="model-image-container">
-                                        <img src="web/images/model_white.png" alt="Model Architecture Diagram"
+                                        <img src="../images/model_white.png" alt="Model Architecture Diagram"
                                             class="model-image">
                                         <p class="image-caption">Model Architecture</p>
                                     </div>
@@ -362,14 +373,14 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="web/forecast/js/translations.js"></script>
-    <script src="web/forecast/js/language-toggle.js"></script>
-    <script src="web/forecast/js/content-loader.js"></script>
-    <script src="web/forecast/js/colormaps.js"></script>
-    <script src="web/forecast/js/solar-images.js"></script>
-    <script src="web/forecast/js/predictions.js"></script>
-    <script src="web/forecast/js/goes-chart.js"></script>
-    <script src="web/forecast/js/main.js"></script>
+    <script src="js/translations.js"></script>
+    <script src="js/language-toggle.js"></script>
+    <script src="js/content-loader.js"></script>
+    <script src="js/colormaps.js"></script>
+    <script src="js/solar-images.js"></script>
+    <script src="js/predictions.js"></script>
+    <script src="js/goes-chart.js"></script>
+    <script src="js/main.js"></script>
 </body>
 
 </html>

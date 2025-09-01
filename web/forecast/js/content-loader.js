@@ -26,7 +26,7 @@ class ContentLoader {
         }
         
         try {
-            const response = await fetch(`web/forecast/content/${contentId}-${language}.html`);
+            const response = await fetch(`content/${contentId}-${language}.html`);
             if (!response.ok) {
                 throw new Error(`Failed to load content: ${response.status}`);
             }

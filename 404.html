@@ -23,23 +23,19 @@
         if (currentPath.includes('/forecast')) {
             console.log('Redirecting to forecast app');
             window.location.replace(`${basePath}/web/forecast/index.html` + currentSearch + currentHash);
-            return;
-        }
-
-        // Handle demo routes (legacy)
-        if (currentPath.includes('/demo')) {
+        } else if (currentPath.includes('/demo')) {
+            // Handle demo routes (legacy)
             console.log('Redirecting demo to forecast app');
             window.location.replace(`${basePath}/web/forecast/index.html` + currentSearch + currentHash);
-            return;
+        } else {
+            // Store the original path for client-side routing
+            sessionStorage.setItem('github-pages-redirect', window.location.href);
+
+            // Handle other routes - redirect to home with proper base path
+            console.log('Redirecting to index.html');
+            const homeTarget = basePath ? `${basePath}/index.html` : '/index.html';
+            window.location.replace(homeTarget + currentSearch + currentHash);
         }
-
-        // Store the original path for client-side routing
-        sessionStorage.setItem('github-pages-redirect', window.location.href);
-
-        // Handle other routes - redirect to home with proper base path
-        console.log('Redirecting to index.html');
-        const homeTarget = basePath ? `${basePath}/index.html` : '/index.html';
-        window.location.replace(homeTarget + currentSearch + currentHash);
     </script>
 </head>
 
