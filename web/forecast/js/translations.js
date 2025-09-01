@@ -107,7 +107,7 @@ const translations = {
 
 class TranslationManager {
     constructor() {
-        this.currentLang = 'ja';
+        this.currentLang = 'en';
         this.init();
     }
     
@@ -118,8 +118,8 @@ class TranslationManager {
         if (lang && translations[lang]) {
             this.currentLang = lang;
         } else if (!lang) {
-            // Default to Japanese if no language parameter is specified
-            this.currentLang = 'ja';
+            // Default to English if no language parameter is specified
+            this.currentLang = 'en';
         }
         
         // Apply translations
