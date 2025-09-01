@@ -33,6 +33,9 @@
             return;
         }
 
+        // Store the original path for client-side routing
+        sessionStorage.setItem('github-pages-redirect', window.location.href);
+
         // Handle other routes - redirect to home with proper base path
         console.log('Redirecting to index.html');
         const homeTarget = basePath ? `${basePath}/index.html` : '/index.html';

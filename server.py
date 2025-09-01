@@ -14,11 +14,21 @@ class SPAHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         
         print(f"Requested path: {path}")
         
-        # Handle /forecast route specifically
+        # Handle /forecast route specifically - serve forecast app directly
         if path == '/forecast' or path == '/forecast/':
-            self.path = '/web/forecast/index.html'
-            super().do_GET()
-            return
+            try:
+                forecast_file = os.path.join(os.getcwd(), 'web', 'forecast', 'index.html')
+                if os.path.isfile(forecast_file):
+                    self.send_response(200)
+                    self.send_header('Content-type', 'text/html')
+                    self.end_headers()
+                    with open(forecast_file, 'rb') as f:
+                        self.wfile.write(f.read())
+                    return
+            except Exception as e:
+                print(f"Error serving forecast: {e}")
+                self.send_error(500)
+                return
         
         # Handle legacy /demo route - redirect to /forecast
         if path == '/demo' or path == '/demo/':
@@ -39,7 +49,7 @@ class SPAHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 super().do_GET()
                 return
         
-        # For SPA routes (like /demo), serve index.html
+        # For SPA routes, serve index.html
         if not path.startswith('/web/') and not '.' in os.path.basename(path):
             self.path = '/index.html'
             super().do_GET()
@@ -68,8 +78,8 @@ if __name__ == "__main__":
             print("🚀 Deep Space Weather Model - Development Server")
             print("=" * 60)
             print(f"🌐 Server running at: http://localhost:{PORT}")
-            print(f"🔬 Demo page: http://localhost:{PORT}/demo")
-            print(f"🔑 Demo password: deepsolar2025")
+            print(f"🚀 Forecast page: http://localhost:{PORT}/forecast")
+            print(f"🔬 Demo redirect: http://localhost:{PORT}/demo → /forecast")
             print("=" * 60)
             print("📝 GitHub Pages Deployment Notes:")
             print("   • GitHub Pages serves static files only")
