@@ -407,6 +407,9 @@ class SolarFlareDemo {
         // Update GOES chart theme
         this.goesChartManager.updateTheme();
         
+        // Refresh dynamic content to update text colors
+        this.refreshDynamicContent();
+        
         const themeBtn = document.getElementById('theme-toggle-btn');
         if (themeBtn) {
             themeBtn.innerHTML = `
@@ -423,6 +426,9 @@ class SolarFlareDemo {
         
         // Update GOES chart theme
         this.goesChartManager.updateTheme();
+        
+        // Refresh dynamic content to update text colors
+        this.refreshDynamicContent();
         
         const themeBtn = document.getElementById('theme-toggle-btn');
         if (themeBtn) {
@@ -750,8 +756,8 @@ class SolarFlareDemo {
             
             block.innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; height: 100%;">
-                    <span style="font-size: 1rem; font-weight: 700; color: ${textColor}; text-shadow: ${textShadow}; line-height: 1;">${info.label} (${info.level})</span>
-                    <span style="font-size: 1.2rem; font-weight: 800; color: ${textColor}; text-shadow: ${textShadow}; line-height: 1;">${percentageText}</span>
+                    <span style="font-weight: 700; color: ${textColor}; text-shadow: ${textShadow}; line-height: 1;">${info.label} (${info.level})</span>
+                    <span style="font-weight: 800; color: ${textColor}; text-shadow: ${textShadow}; line-height: 1;">${percentageText}</span>
                 </div>
             `;
             
@@ -1192,8 +1198,8 @@ class SolarFlareDemo {
             const textColor = (i === level) ? '#fff' : (i <= level) ? 'rgba(255, 255, 255, 0.6)' : '#999';
             
             block.innerHTML = `
-                <span style="font-size: 1.2rem; font-weight: 600; color: ${textColor};">${info.label} (${info.level})</span>
-                <span style="font-size: 1.3rem; font-weight: 700; color: ${textColor};">${percentageText}</span>
+                <span style="font-weight: 600; color: ${textColor};">${info.label} (${info.level})</span>
+                <span style="font-weight: 700; color: ${textColor};">${percentageText}</span>
             `;
             
             blocksContainer.appendChild(block);

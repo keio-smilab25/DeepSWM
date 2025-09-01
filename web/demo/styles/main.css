@@ -272,12 +272,164 @@ body {
     min-height: 500px;
 }
 
+@media (max-width: 1400px) {
+    .main-layout {
+        grid-template-columns: 2fr 1fr;
+        gap: 0.5rem;
+    }
+}
+
 /* Left Panel */
 .left-panel {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
     min-height: 0;
+}
+
+/* iPad Pro専用設定 (1024×1366) */
+@media (min-width: 1024px) and (max-width: 1366px) {
+    /* 304太陽画像を大きく */
+    .solar-surface-panel .aia-304-container {
+        max-width: 380px;
+        max-height: 380px;
+    }
+    
+    .solar-surface-panel .aia-304-canvas {
+        max-width: 380px;
+        max-height: 380px;
+    }
+    
+    /* パネルタイトルのフォントサイズ */
+    .panel-title {
+        font-size: 1.5rem !important;
+    }
+    
+    /* 長いタイトル用の特別調整 */
+    .forecast-panel .panel-title {
+        font-size: 1.3rem !important;
+        line-height: 1.1;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+    }
+    
+    /* バー内のフォントサイズ */
+    .status-level-blocks .level-block,
+    .forecast-level-blocks .level-block {
+        height: 65px;
+        min-height: 65px;
+        max-height: 65px;
+        padding: 1rem 1.2rem;
+        font-size: 1.3rem;
+        flex: none;
+        flex-shrink: 0;
+    }
+    
+    .level-block span {
+        font-size: 1.3rem !important;
+    }
+    
+    .level-block span:first-child {
+        font-size: 1.3rem !important;
+    }
+    
+    .level-block span:last-child {
+        font-size: 1.3rem !important;
+    }
+    
+    /* パネルステータス表示のフォントサイズ */
+    .panel-status .status-text {
+        font-size: 1.5rem !important;
+    }
+    
+    .panel-status .level-text {
+        font-size: 1.2rem !important;
+    }
+    
+    /* セクションタイトルのフォントサイズ */
+    .section-main-title {
+        font-size: 2rem !important;
+    }
+    
+    /* パネルサブタイトルのフォントサイズ */
+    .panel-subtitle {
+        font-size: 1.3rem !important;
+    }
+    
+    /* 時間表示のフォントサイズ */
+    .time-label,
+    .time-value {
+        font-size: 1.2rem !important;
+    }
+    
+    /* メインタイトルとサブタイトル */
+    .title {
+        font-size: 2.5rem !important;
+    }
+    
+    .subtitle {
+        font-size: 1.4rem !important;
+    }
+    
+    .author-names {
+        font-size: 1.2rem !important;
+    }
+    
+    /* パネル高さの調整 */
+    .panel {
+        height: auto;
+        min-height: 420px;
+        padding: 1rem;
+    }
+    
+    /* 現在の状況と予報コンテンツの高さ */
+    .current-forecast-content {
+        min-height: 450px;
+        height: auto;
+    }
+    
+    /* 現在状況パネルと予報パネルの高さ */
+    .current-status-panel,
+    .forecast-panel {
+        min-height: 390px;
+        height: auto;
+    }
+    
+    /* level-block の高さ調整 */
+    .status-level-blocks,
+    .forecast-level-blocks {
+        flex: 1;
+        max-height: none;
+        overflow: visible;
+        padding: 1rem 0.8rem;
+        gap: 0.6rem;
+        justify-content: space-around;
+    }
+}
+
+@media (max-width: 1200px) {
+    .left-panel {
+        gap: 0.2rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .left-panel {
+        gap: 0.15rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .left-panel {
+        gap: 0.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .left-panel {
+        gap: 0.08rem;
+    }
 }
 
 /* Prediction Section (Top 30% of left panel) */
@@ -289,6 +441,31 @@ body {
     height: 32%;
     min-height: 180px;
     align-items: stretch;
+}
+
+@media (max-width: 1200px) {
+    .prediction-section {
+        height: auto;
+        min-height: 140px;
+    }
+}
+
+@media (max-width: 900px) {
+    .prediction-section {
+        min-height: 120px;
+    }
+}
+
+@media (max-width: 768px) {
+    .prediction-section {
+        min-height: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    .prediction-section {
+        min-height: 90px;
+    }
 }
 
 /* Section Headers */
@@ -560,6 +737,30 @@ body {
     align-items: stretch;
 }
 
+@media (max-width: 1200px) {
+    .solar-section {
+        padding: 0.08rem 0.15rem 0.4rem 0.15rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .solar-section {
+        padding: 0.06rem 0.12rem 0.3rem 0.12rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .solar-section {
+        padding: 0.05rem 0.1rem 0.25rem 0.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .solar-section {
+        padding: 0.04rem 0.08rem 0.2rem 0.08rem;
+    }
+}
+
 .section-title {
     font-size: 1rem;
     font-weight: 600;
@@ -567,6 +768,40 @@ body {
     margin-bottom: 0.1rem;
     text-align: center;
     flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 1200px) {
+    .section-title {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .section-title {
+        font-size: 0.85rem;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        line-height: 1.2;
+    }
+}
+
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 0.8rem;
+        line-height: 1.1;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-title {
+        font-size: 0.75rem;
+        line-height: 1.0;
+        margin-bottom: 0.08rem;
+    }
 }
 
 .solar-grid {
@@ -609,6 +844,28 @@ body {
     flex-shrink: 0;
 }
 
+@media (max-width: 1200px) {
+    .channel canvas,
+    .channel img {
+        border-radius: 3px;
+    }
+}
+
+@media (max-width: 768px) {
+    .channel canvas,
+    .channel img {
+        border-radius: 2px;
+    }
+}
+
+@media (max-width: 480px) {
+    .channel canvas,
+    .channel img {
+        border-radius: 2px;
+        border-width: 0.5px;
+    }
+}
+
 .channel-label {
     color: #495057;
     font-size: 0.75rem;
@@ -644,9 +901,41 @@ body {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
-/* 下段（6番目以降）のコピーライトはさらに下に配置 */
+@media (max-width: 1200px) {
+    .channel-copyright {
+        bottom: 0.5rem;
+        right: 0.25rem;
+        font-size: 0.55rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .channel-copyright {
+        bottom: 0.45rem;
+        right: 0.2rem;
+        font-size: 0.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .channel-copyright {
+        bottom: 0.85rem;
+        right: 0.18rem;
+        font-size: 0.45rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .channel-copyright {
+        bottom: 0.85rem;
+        right: 0.15rem;
+        font-size: 0.4rem;
+    }
+}
+
+/* 下段（6番目以降）のコピーライトも上に配置 */
 .channel:nth-child(n+6) .channel-copyright {
-    bottom: 0.6rem;
+    bottom: 0.8rem;
 }
 
 /* Right Panel - Calendar */
@@ -657,6 +946,40 @@ body {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+}
+
+@media (max-width: 1400px) {
+    .right-panel {
+        padding: 0.4rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .right-panel {
+        padding: 0.5rem;
+        min-height: 400px;
+    }
+}
+
+@media (max-width: 900px) {
+    .right-panel {
+        padding: 0.4rem;
+        min-height: 350px;
+    }
+}
+
+@media (max-width: 768px) {
+    .right-panel {
+        padding: 0.3rem;
+        min-height: 320px;
+    }
+}
+
+@media (max-width: 480px) {
+    .right-panel {
+        padding: 0.25rem;
+        min-height: 300px;
+    }
 }
 
 .calendar-section {
@@ -678,6 +1001,41 @@ body {
     flex-shrink: 0;
 }
 
+@media (max-width: 1400px) {
+    .timestamp {
+        font-size: 0.8rem;
+        padding: 0.4rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .timestamp {
+        font-size: 0.75rem;
+        padding: 0.35rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .timestamp {
+        font-size: 0.7rem;
+        padding: 0.3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .timestamp {
+        font-size: 0.65rem;
+        padding: 0.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .timestamp {
+        font-size: 0.6rem;
+        padding: 0.2rem;
+    }
+}
+
 .time-selector {
     flex-shrink: 0;
 }
@@ -690,6 +1048,41 @@ body {
     font-weight: 500;
 }
 
+@media (max-width: 1400px) {
+    .time-selector label {
+        font-size: 0.8rem;
+        margin-bottom: 0.2rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .time-selector label {
+        font-size: 0.75rem;
+        margin-bottom: 0.18rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .time-selector label {
+        font-size: 0.7rem;
+        margin-bottom: 0.15rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .time-selector label {
+        font-size: 0.65rem;
+        margin-bottom: 0.12rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .time-selector label {
+        font-size: 0.6rem;
+        margin-bottom: 0.1rem;
+    }
+}
+
 .time-select {
     width: 100%;
     padding: 0.5rem;
@@ -699,6 +1092,41 @@ body {
     font-size: 0.875rem;
     font-weight: 500;
     font-family: "Kanit", sans-serif;
+}
+
+@media (max-width: 1400px) {
+    .time-select {
+        padding: 0.4rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .time-select {
+        padding: 0.35rem;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .time-select {
+        padding: 0.3rem;
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .time-select {
+        padding: 0.25rem;
+        font-size: 0.65rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .time-select {
+        padding: 0.2rem;
+        font-size: 0.6rem;
+    }
 }
 
 #custom-calendar {
@@ -713,6 +1141,41 @@ body {
     flex-direction: column;
 }
 
+@media (max-width: 1400px) {
+    #custom-calendar {
+        min-height: 320px;
+        max-height: 400px;
+    }
+}
+
+@media (max-width: 1200px) {
+    #custom-calendar {
+        min-height: 300px;
+        max-height: 380px;
+    }
+}
+
+@media (max-width: 900px) {
+    #custom-calendar {
+        min-height: 280px;
+        max-height: 350px;
+    }
+}
+
+@media (max-width: 768px) {
+    #custom-calendar {
+        min-height: 260px;
+        max-height: 320px;
+    }
+}
+
+@media (max-width: 480px) {
+    #custom-calendar {
+        min-height: 240px;
+        max-height: 280px;
+    }
+}
+
 /* Custom Calendar Header */
 .custom-calendar-header {
     display: flex;
@@ -723,6 +1186,36 @@ body {
     border-bottom: 1px solid #dee2e6;
 }
 
+@media (max-width: 1400px) {
+    .custom-calendar-header {
+        padding: 0.4rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .custom-calendar-header {
+        padding: 0.35rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .custom-calendar-header {
+        padding: 0.3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .custom-calendar-header {
+        padding: 0.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .custom-calendar-header {
+        padding: 0.2rem;
+    }
+}
+
 .custom-calendar-nav {
     background: none;
     border: none;
@@ -731,6 +1224,41 @@ body {
     cursor: pointer;
     padding: 0.25rem;
     border-radius: 4px;
+}
+
+@media (max-width: 1400px) {
+    .custom-calendar-nav {
+        font-size: 0.9rem;
+        padding: 0.2rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .custom-calendar-nav {
+        font-size: 0.85rem;
+        padding: 0.18rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .custom-calendar-nav {
+        font-size: 0.8rem;
+        padding: 0.15rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .custom-calendar-nav {
+        font-size: 0.75rem;
+        padding: 0.12rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .custom-calendar-nav {
+        font-size: 0.7rem;
+        padding: 0.1rem;
+    }
 }
 
 .custom-calendar-nav:hover {
@@ -753,6 +1281,43 @@ body {
     color: #333;
     font-family: "Kanit", sans-serif;
     cursor: pointer;
+}
+
+@media (max-width: 1400px) {
+    .month-year-select {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .month-year-select {
+        padding: 0.18rem 0.35rem;
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .month-year-select {
+        padding: 0.15rem 0.3rem;
+        font-size: 0.65rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .month-year-select {
+        padding: 0.12rem 0.25rem;
+        font-size: 0.6rem;
+        border-radius: 3px;
+    }
+}
+
+@media (max-width: 480px) {
+    .month-year-select {
+        padding: 0.1rem 0.2rem;
+        font-size: 0.55rem;
+        border-radius: 2px;
+    }
 }
 
 .month-year-select:focus {
@@ -783,12 +1348,82 @@ body {
     color: #6c757d;
 }
 
+@media (max-width: 1400px) {
+    .custom-calendar-weekday {
+        padding: 0.35rem;
+        font-size: 0.65rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .custom-calendar-weekday {
+        padding: 0.3rem;
+        font-size: 0.6rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .custom-calendar-weekday {
+        padding: 0.25rem;
+        font-size: 0.55rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .custom-calendar-weekday {
+        padding: 0.2rem;
+        font-size: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .custom-calendar-weekday {
+        padding: 0.15rem;
+        font-size: 0.45rem;
+    }
+}
+
 .custom-calendar-days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     flex: 1;
     padding: 0.3rem;
     gap: 2px;
+}
+
+@media (max-width: 1400px) {
+    .custom-calendar-days {
+        padding: 0.25rem;
+        gap: 1.5px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .custom-calendar-days {
+        padding: 0.2rem;
+        gap: 1px;
+    }
+}
+
+@media (max-width: 900px) {
+    .custom-calendar-days {
+        padding: 0.15rem;
+        gap: 1px;
+    }
+}
+
+@media (max-width: 768px) {
+    .custom-calendar-days {
+        padding: 0.1rem;
+        gap: 0.5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .custom-calendar-days {
+        padding: 0.08rem;
+        gap: 0.5px;
+    }
 }
 
 .custom-calendar-day {
@@ -804,6 +1439,41 @@ body {
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s ease;
+}
+
+@media (max-width: 1400px) {
+    .custom-calendar-day {
+        height: 50px;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .custom-calendar-day {
+        height: 45px;
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .custom-calendar-day {
+        height: 40px;
+        font-size: 0.65rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .custom-calendar-day {
+        height: 35px;
+        font-size: 0.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .custom-calendar-day {
+        height: 30px;
+        font-size: 0.55rem;
+    }
 }
 
 .custom-calendar-day:hover {
@@ -918,43 +1588,153 @@ body {
 }
 
 /* Responsive Design */
+@media (max-width: 1400px) {
+    .container {
+        max-width: 100%;
+        padding: 0 0.5rem;
+    }
+    
+    .header {
+        padding: 0.5rem 1rem;
+    }
+    
+    .controls-section {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin-top: 1rem;
+        justify-content: center;
+    }
+    
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
 @media (max-width: 1200px) {
     .main-layout {
         grid-template-columns: 1fr;
         grid-template-rows: 1fr auto;
+        gap: 0.5rem;
     }
     
     .prediction-section {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
         height: auto;
+        min-height: 160px;
+        margin-bottom: 0.5rem;
     }
     
-    .metrics-section {
-        flex-direction: row;
+    .section-headers-two {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.2rem;
+    }
+    
+    .section-header {
+        font-size: 0.85rem;
+        padding: 0.25rem 0.5rem;
+        text-align: center;
+    }
+    
+    .performance-section {
+        min-height: 100px;
+    }
+    
+    .performance-display {
+        min-height: 90px;
+    }
+    
+    .solar-grid {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(4, 1fr);
+        min-height: 350px;
+    }
+    
+    .channel {
+        min-height: 70px;
+    }
+    
+    .channel-label {
+        font-size: 0.7rem;
+        padding: 0.05rem 0.15rem;
     }
 }
 
-@media (max-width: 768px) {
-    body {
+@media (max-width: 900px) {
+    .header {
         padding: 0.5rem;
     }
     
     .title {
-        font-size: 2rem;
+        font-size: 1.6rem;
     }
     
-    .title-with-logo {
-        flex-direction: column;
+    .subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .author-names {
+        font-size: 0.9rem;
+    }
+    
+    .controls-section {
+        flex-direction: row;
+        gap: 1rem;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .language-toggle {
+        /* 自然な順序で横並び */
+    }
+    
+    .theme-toggle {
+        /* 自然な順序で横並び */
+    }
+    
+    .publication-links {
+        gap: 0.5rem;
+        margin-top: -0.5rem;
+    }
+    
+    .external-link {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.75rem;
+    }
+    
+    .main-layout {
         gap: 0.4rem;
     }
     
-    .logo {
-        height: 46px;
+    .prediction-section {
+        grid-template-columns: 1fr 1fr;
+        height: auto;
+        min-height: 200px;
+        margin-bottom: 0.4rem;
     }
     
-    .subtitle,
-    .publication-links {
-        transform: translateX(0); /* モバイルではシフトを無効化 */
+    .section-headers-two {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.1rem;
+        margin-bottom: 0.3rem;
+    }
+    
+    .section-header {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.4rem;
+        line-height: 1.1;
+    }
+    
+    .performance-section {
+        min-height: 70px;
+        margin-bottom: 0.2rem;
+    }
+    
+    .performance-display {
+        min-height: 60px;
+        padding: 0.3rem;
     }
     
     .solar-grid {
@@ -963,18 +1743,354 @@ body {
         min-height: 400px;
         gap: 0.2rem;
     }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 0.25rem;
+    }
+    
+    .container {
+        gap: 0.25rem;
+    }
+    
+    .header {
+        padding: 0.5rem;
+        position: relative;
+    }
+    
+    .header-content {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        gap: 1rem;
+    }
+    
+    .title-section {
+        width: 100%;
+        text-align: center;
+        padding-right: 0;
+    }
+    
+    .title-with-logo {
+        flex-direction: row;
+        gap: 0.75rem;
+        align-items: flex-start;
+        justify-content: center;
+        margin-bottom: 0.5rem;
+    }
+    
+    .logo {
+        height: 45px;
+        flex-shrink: 0;
+    }
+    
+    .title-content {
+        flex: 1;
+        text-align: center;
+        align-items: center;
+    }
+    
+    .title {
+        font-size: 1.6rem;
+        line-height: 1.0;
+        text-align: center;
+        margin-bottom: 0.2rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .subtitle {
+        font-size: 0.8rem;
+        margin-top: 0;
+        text-align: center;
+    }
+    
+    .author-names {
+        font-size: 0.8rem;
+        margin-top: -0.5rem;
+        text-align: center;
+    }
+    
+    .subtitle,
+    .publication-links {
+        transform: translateX(0);
+    }
+    
+    .publication-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.15rem;
+        margin-top: 0.2rem;
+        margin-bottom: 0.2rem;
+    }
+    
+    .external-link {
+        padding: 0.15rem 0.3rem;
+        font-size: 0.5rem;
+    }
+    
+    .controls-section {
+        position: relative;
+        top: auto;
+        right: auto;
+        flex-direction: row;
+        gap: 1rem;
+        align-items: center;
+        justify-content: center;
+        margin-top: 0.2rem;
+        order: 3;
+        width: 100%;
+    }
+    
+    .theme-toggle {
+        /* 自然な順序で横並び */
+    }
+    
+    .language-toggle {
+        /* 自然な順序で横並び */
+    }
+    
+    .lang-btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.65rem;
+    }
+    
+    .theme-btn {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.75rem;
+    }
+    
+    .theme-text {
+        font-size: 0.75rem;
+    }
     
     .flare-class {
         font-size: 2.5rem;
     }
     
     .prediction-section {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
+        min-height: 180px;
+        margin-bottom: 0.3rem;
     }
     
-    .metrics-section {
-        flex-direction: column;
+    .section-headers-two {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.15rem;
+        margin-bottom: 0.25rem;
     }
+    
+    .section-header {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.3rem;
+        line-height: 1.1;
+    }
+    
+    .performance-section {
+        min-height: 60px;
+        margin-bottom: 0.15rem;
+    }
+    
+    .performance-display {
+        min-height: 50px;
+        padding: 0.25rem;
+    }
+    
+    /* パーセンテージ表示のフォントサイズを調整 */
+    .performance-display div[style*="font-size: 3rem"] {
+        font-size: 2.2rem !important;
+    }
+    
+    .solar-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(5, 1fr);
+        min-height: 450px;
+        gap: 0.15rem;
+    }
+    
+    .channel {
+        min-height: 80px;
+    }
+    
+    .channel-label {
+        font-size: 0.8rem;
+        padding: 0.05rem 0.1rem;
+        min-height: 1rem;
+    }
+    
+    .image-caption {
+        font-size: 0.75rem;
+        margin-top: 0.3rem;
+        line-height: 1.2;
+        display: block !important;
+        visibility: visible !important;
+    }
+    
+    .model-image-container {
+        min-height: 140px;
+        height: auto !important;
+        overflow: visible;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .model-image {
+        max-height: 110px !important;
+        width: auto !important;
+        flex-shrink: 0;
+    }
+    
+    .model-images {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 0.15rem;
+    }
+    
+    .header {
+        padding: 0.4rem 0.25rem;
+    }
+    
+    .title-section {
+        width: 100%;
+        text-align: center;
+        padding-right: 0;
+    }
+    
+    .title-with-logo {
+        gap: 0.5rem;
+        justify-content: center;
+    }
+    
+    .title {
+        font-size: 1.4rem;
+        line-height: 1.0;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .subtitle {
+        font-size: 0.75rem;
+        text-align: center;
+    }
+    
+    .author-names {
+        font-size: 0.75rem;
+        margin-top: -0.3rem;
+        text-align: center;
+    }
+    
+    .logo {
+        height: 35px;
+    }
+    
+    .publication-links {
+        gap: 0.1rem;
+        margin-top: 0.15rem;
+        margin-bottom: 0.15rem;
+        justify-content: center;
+    }
+    
+    .external-link {
+        padding: 0.1rem 0.25rem;
+        font-size: 0.45rem;
+    }
+    
+    .external-link .icon {
+        font-size: 0.6rem;
+    }
+    
+    .controls-section {
+        flex-direction: row;
+        gap: 1rem;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-top: 0.15rem;
+    }
+    
+    .lang-btn {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.6rem;
+    }
+    
+    .theme-btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.7rem;
+    }
+    
+    .theme-icon {
+        font-size: 0.8rem;
+    }
+    
+    .theme-text {
+        font-size: 0.7rem;
+    }
+    
+    .section-main-title {
+        font-size: 1.1rem;
+    }
+    
+    .section-header {
+        font-size: 0.6rem;
+        padding: 0.1rem 0.15rem;
+        line-height: 1.0;
+        text-align: center;
+    }
+    
+    .prediction-section {
+        grid-template-columns: 1fr 1fr;
+        min-height: 160px;
+        margin-bottom: 0.25rem;
+    }
+    
+    .section-headers-two {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.1rem;
+        margin-bottom: 0.2rem;
+    }
+    
+    .performance-section {
+        min-height: 50px;
+        margin-bottom: 0.1rem;
+    }
+    
+    .performance-display {
+        min-height: 40px;
+        padding: 0.2rem;
+    }
+    
+    /* パーセンテージ表示のフォントサイズを調整 */
+    .performance-display div[style*="font-size: 3rem"] {
+        font-size: 2rem !important;
+    }
+    
+    .solar-grid {
+        min-height: 400px;
+        gap: 0.1rem;
+    }
+    
+    .channel-label {
+        font-size: 0.7rem;
+        padding: 0.03rem 0.08rem;
+    }
+    
+
 }
 
 .no-data {
@@ -1391,6 +2507,37 @@ body.dark-theme {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+@media (max-width: 1200px) {
+    .video-container {
+        max-width: 350px;
+    }
+}
+
+@media (max-width: 900px) {
+    .video-container {
+        max-width: 100%;
+    }
+    
+    .video-container video {
+        max-height: 300px;
+        object-fit: cover;
+    }
+}
+
+@media (max-width: 768px) {
+    .video-container video {
+        max-height: 250px;
+        border-radius: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .video-container video {
+        max-height: 200px;
+        border-radius: 4px;
+    }
+}
+
 .video-caption {
     margin-top: 0.75rem;
     font-size: 0.875rem;
@@ -1428,6 +2575,78 @@ body.dark-theme {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     background: #fff;
     padding: 1rem;
+}
+
+@media (max-width: 1200px) {
+    .model-images {
+        max-width: 350px;
+        gap: 1.2rem;
+    }
+    
+    .model-image {
+        padding: 0.8rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .model-images {
+        max-width: 100%;
+        gap: 1rem;
+    }
+    
+    .model-image {
+        padding: 0.6rem;
+        border-radius: 6px;
+    }
+}
+
+@media (max-width: 768px) {
+    .model-images {
+        gap: 0.8rem;
+    }
+    
+    .model-image {
+        padding: 0.5rem;
+        border-radius: 4px;
+    }
+}
+
+@media (max-width: 480px) {
+    .model-images {
+        gap: 0.6rem;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .model-image {
+        padding: 0.4rem;
+    }
+    
+    .image-caption {
+        font-size: 0.7rem;
+        margin-top: 0.25rem;
+        line-height: 1.1;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    .model-image-container {
+        min-height: 150px;
+        height: auto !important;
+        overflow: visible;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .model-image {
+        max-height: 100px !important;
+        width: auto !important;
+        flex-shrink: 0;
+    }
 }
 
 .image-caption {
@@ -1571,6 +2790,24 @@ body.dark-theme {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .current-forecast-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .current-forecast-header {
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
 }
 
 .section-main-title {
@@ -1579,6 +2816,38 @@ body.dark-theme {
     color: #333;
     margin: 0;
     font-family: "Kanit", sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 900px) {
+    .section-main-title {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .section-main-title {
+        font-size: 1.4rem;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+    }
+    
+    .past-forecasts-section .section-main-title {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-main-title {
+        font-size: 1.2rem;
+    }
+    
+    .past-forecasts-section .section-main-title {
+        margin-bottom: 0.75rem;
+    }
 }
 
 .current-time {
@@ -1589,6 +2858,31 @@ body.dark-theme {
     padding: 0.5rem 1rem;
     border-radius: 20px;
     border: 1px solid #dee2e6;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+@media (max-width: 900px) {
+    .current-time {
+        padding: 0.4rem 0.8rem;
+        gap: 0.4rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .current-time {
+        padding: 0.35rem 0.7rem;
+        border-radius: 15px;
+        align-self: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .current-time {
+        padding: 0.3rem 0.6rem;
+        border-radius: 12px;
+        gap: 0.3rem;
+    }
 }
 
 .time-label {
@@ -1597,11 +2891,47 @@ body.dark-theme {
     font-weight: 500;
 }
 
+@media (max-width: 900px) {
+    .time-label {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .time-label {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .time-label {
+        font-size: 0.7rem;
+    }
+}
+
 .time-value {
     font-size: 1rem;
     color: #333;
     font-weight: 600;
     font-family: "Kanit", monospace;
+}
+
+@media (max-width: 900px) {
+    .time-value {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .time-value {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .time-value {
+        font-size: 0.8rem;
+    }
 }
 
 .current-forecast-content {
@@ -1801,8 +3131,8 @@ body.dark-theme {
     border-radius: 4px;
     width: 100%;
     height: auto;
-    max-width: 200px;
-    max-height: 150px;
+    max-width: 300px;
+    max-height: 250px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1970,6 +3300,18 @@ body.dark-theme {
     flex-shrink: 0;
 }
 
+.level-block span {
+    font-size: 1.2rem;
+}
+
+.level-block span:first-child {
+    font-size: 1.1rem;
+}
+
+.level-block span:last-child {
+    font-size: 1.3rem;
+}
+
 
 
 /* Flare Level Colors and Classes */
@@ -2130,35 +3472,166 @@ body.dark-theme {
     color: #94a3b8;
 }
 
+/* ライトモードでのlevel-block内のテキスト色調整 */
+.level-block span {
+    color: #495057 !important;
+}
+
+.level-block:not(.filled) span {
+    color: #6c757d !important;
+}
+
+/* ライトモードでfilled状態のバーは白文字 */
+.level-block.filled span {
+    color: #fff !important;
+}
+
+/* ダークモードでのlevel-block内のテキスト色調整 */
+.dark-theme .level-block span {
+    color: #fff !important;
+}
+
+.dark-theme .level-block:not(.filled) span {
+    color: #94a3b8 !important;
+}
+
 /* Responsive Design for Panels */
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
     .current-forecast-content {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
         height: auto;
+        gap: 0.75rem;
     }
     
-    .solar-surface-panel {
-        grid-column: 1 / -1;
-        height: 300px;
+    .panel {
+        height: 380px;
     }
     
     .panel-title {
         font-size: 1rem;
+        min-height: 2rem;
+    }
+    
+    .panel-subtitle {
+        font-size: 0.85rem;
+        min-height: 1.3rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .current-forecast-content {
+        grid-template-columns: 1fr 1fr;
+        height: auto;
+        gap: 0.75rem;
+    }
+    
+    .solar-surface-panel {
+        grid-column: 1 / -1;
+        height: 320px;
+        order: -1;
+    }
+    
+    .current-status-panel,
+    .forecast-panel {
+        height: 350px;
+    }
+    
+    .panel-title {
+        font-size: 0.95rem;
+        min-height: 1.8rem;
     }
     
     .forecast-panel .panel-title {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+    }
+    
+    .panel-subtitle {
+        font-size: 0.8rem;
+        min-height: 1.2rem;
     }
     
     .status-level-blocks .level-block,
     .forecast-level-blocks .level-block {
-        height: 40px;
-        padding: 0.3rem;
+        height: 38px;
+        min-height: 38px;
+        max-height: 38px;
+        padding: 0.25rem 0.4rem;
+        font-size: 0.85rem;
     }
     
-    .status-level-blocks .level-block span,
-    .forecast-level-blocks .level-block span {
+    .panel-status .status-text {
+        font-size: 1.2rem;
+    }
+    
+    .panel-status .level-text {
+        font-size: 1rem;
+    }
+    
+    .aia-304-container {
+        max-width: 320px;
+        max-height: 320px;
+    }
+}
+
+@media (max-width: 900px) {
+    .current-forecast-content {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+    
+    .panel {
+        height: 300px;
+    }
+    
+    .solar-surface-panel {
+        grid-column: 1;
+        height: 280px;
+        order: -1;
+    }
+    
+    .current-status-panel,
+    .forecast-panel {
+        height: 280px;
+    }
+    
+    .panel-title {
         font-size: 0.9rem;
+        min-height: 1.6rem;
+    }
+    
+    .forecast-panel .panel-title {
+        font-size: 0.8rem;
+    }
+    
+    .panel-subtitle {
+        font-size: 0.75rem;
+        min-height: 1.1rem;
+    }
+    
+    .status-level-blocks .level-block,
+    .forecast-level-blocks .level-block {
+        height: 35px;
+        min-height: 35px;
+        max-height: 35px;
+        padding: 0.2rem 0.35rem;
+        font-size: 0.8rem;
+    }
+    
+    .panel-status {
+        padding: 0.25rem 0.4rem;
+    }
+    
+    .panel-status .status-text {
+        font-size: 1.1rem;
+    }
+    
+    .panel-status .level-text {
+        font-size: 0.9rem;
+    }
+    
+    .aia-304-container {
+        max-width: 300px;
+        max-height: 300px;
     }
 }
 
@@ -2192,40 +3665,164 @@ body.dark-theme {
     
     .current-forecast-content {
         grid-template-columns: 1fr;
-        gap: 1rem;
+        gap: 0.5rem;
         height: auto;
     }
     
     .panel {
-        height: 380px;
+        height: 320px;
+    }
+    
+    .solar-surface-panel {
+        height: 280px;
+        order: -1;
+    }
+    
+    .current-status-panel,
+    .forecast-panel {
+        height: 300px;
     }
     
     .solar-surface-panel .aia-304-container {
-        max-width: 160px;
-        max-height: 160px;
+        max-width: 240px;
+        max-height: 240px;
         margin: 0 auto;
     }
     
     .solar-surface-panel .aia-304-canvas {
-        max-width: 160px;
-        max-height: 160px;
+        max-width: 240px;
+        max-height: 240px;
     }
     
     .status-level-blocks .level-block,
     .forecast-level-blocks .level-block {
-        height: 40px;
-        padding: 0.25rem;
-    }
-    
-    .panel-title {
-        font-size: 1rem;
-    }
-    
-    .forecast-panel .panel-title {
+        height: 32px;
+        min-height: 32px;
+        max-height: 32px;
+        padding: 0.1rem 0.2rem;
         font-size: 0.85rem;
     }
     
+    .level-block span {
+        font-size: 0.85rem !important;
+    }
+    
+    .level-block span:first-child {
+        font-size: 0.85rem !important;
+    }
+    
+    .level-block span:last-child {
+        font-size: 0.85rem !important;
+    }
+    
+    .panel-title {
+        font-size: 0.85rem;
+        min-height: 1.5rem;
+    }
+    
+    .forecast-panel .panel-title {
+        font-size: 0.75rem;
+    }
+    
     .panel-subtitle {
+        font-size: 0.7rem;
+        min-height: 1rem;
+    }
+    
+    .panel-status {
+        padding: 0.2rem 0.3rem;
+    }
+    
+    .panel-status .status-text {
+        font-size: 1rem;
+    }
+    
+    .panel-status .level-text {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .current-forecast-content {
+        gap: 0.4rem;
+    }
+    
+    .panel {
+        height: 280px;
+        padding: 0.75rem 0.5rem;
+    }
+    
+    .solar-surface-panel {
+        height: 240px;
+    }
+    
+    .current-status-panel,
+    .forecast-panel {
+        height: 260px;
+    }
+    
+    .panel-title {
+        font-size: 0.8rem;
+        min-height: 1.4rem;
+        padding: 0 0.1rem;
+    }
+    
+    .forecast-panel .panel-title {
+        font-size: 0.7rem;
+    }
+    
+    .panel-subtitle {
+        font-size: 0.65rem;
+        min-height: 0.9rem;
+    }
+    
+    .solar-surface-panel .aia-304-container {
+        max-width: 200px;
+        max-height: 200px;
+    }
+    
+    .solar-surface-panel .aia-304-canvas {
+        max-width: 200px;
+        max-height: 200px;
+    }
+    
+    .status-level-blocks,
+    .forecast-level-blocks {
+        padding: 0.3rem 0.3rem;
+        gap: 0.1rem;
+    }
+    
+    .status-level-blocks .level-block,
+    .forecast-level-blocks .level-block {
+        height: 28px;
+        min-height: 28px;
+        max-height: 28px;
+        padding: 0.08rem 0.15rem;
+        font-size: 0.8rem;
+    }
+    
+    .level-block span {
+        font-size: 0.8rem !important;
+    }
+    
+    .level-block span:first-child {
+        font-size: 0.8rem !important;
+    }
+    
+    .level-block span:last-child {
+        font-size: 0.8rem !important;
+    }
+    
+    .panel-status {
+        padding: 0.15rem 0.25rem;
+    }
+    
+    .panel-status .status-text {
+        font-size: 0.9rem;
+        margin-bottom: 0.1rem;
+    }
+    
+    .panel-status .level-text {
         font-size: 0.8rem;
     }
 }
@@ -2251,6 +3848,50 @@ body.dark-theme {
     height: 100% !important;
 }
 
+@media (max-width: 1200px) {
+    .goes-chart-section {
+        padding: 0.8rem;
+    }
+    
+    .goes-chart-container {
+        height: 280px;
+    }
+}
+
+@media (max-width: 900px) {
+    .goes-chart-section {
+        padding: 0.6rem;
+    }
+    
+    .goes-chart-container {
+        height: 260px;
+    }
+}
+
+@media (max-width: 768px) {
+    .goes-chart-section {
+        padding: 0.5rem;
+        border-radius: 3px;
+    }
+    
+    .goes-chart-container {
+        height: 240px;
+        margin-top: 0.4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .goes-chart-section {
+        padding: 0.4rem;
+        border-radius: 2px;
+    }
+    
+    .goes-chart-container {
+        height: 200px;
+        margin-top: 0.3rem;
+    }
+}
+
 /* Dark Theme for GOES Chart */
 .dark-theme .goes-chart-section {
     background: rgba(15, 23, 42, 0.8);
@@ -2258,16 +3899,7 @@ body.dark-theme {
     backdrop-filter: blur(10px);
 }
 
-/* Responsive Design for GOES Chart */
-@media (max-width: 768px) {
-    .goes-chart-container {
-        height: 250px;
-    }
-    
-    .goes-chart-section {
-        padding: 0.75rem;
-    }
-}
+
 
 /* Remove old prediction display rules - using new structure */
 
@@ -2307,6 +3939,22 @@ body.dark-theme {
 }
 
 /* Responsive adjustments for current forecast */
+@media (max-width: 1400px) {
+    .forecast-single-column .level-block {
+        height: 40px !important;
+        padding: 0.35rem 0.55rem !important;
+        font-size: 0.9rem !important;
+    }
+    
+    .forecast-single-column .level-block span:first-child {
+        font-size: 0.85rem !important;
+    }
+    
+    .forecast-single-column .level-block span:last-child {
+        font-size: 1.05rem !important;
+    }
+}
+
 @media (max-width: 1200px) {
     .forecast-single-column .level-block {
         height: 35px !important;
@@ -2325,12 +3973,14 @@ body.dark-theme {
 
 @media (max-width: 900px) {
     .forecast-single-column {
-        height: 200px;
+        height: auto;
+        min-height: 180px;
     }
     
     .forecast-single-column .level-block {
-        height: 40px !important;
-        padding: 0.35rem 0.55rem !important;
+        height: 32px !important;
+        padding: 0.25rem 0.4rem !important;
+        font-size: 0.8rem !important;
     }
     
     .forecast-single-column .level-block span:first-child {
@@ -2344,16 +3994,33 @@ body.dark-theme {
 
 @media (max-width: 768px) {
     .forecast-single-column .level-block {
-        height: 45px !important;
-        padding: 0.4rem 0.6rem !important;
+        height: 30px !important;
+        padding: 0.2rem 0.35rem !important;
+        font-size: 0.75rem !important;
     }
     
     .forecast-single-column .level-block span:first-child {
-        font-size: 0.8rem !important;
+        font-size: 0.6rem !important;
     }
     
     .forecast-single-column .level-block span:last-child {
-        font-size: 1rem !important;
+        font-size: 0.7rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .forecast-single-column .level-block {
+        height: 28px !important;
+        padding: 0.15rem 0.3rem !important;
+        font-size: 0.7rem !important;
+    }
+    
+    .forecast-single-column .level-block span:first-child {
+        font-size: 0.75rem !important;
+    }
+    
+    .forecast-single-column .level-block span:last-child {
+        font-size: 0.75rem !important;
     }
 }
 
