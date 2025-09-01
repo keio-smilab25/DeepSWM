@@ -1,2 +1,9 @@
-# Redirect all routes to index.html for client-side routing
+# Redirect demo to forecast (legacy support)
+/demo    /forecast/    301
+/demo/*  /forecast/:splat    301
+
+# Forecast app routing
+/forecast/*  /web/forecast/index.html    200
+
+# Redirect all other routes to index.html for client-side routing
 /*    /index.html   200 

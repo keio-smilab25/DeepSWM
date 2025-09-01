@@ -14,6 +14,25 @@
 
         console.log('404 handler - Current path:', currentPath);
 
+        // Get repository name for GitHub Pages
+        const pathSegments = currentPath.split('/').filter(Boolean);
+        const repoName = window.location.hostname.includes('github.io') ? (pathSegments[0] || 'DeepSWM') : '';
+        const basePath = repoName ? `/${repoName}` : '';
+
+        // Handle forecast routes
+        if (currentPath.includes('/forecast')) {
+            console.log('Redirecting to forecast app');
+            window.location.replace(`${basePath}/web/forecast/index.html` + currentSearch + currentHash);
+            return;
+        }
+
+        // Handle demo routes (legacy)
+        if (currentPath.includes('/demo')) {
+            console.log('Redirecting demo to forecast app');
+            window.location.replace(`${basePath}/web/forecast/index.html` + currentSearch + currentHash);
+            return;
+        }
+
         // Handle other routes - redirect to home
         console.log('Redirecting to index.html');
         window.location.replace('/index.html' + currentSearch + currentHash);
