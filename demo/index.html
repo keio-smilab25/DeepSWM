@@ -17,15 +17,15 @@
 
         if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
             // Local development - use relative path
-            targetPath = '../web/demo/index.html';
+            targetPath = '../web/forecast/index.html';
         } else if (window.location.hostname.includes('github.io')) {
             // GitHub Pages - use absolute path with repository
             const pathSegments = window.location.pathname.split('/').filter(Boolean);
             const repoName = pathSegments[0] || 'DeepSWM'; // fallback to DeepSWM
-            targetPath = `/${repoName}/web/demo/index.html`;
+            targetPath = `/${repoName}/web/forecast/index.html`;
         } else {
             // Other deployments - use absolute path
-            targetPath = '/web/demo/index.html';
+            targetPath = '/web/forecast/index.html';
         }
 
         console.log('Demo redirect - Target path:', targetPath);

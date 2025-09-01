@@ -33,9 +33,10 @@
             return;
         }
 
-        // Handle other routes - redirect to home
+        // Handle other routes - redirect to home with proper base path
         console.log('Redirecting to index.html');
-        window.location.replace('/index.html' + currentSearch + currentHash);
+        const homeTarget = basePath ? `${basePath}/index.html` : '/index.html';
+        window.location.replace(homeTarget + currentSearch + currentHash);
     </script>
 </head>
 
