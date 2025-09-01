@@ -236,32 +236,31 @@ class SolarFlareDemo {
     }
     
     getDefaultDateTime() {
-        const now = new Date();
-        const currentHour = now.getUTCHours();
-        
-        // Try current time - 3 hours first
-        let targetHour = currentHour - 3;
-        let targetDate = new Date(now);
-        
-        if (targetHour < 0) {
-            targetDate.setUTCDate(targetDate.getUTCDate() - 1);
-            targetHour = 24 + targetHour;
-        }
-        
-        // Check if data exists for this date/hour
-        const year = targetDate.getUTCFullYear();
-        const month = String(targetDate.getUTCMonth() + 1).padStart(2, '0');
-        const day = String(targetDate.getUTCDate()).padStart(2, '0');
-        const hour = String(targetHour).padStart(2, '0');
-        const dataKey = `${year}${month}${day}${hour}`;
-        
-        if (this.predictionManager.predictionData && this.predictionManager.predictionData[dataKey]) {
-            return { date: targetDate, hour: targetHour };
-        }
-        
-        // If no data for current-3h, find the latest available data
+        // Use the same logic as calendar - get the latest available date from prediction data
         const latestDate = this.predictionManager.getLatestAvailableDate();
-        return { date: latestDate, hour: 12 }; // Default to noon
+        if (latestDate) {
+            // For the latest date, try to find the latest hour with data
+            const year = latestDate.getUTCFullYear();
+            const month = String(latestDate.getUTCMonth() + 1).padStart(2, '0');
+            const day = String(latestDate.getUTCDate()).padStart(2, '0');
+            
+            // Check for the latest hour with data on this date
+            let latestHour = 0;
+            for (let h = 23; h >= 0; h--) {
+                const hour = String(h).padStart(2, '0');
+                const dataKey = `${year}${month}${day}${hour}`;
+                if (this.predictionManager.predictionData && this.predictionManager.predictionData[dataKey]) {
+                    latestHour = h;
+                    break;
+                }
+            }
+            
+            return { date: latestDate, hour: latestHour };
+        }
+        
+        // Fallback to current time if no data available
+        const now = new Date();
+        return { date: now, hour: 12 };
     }
     
     initTimeSelector() {
@@ -321,7 +320,8 @@ class SolarFlareDemo {
         const dateStr = this.currentDate.toLocaleDateString(lang === 'ja' ? 'ja-JP' : 'en-US', {
             year: 'numeric',
             month: 'long',
-            day: 'numeric'
+            day: 'numeric',
+            timeZone: 'UTC'
         });
         
         const selectedDateEl = document.getElementById('selected-date');
@@ -338,7 +338,7 @@ class SolarFlareDemo {
     updateTimestamp() {
         const timestampEl = document.getElementById('timestamp');
         if (timestampEl && this.currentDate) {
-            const dateStr = `${this.currentDate.getFullYear()}-${String(this.currentDate.getMonth() + 1).padStart(2, '0')}-${String(this.currentDate.getDate()).padStart(2, '0')}`;
+            const dateStr = `${this.currentDate.getUTCFullYear()}-${String(this.currentDate.getUTCMonth() + 1).padStart(2, '0')}-${String(this.currentDate.getUTCDate()).padStart(2, '0')}`;
             const timeStr = `${String(this.currentHour).padStart(2, '0')}:00 UTC`;
             timestampEl.textContent = `${dateStr} ${timeStr}`;
         }
@@ -350,8 +350,8 @@ class SolarFlareDemo {
             const solarImagesText = this.translationManager.t('solar_images');
             solarTitleEl.textContent = `${solarImagesText} ${startTime} - ${endTime} UTC`;
         } else if (solarTitleEl && this.currentDate) {
-            const month = String(this.currentDate.getMonth() + 1).padStart(2, '0');
-            const day = String(this.currentDate.getDate()).padStart(2, '0');
+            const month = String(this.currentDate.getUTCMonth() + 1).padStart(2, '0');
+            const day = String(this.currentDate.getUTCDate()).padStart(2, '0');
             const hour = String(this.currentHour).padStart(2, '0');
             const solarImagesText = this.translationManager.t('solar_images');
             solarTitleEl.textContent = `${solarImagesText} ${month}/${day} ${hour}:00 UTC`;
@@ -484,44 +484,45 @@ class SolarFlareDemo {
     }
     
     async initCurrentForecast() {
-        await this.loadCurrentForecastAndImages();
-        
-        // Initialize the new panel structure
+        // Initialize the new panel structure first
         this.initializePanels();
+        
+        // Then load the actual data
+        await this.loadCurrentForecastAndImages();
     }
     
     initializePanels() {
-        // Initialize current status panel (no percentages) with loading state
-        this.updateLevelBlocksNew(1, null, 'current-level-blocks');
+        // Set default quiet status for both panels
+        const defaultStatus = {
+            level: 1,
+            status: this.translationManager.t('flare_status_quiet'),
+            statusClass: 'status-quiet',
+            flareClass: 'O-class',
+            icon: '🟢',
+            color: '#4caf50'
+        };
         
-        // Initialize forecast panel (with percentages when data is available) with loading state
-        this.updateLevelBlocksNew(1, null, 'forecast-level-blocks');
+        // Initialize current status panel with default quiet status
+        this.updateStatusPanel(defaultStatus, 'current');
         
-        // Set default loading states
-        const currentStatus = document.getElementById('current-status');
-        const forecastStatus = document.getElementById('forecast-status');
-        
-        const loadingText = this.translationManager.t('loading');
-        
-        if (currentStatus) {
-            currentStatus.querySelector('.status-text').textContent = loadingText;
-            currentStatus.querySelector('.level-text').textContent = '--';
-        }
-        
-        if (forecastStatus) {
-            forecastStatus.querySelector('.status-text').textContent = loadingText;
-            forecastStatus.querySelector('.level-text').textContent = '--';
-        }
+        // Initialize forecast panel with default quiet prediction
+        const defaultPrediction = {
+            o_prob: 1.0,
+            c_prob: 0.0,
+            m_prob: 0.0,
+            x_prob: 0.0
+        };
+        this.updateForecastPanel(defaultPrediction);
     }
     
     updateDataTime(timestamp) {
         const timeElement = document.getElementById('current-time-value');
         if (timeElement && timestamp) {
-            const year = timestamp.getFullYear();
-            const month = String(timestamp.getMonth() + 1).padStart(2, '0');
-            const day = String(timestamp.getDate()).padStart(2, '0');
-            const hour = String(timestamp.getHours()).padStart(2, '0');
-            const minute = String(timestamp.getMinutes()).padStart(2, '0');
+            const year = timestamp.getUTCFullYear();
+            const month = String(timestamp.getUTCMonth() + 1).padStart(2, '0');
+            const day = String(timestamp.getUTCDate()).padStart(2, '0');
+            const hour = String(timestamp.getUTCHours()).padStart(2, '0');
+            const minute = String(timestamp.getUTCMinutes()).padStart(2, '0');
             
             timeElement.textContent = `${year}/${month}/${day} ${hour}:${minute}`;
         }
@@ -537,19 +538,19 @@ class SolarFlareDemo {
             const startTime = new Date(timestamp);
             const endTime = new Date(timestamp.getTime() + 24 * 60 * 60 * 1000); // Add 24 hours
             
-            // Format start time
-            const startYear = startTime.getFullYear();
-            const startMonth = String(startTime.getMonth() + 1).padStart(2, '0');
-            const startDay = String(startTime.getDate()).padStart(2, '0');
-            const startHour = String(startTime.getHours()).padStart(2, '0');
-            const startMinute = String(startTime.getMinutes()).padStart(2, '0');
+            // Format start time using UTC methods
+            const startYear = startTime.getUTCFullYear();
+            const startMonth = String(startTime.getUTCMonth() + 1).padStart(2, '0');
+            const startDay = String(startTime.getUTCDate()).padStart(2, '0');
+            const startHour = String(startTime.getUTCHours()).padStart(2, '0');
+            const startMinute = String(startTime.getUTCMinutes()).padStart(2, '0');
             
-            // Format end time  
-            const endYear = endTime.getFullYear();
-            const endMonth = String(endTime.getMonth() + 1).padStart(2, '0');
-            const endDay = String(endTime.getDate()).padStart(2, '0');
-            const endHour = String(endTime.getHours()).padStart(2, '0');
-            const endMinute = String(endTime.getMinutes()).padStart(2, '0');
+            // Format end time using UTC methods
+            const endYear = endTime.getUTCFullYear();
+            const endMonth = String(endTime.getUTCMonth() + 1).padStart(2, '0');
+            const endDay = String(endTime.getUTCDate()).padStart(2, '0');
+            const endHour = String(endTime.getUTCHours()).padStart(2, '0');
+            const endMinute = String(endTime.getUTCMinutes()).padStart(2, '0');
             
             // Create the title with date range
             let startDateStr, endDateStr;
@@ -571,68 +572,47 @@ class SolarFlareDemo {
         try {
             console.log('Loading current forecast and images...');
             
-            // Use the already loaded prediction data from PredictionManager
+            // Use the same default date/time as calendar
+            const defaultDateTime = this.getDefaultDateTime();
+            const targetDate = defaultDateTime.date;
+            const targetHour = defaultDateTime.hour;
+            
+            // Create data key for the selected date/hour
+            const year = targetDate.getUTCFullYear();
+            const month = String(targetDate.getUTCMonth() + 1).padStart(2, '0');
+            const day = String(targetDate.getUTCDate()).padStart(2, '0');
+            const hour = String(targetHour).padStart(2, '0');
+            const dataKey = `${year}${month}${day}${hour}`;
+            
+            console.log('Using default date/time:', targetDate, 'hour:', targetHour);
+            console.log('Data key:', dataKey);
+            
+            // Check if prediction data exists for this key
             const data = this.predictionManager.predictionData;
-            if (!data || Object.keys(data).length === 0) {
-                throw new Error('No prediction data available');
+            if (!data || !data[dataKey]) {
+                throw new Error(`No prediction data available for ${dataKey}`);
             }
             
-            console.log('Using prediction data:', Object.keys(data).length, 'entries');
-            console.log('Sample keys:', Object.keys(data).slice(0, 5));
+            // Create timestamp for this data
+            const timestamp = new Date(Date.UTC(year, parseInt(month) - 1, parseInt(day), parseInt(hour), 0, 0));
             
-            // Find the latest available data that has corresponding images
-            const sortedKeys = Object.keys(data).sort().reverse(); // Latest first
-            console.log('Latest keys:', sortedKeys.slice(0, 5));
-            let selectedKey = null;
-            let selectedTimestamp = null;
+            // Update the data time display
+            this.updateDataTime(timestamp);
             
-            for (const key of sortedKeys) {
-                // Parse timestamp from key (YYYYMMDDHH format)
-                const year = parseInt(key.substr(0, 4));
-                const month = parseInt(key.substr(4, 2));
-                const day = parseInt(key.substr(6, 2));
-                const hour = parseInt(key.substr(8, 2));
-                
-                const timestamp = new Date(year, month - 1, day, hour, 0, 0);
-                
-                // Check if images exist for this timestamp
-                const monthStr = String(month).padStart(2, '0');
-                const dayStr = String(day).padStart(2, '0');
-                const hourStr = String(hour).padStart(2, '0');
-                
-                const imagePath = `${this.solarImagesManager.basePath}/data/images/${monthStr}${dayStr}/${hourStr}_aia_0304.png`;
-                console.log('Checking image:', imagePath);
-                
-                const imageExists = await this.checkImageExists(imagePath);
-                console.log('Image exists:', imageExists, 'for', imagePath);
-                if (imageExists) {
-                    selectedKey = key;
-                    selectedTimestamp = timestamp;
-                    console.log('Selected timestamp:', selectedKey, timestamp);
-                    break;
-                }
-            }
+            // Display the prediction
+            const predictionArray = data[dataKey];
+            const predictionObj = {
+                o_prob: predictionArray[0],
+                c_prob: predictionArray[1], 
+                m_prob: predictionArray[2],
+                x_prob: predictionArray[3]
+            };
             
-            if (selectedKey && selectedTimestamp) {
-                // Update the data time display
-                this.updateDataTime(selectedTimestamp);
-                
-                // Display the prediction
-                const predictionArray = data[selectedKey];
-                const predictionObj = {
-                    o_prob: predictionArray[0],
-                    c_prob: predictionArray[1], 
-                    m_prob: predictionArray[2],
-                    x_prob: predictionArray[3]
-                };
-                this.displayCurrentForecast(predictionObj);
-                
-                // Load 4 images going backwards from this timestamp
-                await this.loadAIA304ImagesFromTimestamp(selectedTimestamp);
-                
-            } else {
-                throw new Error('No data with corresponding images found');
-            }
+            // Update both current status and forecast panels
+            this.updateCurrentForecast(targetDate, targetHour);
+            
+            // Load 4 images going backwards from this timestamp
+            await this.loadAIA304ImagesFromTimestamp(timestamp);
             
         } catch (error) {
             console.error('Error loading current forecast:', error);
@@ -777,9 +757,9 @@ class SolarFlareDemo {
         // Load 4 images going backwards from the base timestamp
         for (let i = 3; i >= 0; i--) { // Start from 3 hours back, go to current (oldest to newest)
             const timestamp = new Date(baseTimestamp.getTime() - i * 60 * 60 * 1000); // Go back i hours
-            const month = String(timestamp.getMonth() + 1).padStart(2, '0');
-            const day = String(timestamp.getDate()).padStart(2, '0');
-            const hour = String(timestamp.getHours()).padStart(2, '0');
+            const month = String(timestamp.getUTCMonth() + 1).padStart(2, '0');
+            const day = String(timestamp.getUTCDate()).padStart(2, '0');
+            const hour = String(timestamp.getUTCHours()).padStart(2, '0');
             
             const imagePath = `${this.solarImagesManager.basePath}/data/images/${month}${day}/${hour}_aia_0304.png`;
             
@@ -907,14 +887,27 @@ class SolarFlareDemo {
     }
     
     displayCurrentForecastError() {
-        const statusElement = document.getElementById('flare-status');
-        if (statusElement) {
-            statusElement.className = 'flare-status status-quiet';
-            statusElement.querySelector('.status-text').textContent = this.translationManager.t('loading');
-            statusElement.querySelector('.level-text').textContent = '--';
-        }
+        // Set default quiet status for both panels
+        const defaultStatus = {
+            level: 1,
+            status: this.translationManager.t('flare_status_quiet'),
+            statusClass: 'status-quiet',
+            flareClass: 'O-class',
+            icon: '🟢',
+            color: '#4caf50'
+        };
         
-        this.updateLevelBlocks(1);
+        // Update current status panel
+        this.updateStatusPanel(defaultStatus, 'current');
+        
+        // Update forecast panel with default prediction
+        const defaultPrediction = {
+            o_prob: 1.0,
+            c_prob: 0.0,
+            m_prob: 0.0,
+            x_prob: 0.0
+        };
+        this.updateForecastPanel(defaultPrediction);
     }
     
     updateCurrentForecast(date, hour) {
@@ -930,9 +923,9 @@ class SolarFlareDemo {
         this.updateCurrentStatusTime(timestamp);
         
         // Get prediction data for the selected date/hour
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
+        const year = date.getUTCFullYear();
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(date.getUTCDate()).padStart(2, '0');
         const hourStr = String(hour).padStart(2, '0');
         const dataKey = `${year}${month}${day}${hourStr}`;
         
@@ -983,9 +976,9 @@ class SolarFlareDemo {
     }
     
     formatTimeForDisplay(timestamp) {
-        const month = String(timestamp.getMonth() + 1);
-        const day = String(timestamp.getDate());
-        const hour = String(timestamp.getHours()).padStart(2, '0');
+        const month = String(timestamp.getUTCMonth() + 1);
+        const day = String(timestamp.getUTCDate());
+        const hour = String(timestamp.getUTCHours()).padStart(2, '0');
         return `${month}/${day} ${hour}:00`;
     }
     
@@ -1020,7 +1013,7 @@ class SolarFlareDemo {
         const day = parseInt(currentDataKey.substr(6, 2));
         const hour = parseInt(currentDataKey.substr(8, 2));
         
-        const currentTime = new Date(year, month - 1, day, hour, 0, 0);
+        const currentTime = new Date(Date.UTC(year, month - 1, day, hour, 0, 0));
         const startTime = new Date(currentTime.getTime() - 24 * 60 * 60 * 1000); // 24 hours ago
         
         let maxFlux = 0;
@@ -1028,7 +1021,7 @@ class SolarFlareDemo {
         // Check all data points in the past 24 hours
         for (let i = 0; i <= 24; i++) {
             const checkTime = new Date(startTime.getTime() + i * 60 * 60 * 1000); // Each hour
-            const checkKey = `${checkTime.getFullYear()}${String(checkTime.getMonth() + 1).padStart(2, '0')}${String(checkTime.getDate()).padStart(2, '0')}${String(checkTime.getHours()).padStart(2, '0')}`;
+            const checkKey = `${checkTime.getUTCFullYear()}${String(checkTime.getUTCMonth() + 1).padStart(2, '0')}${String(checkTime.getUTCDate()).padStart(2, '0')}${String(checkTime.getUTCHours()).padStart(2, '0')}`;
             
             if (xrsData[checkKey] !== undefined) {
                 maxFlux = Math.max(maxFlux, xrsData[checkKey]);
@@ -1207,14 +1200,14 @@ class SolarFlareDemo {
     }
     
     displayForecastError() {
-        const statusElement = document.getElementById('forecast-status');
-        if (statusElement) {
-            statusElement.className = 'panel-status status-quiet';
-            statusElement.querySelector('.status-text').textContent = this.translationManager.t('loading');
-            statusElement.querySelector('.level-text').textContent = '--';
-        }
-        
-        this.updateLevelBlocksNew(1, null, 'forecast-level-blocks');
+        // Set default quiet forecast
+        const defaultPrediction = {
+            o_prob: 1.0,
+            c_prob: 0.0,
+            m_prob: 0.0,
+            x_prob: 0.0
+        };
+        this.updateForecastPanel(defaultPrediction);
     }
     
     refreshDynamicContent() {
