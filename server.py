@@ -14,10 +14,17 @@ class SPAHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         
         print(f"Requested path: {path}")
         
-        # Handle /demo route specifically
-        if path == '/demo' or path == '/demo/':
-            self.path = '/web/demo/index.html'
+        # Handle /forecast route specifically
+        if path == '/forecast' or path == '/forecast/':
+            self.path = '/web/forecast/index.html'
             super().do_GET()
+            return
+        
+        # Handle legacy /demo route - redirect to /forecast
+        if path == '/demo' or path == '/demo/':
+            self.send_response(301)
+            self.send_header('Location', '/forecast/')
+            self.end_headers()
             return
         
         # If the path exists as a file, serve it normally
