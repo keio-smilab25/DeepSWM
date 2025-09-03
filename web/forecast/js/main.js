@@ -56,6 +56,14 @@ class SolarFlareDemo {
         this.currentDate = defaultDateTime.date;
         this.currentHour = defaultDateTime.hour;
         
+        // Ensure current year is within allowed range
+        const currentYear = new Date().getFullYear();
+        if (this.currentDate.getFullYear() < 2025) {
+            this.currentDate = new Date(2025, 0, 1); // January 1, 2025
+        } else if (this.currentDate.getFullYear() > currentYear) {
+            this.currentDate = new Date(currentYear, 11, 31); // December 31, current year
+        }
+        
         this.createCustomCalendar();
     }
     
@@ -112,8 +120,8 @@ class SolarFlareDemo {
     
     generateYearOptions() {
         const currentYear = new Date().getFullYear();
-        const startYear = 2020;
-        const endYear = currentYear + 5;
+        const startYear = 2025; // 2025年5月以前は選択不可
+        const endYear = currentYear; // 現在年以降は選択不可
         let options = '';
         
         for (let year = startYear; year <= endYear; year++) {
@@ -189,6 +197,11 @@ class SolarFlareDemo {
                 if (this.currentMonth < 0) {
                     this.currentMonth = 11;
                     this.currentYear--;
+                    // 2025年未満には移動しない
+                    if (this.currentYear < 2025) {
+                        this.currentYear = 2025;
+                        this.currentMonth = 0;
+                    }
                 }
                 this.renderCalendar();
             });
@@ -200,6 +213,12 @@ class SolarFlareDemo {
                 if (this.currentMonth > 11) {
                     this.currentMonth = 0;
                     this.currentYear++;
+                    // 現在年以降には移動しない
+                    const currentYear = new Date().getFullYear();
+                    if (this.currentYear > currentYear) {
+                        this.currentYear = currentYear;
+                        this.currentMonth = 11;
+                    }
                 }
                 this.renderCalendar();
             });
@@ -214,8 +233,17 @@ class SolarFlareDemo {
         
         if (yearSelect) {
             yearSelect.addEventListener('change', (e) => {
-                this.currentYear = parseInt(e.target.value);
-                this.renderCalendar();
+                const selectedYear = parseInt(e.target.value);
+                const currentYear = new Date().getFullYear();
+                
+                // Ensure selected year is within allowed range
+                if (selectedYear >= 2025 && selectedYear <= currentYear) {
+                    this.currentYear = selectedYear;
+                    this.renderCalendar();
+                } else {
+                    // Reset to current selection if invalid
+                    e.target.value = this.currentYear;
+                }
             });
         }
         
@@ -258,9 +286,21 @@ class SolarFlareDemo {
             return { date: latestDate, hour: latestHour };
         }
         
-        // Fallback to current time if no data available
+        // Fallback to current time if no data available, but ensure it's within allowed range
         const now = new Date();
-        return { date: now, hour: 12 };
+        const currentYear = now.getFullYear();
+        
+        // Ensure the date is within allowed range (2025-2025 or later if current year > 2025)
+        let fallbackDate = now;
+        if (now.getFullYear() < 2025) {
+            // If current year is before 2025, use 2025
+            fallbackDate = new Date(2025, 0, 1); // January 1, 2025
+        } else if (now.getFullYear() > currentYear) {
+            // If somehow we're in the future, cap at current year
+            fallbackDate = new Date(currentYear, 11, 31); // December 31, current year
+        }
+        
+        return { date: fallbackDate, hour: 12 };
     }
     
     initTimeSelector() {
