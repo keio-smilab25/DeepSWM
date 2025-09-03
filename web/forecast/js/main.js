@@ -359,7 +359,8 @@ class SolarFlareDemo {
         this.solarImagesManager.loadImages(this.currentDate, this.currentHour);
         this.predictionManager.displayPrediction(this.currentDate, this.currentHour);
         
-        // Update performance displays based on current date
+        // Update performance displays
+        // Month performance depends on current date, all period performance is independent
         this.predictionManager.updatePerformanceDisplays(this.currentDate);
         
         // Update Current Forecast with selected date/time
@@ -1268,6 +1269,7 @@ class SolarFlareDemo {
     
     refreshDynamicContent() {
         // Refresh performance displays
+        // Month performance depends on current date, all period performance is independent
         if (this.predictionManager && this.currentDate) {
             this.predictionManager.updatePerformanceDisplays(this.currentDate);
         }

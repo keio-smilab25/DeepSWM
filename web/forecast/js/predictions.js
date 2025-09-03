@@ -434,13 +434,67 @@ class PredictionManager {
         return { accuracy, total, correct };
     }
     
+    // Calculate performance for all available data (regardless of current date)
+    calculateAllPeriodPerformance() {
+        if (!this.predictionData || !this.xrsData) return null;
+        
+        let total = 0;
+        let correct = 0;
+        
+        // Process all available prediction data
+        for (const key in this.predictionData) {
+            const probs = this.predictionData[key];
+            if (!probs || probs.length !== 4) continue;
+            
+            // Parse date from key (YYYYMMDDHH format)
+            const year = parseInt(key.substr(0, 4));
+            const month = parseInt(key.substr(4, 2));
+            const day = parseInt(key.substr(6, 2));
+            const hour = parseInt(key.substr(8, 2));
+            
+            const entryDate = new Date(year, month - 1, day, hour);
+            
+            // Only process data from May 1, 2025 onwards (when the model was operational)
+            const cutoffDate = new Date(2025, 4, 1); // May 1, 2025
+            if (entryDate < cutoffDate) continue;
+            
+            // Get corresponding XRS data - exclude missing data
+            const xrsFlux = this.xrsData[key];
+            
+            // Only process if XRS data exists, is not null/undefined, and is greater than 0
+            if (xrsFlux !== null && xrsFlux !== undefined && xrsFlux > 0) {
+                const actualClass = this.getFlareClassFromFlux(xrsFlux);
+                const predictedClass = this.getPredictedClassFromProbs(probs);
+                
+                // Only count if both actual and predicted classes are valid
+                if (actualClass && predictedClass) {
+                    total++;
+                    
+                    // Convert to binary classification (M+X vs C+O)
+                    const actualBinary = this.getBinaryClass(actualClass);
+                    const predictedBinary = this.getBinaryClass(predictedClass);
+                    
+                    if (actualBinary === predictedBinary) {
+                        correct++;
+                    }
+                }
+            }
+        }
+        
+        if (total === 0) return null;
+        
+        const accuracy = correct / total;
+        return { accuracy, total, correct };
+    }
+    
     // Update performance displays for different periods
+    // Month performance depends on current date, all period performance is independent
     updatePerformanceDisplays(currentDate) {
         if (!currentDate) return;
         
         // Calculate performance for different periods
         const monthPerformance = this.calculatePerformanceForPeriod(currentDate, 30);
-        const allPerformance = this.calculatePerformanceForPeriod(currentDate, 365); // All available data
+        const allPerformance = this.calculateAllPeriodPerformance(); // All available data regardless of current date
         
         // Update displays using the existing UI structure
         this.updateMonthPerformanceDisplay(monthPerformance);
