@@ -56,10 +56,12 @@ class SolarFlareDemo {
         this.currentDate = defaultDateTime.date;
         this.currentHour = defaultDateTime.hour;
         
-        // Ensure current year is within allowed range
+        // Ensure current year is within allowed range (2025 May 1 or later)
         const currentYear = new Date().getFullYear();
-        if (this.currentDate.getFullYear() < 2025) {
-            this.currentDate = new Date(2025, 0, 1); // January 1, 2025
+        const cutoffDate = new Date(2025, 4, 1); // May 1, 2025
+        
+        if (this.currentDate < cutoffDate) {
+            this.currentDate = new Date(cutoffDate); // May 1, 2025
         } else if (this.currentDate.getFullYear() > currentYear) {
             this.currentDate = new Date(currentYear, 11, 31); // December 31, current year
         }
@@ -120,8 +122,8 @@ class SolarFlareDemo {
     
     generateYearOptions() {
         const currentYear = new Date().getFullYear();
-        const startYear = 2025; // 2025年5月以前は選択不可
-        const endYear = currentYear; // 現在年以降は選択不可
+        const startYear = 2025; // 2025年から選択可能
+        const endYear = currentYear; // 現在年まで選択可能
         let options = '';
         
         for (let year = startYear; year <= endYear; year++) {
@@ -153,6 +155,9 @@ class SolarFlareDemo {
         const today = new Date();
         today.setHours(23, 59, 59, 999); // Set to end of today for comparison
         
+        // Define the cutoff date: May 1, 2025
+        const cutoffDate = new Date(2025, 4, 1); // Month is 0-indexed, so 4 = May
+        
         for (let day = 1; day <= daysInMonth; day++) {
             const date = new Date(this.currentYear, this.currentMonth, day);
             const dateStr = `${this.currentYear}-${String(this.currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
@@ -161,12 +166,16 @@ class SolarFlareDemo {
                 this.currentDate.getMonth() === this.currentMonth && 
                 this.currentDate.getFullYear() === this.currentYear;
             const hasData = this.predictionManager.hasDataForDate(date);
+            
+            // Check if date is before cutoff (2025 May 1) or in the future
+            const isBeforeCutoff = date < cutoffDate;
             const isFutureDate = date > today;
+            const isDisabled = isBeforeCutoff || isFutureDate;
             
             let classes = 'custom-calendar-day';
             if (isSelected) classes += ' selected';
-            if (hasData) classes += ' has-data';
-            if (isFutureDate) classes += ' disabled';
+            if (hasData && !isDisabled) classes += ' has-data';
+            if (isDisabled) classes += ' disabled';
             
             daysHTML += `<div class="${classes}" data-date="${dateStr}">${day}</div>`;
         }
@@ -197,10 +206,12 @@ class SolarFlareDemo {
                 if (this.currentMonth < 0) {
                     this.currentMonth = 11;
                     this.currentYear--;
-                    // 2025年未満には移動しない
-                    if (this.currentYear < 2025) {
+                    // 2025年5月1日以前には移動しない
+                    const cutoffDate = new Date(2025, 4, 1); // May 1, 2025
+                    const checkDate = new Date(this.currentYear, this.currentMonth, 1);
+                    if (checkDate < cutoffDate) {
                         this.currentYear = 2025;
-                        this.currentMonth = 0;
+                        this.currentMonth = 4; // May (0-indexed)
                     }
                 }
                 this.renderCalendar();
@@ -236,8 +247,11 @@ class SolarFlareDemo {
                 const selectedYear = parseInt(e.target.value);
                 const currentYear = new Date().getFullYear();
                 
-                // Ensure selected year is within allowed range
-                if (selectedYear >= 2025 && selectedYear <= currentYear) {
+                // Ensure selected year is within allowed range (2025 May 1 or later)
+                const cutoffDate = new Date(2025, 4, 1); // May 1, 2025
+                const checkDate = new Date(selectedYear, 0, 1); // January 1 of selected year
+                
+                if (checkDate >= cutoffDate && selectedYear <= currentYear) {
                     this.currentYear = selectedYear;
                     this.renderCalendar();
                 } else {
@@ -290,11 +304,13 @@ class SolarFlareDemo {
         const now = new Date();
         const currentYear = now.getFullYear();
         
-        // Ensure the date is within allowed range (2025-2025 or later if current year > 2025)
+        // Ensure the date is within allowed range (2025 May 1 or later)
         let fallbackDate = now;
-        if (now.getFullYear() < 2025) {
-            // If current year is before 2025, use 2025
-            fallbackDate = new Date(2025, 0, 1); // January 1, 2025
+        const cutoffDate = new Date(2025, 4, 1); // May 1, 2025
+        
+        if (now < cutoffDate) {
+            // If current date is before May 1, 2025, use May 1, 2025
+            fallbackDate = new Date(cutoffDate);
         } else if (now.getFullYear() > currentYear) {
             // If somehow we're in the future, cap at current year
             fallbackDate = new Date(currentYear, 11, 31); // December 31, current year
