@@ -1929,7 +1929,7 @@ body {
     }
     
     .model-image-container {
-        min-height: 140px;
+        min-height: 200px;
         height: auto !important;
         overflow: visible;
         display: flex !important;
@@ -1940,7 +1940,7 @@ body {
     }
     
     .model-image {
-        max-height: 110px !important;
+        max-height: 180px !important;
         width: auto !important;
         flex-shrink: 0;
     }
@@ -2726,7 +2726,7 @@ body.dark-theme {
     }
     
     .model-image-container {
-        min-height: 150px;
+        min-height: 220px;
         height: auto !important;
         overflow: visible;
         display: flex !important;
@@ -2737,7 +2737,7 @@ body.dark-theme {
     }
     
     .model-image {
-        max-height: 100px !important;
+        max-height: 200px !important;
         width: auto !important;
         flex-shrink: 0;
     }
