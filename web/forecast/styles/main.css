@@ -2525,16 +2525,80 @@ body.dark-theme {
 }
 
 @media (max-width: 768px) {
+    .video-container {
+        max-width: 100%;
+        width: 100%;
+    }
+    
     .video-container video {
         max-height: 250px;
         border-radius: 6px;
+        width: 100%;
+        display: block;
     }
 }
 
 @media (max-width: 480px) {
+    .video-container {
+        max-width: 100%;
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 0.5rem;
+        box-sizing: border-box;
+        flex-shrink: 0;
+    }
+    
     .video-container video {
-        max-height: 200px;
+        max-height: 220px;
         border-radius: 4px;
+        width: 100%;
+        display: block;
+        margin: 0 auto;
+        box-sizing: border-box;
+    }
+}
+
+@media (max-width: 320px) {
+    .video-container {
+        padding: 0 0.25rem;
+    }
+    
+    .video-container video {
+        max-height: 180px;
+        min-height: 150px;
+        border-radius: 3px;
+    }
+    
+    .video-caption {
+        font-size: 0.75rem;
+        margin-top: 0.5rem;
+    }
+    
+    .video-credits {
+        font-size: 0.5rem !important;
+        margin-top: 0.5rem !important;
+        padding: 0.3rem !important;
+    }
+    
+    .video-credits div {
+        font-size: 0.45rem !important;
+        max-width: 250px !important;
+        gap: 0.15rem 0.3rem !important;
+    }
+    
+    .info-section.expanded .info-content {
+        max-height: 1800px;
+    }
+}
+
+@media (max-width: 280px) {
+    .info-section.expanded .info-content {
+        max-height: 2000px;
+    }
+    
+    .video-container video {
+        max-height: 160px;
+        min-height: 120px;
     }
 }
 
@@ -3658,11 +3722,17 @@ body.dark-theme {
     
     .video-container {
         max-width: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
     
     .video-container video {
-        max-height: 250px;
+        max-height: 280px;
         object-fit: cover;
+        width: 100%;
+        display: block;
     }
     
     .link-chips {
@@ -3670,7 +3740,7 @@ body.dark-theme {
     }
     
     .info-section.expanded .info-content {
-        max-height: 1200px;
+        max-height: 2000px;
     }
     
     .current-forecast-content {
