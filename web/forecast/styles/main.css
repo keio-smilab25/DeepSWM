@@ -2536,6 +2536,11 @@ body.dark-theme {
         width: 100%;
         display: block;
     }
+    
+    .video-caption {
+        font-size: 0.75rem;
+        line-height: 1.2;
+    }
 }
 
 @media (max-width: 480px) {
@@ -2556,6 +2561,15 @@ body.dark-theme {
         margin: 0 auto;
         box-sizing: border-box;
     }
+    
+    .video-caption {
+        font-size: 0.7rem;
+        line-height: 1.1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
 }
 
 @media (max-width: 320px) {
@@ -2570,8 +2584,13 @@ body.dark-theme {
     }
     
     .video-caption {
-        font-size: 0.75rem;
+        font-size: 0.65rem;
         margin-top: 0.5rem;
+        line-height: 1.1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
     }
     
     .video-credits {
@@ -2608,6 +2627,7 @@ body.dark-theme {
     color: #6c757d;
     text-align: center;
     font-style: italic;
+    line-height: 1.2;
 }
 
 /* Model Content */
