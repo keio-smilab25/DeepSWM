@@ -4084,6 +4084,60 @@ body.dark-theme {
     color: #94a3b8;
 }
 
+/* Dark theme for flare classification table */
+.dark-theme .flare-classification-table table {
+    background: rgba(30, 41, 59, 0.8) !important;
+    border: 1px solid rgba(148, 163, 184, 0.3) !important;
+}
+
+.dark-theme .flare-classification-table thead tr {
+    background-color: rgba(51, 65, 85, 0.8) !important;
+    border-bottom: 2px solid rgba(148, 163, 184, 0.3) !important;
+}
+
+.dark-theme .flare-classification-table th {
+    background-color: rgba(51, 65, 85, 0.8) !important;
+    border: 1px solid rgba(148, 163, 184, 0.3) !important;
+    color: #f1f5f9 !important;
+}
+
+.dark-theme .flare-classification-table td {
+    border: 1px solid rgba(148, 163, 184, 0.3) !important;
+    color: #e2e8f0 !important;
+    background-color: transparent !important;
+}
+
+.dark-theme .flare-classification-table tbody tr:nth-child(even) {
+    background-color: rgba(51, 65, 85, 0.3) !important;
+}
+
+.dark-theme .flare-classification-table tbody tr:nth-child(even) td {
+    background-color: rgba(51, 65, 85, 0.3) !important;
+}
+
+.dark-theme .flare-classification-table strong {
+    color: #f1f5f9 !important;
+}
+
+/* Dark theme for source citation box */
+.dark-theme .text-content div[style*="background-color: #f8f9fa"] {
+    background-color: rgba(30, 41, 59, 0.8) !important;
+    border: 1px solid rgba(148, 163, 184, 0.3) !important;
+    color: #e2e8f0 !important;
+}
+
+.dark-theme .text-content div[style*="background-color: #f8f9fa"] strong {
+    color: #f1f5f9 !important;
+}
+
+.dark-theme .text-content div[style*="background-color: #f8f9fa"] a {
+    color: #60a5fa !important;
+}
+
+.dark-theme .text-content div[style*="background-color: #f8f9fa"] a:hover {
+    color: #93c5fd !important;
+}
+
 /* Image Modal Styles */
 .image-modal {
     display: none;
