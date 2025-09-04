@@ -3,17 +3,16 @@
         太陽フレア活動を予測するAIモデルです。</p>
 
     <p>本モデルは、<strong>672時間（28日間）の観測データ</strong>を活用し、
-        多チャンネル太陽画像系列における長距離時空間依存性と詳細な特徴を捉えることで、
+        多チャンネル太陽画像系列における長距離時空間依存関係と黒点などの重要な特徴を捉えることで、
         太陽フレアを正確かつ信頼性高く予測します。</p>
 
     <p><strong>主な新規性：</strong></p>
     <ul>
-        <li><strong>Solar Spatial Encoder（SSE）:</strong> 多波長解析のための
-            深度方向チャンネル選択モジュールと時空間状態空間モジュールを特徴とします</li>
-        <li><strong>Long-range Temporal SSM (LT-SSM):</strong> 太陽の自転周期を超える
-            時間依存性をモデル化します</li>
-        <li><strong>Sparse Masked Autoencoder:</strong> 黒点などの重要な領域を
-            保持する2段階マスキングによる新規事前学習戦略</li>
+        <li><strong>Solar Spatial Encoder (SSE):</strong> 多波長太陽画像の各チャネルに選択的な重み付けを行うことで、長距離の時空間依存関係を捉えます。</li>
+        <li><strong>Long-range Temporal SSM (LT-SSM):</strong> 太陽自転周期を超える詳細な時系列特徴や長距離の時系列依存関係を捕捉します。</li>
+        <li><strong>Sparse Masked Autoencoder:</strong> 黒点などの重要であるが疎な画像領域の表現学習を行うため、疎な画像に特化したMasked
+            Autoencoderによる事前学習手法です。
+        </li>
     </ul>
 
     <p><strong>結果:</strong> 本手法は全てのベースライン手法を上回り、
