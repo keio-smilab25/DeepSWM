@@ -1812,6 +1812,7 @@ body {
         font-size: 0.8rem;
         margin-top: -0.5rem;
         text-align: center;
+        margin-left: 1.5rem;
     }
     
     .subtitle,
@@ -1993,6 +1994,7 @@ body {
         font-size: 0.75rem;
         margin-top: -0.3rem;
         text-align: center;
+        margin-left: 2.8rem;
     }
     
     .logo {
