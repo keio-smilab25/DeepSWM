@@ -1302,7 +1302,11 @@ class SolarFlareDemo {
                 const key = element.getAttribute('data-i18n');
                 const translation = this.translationManager.t(key);
                 if (translation) {
-                    element.textContent = translation;
+                    if (translation.includes('<br/>')) {
+                        element.innerHTML = translation;
+                    } else {
+                        element.textContent = translation;
+                    }
                 }
             });
         }

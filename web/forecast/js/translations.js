@@ -72,11 +72,11 @@ const translations = {
         prediction_probabilities: "予報確率",
         prediction_performance: "予報的中率",
         model_performance_week: "予報的中率 (直近1週間)",
-        model_performance_month: "予報的中率 (直近1ヶ月)",
-        model_performance_all: "予報的中率 (全期間)",
+        model_performance_month: "予報的中率<br/>(直近1ヶ月)",
+        model_performance_all: "予報的中率<br/>(全期間)",
         since_may_2025: "2025年5月〜",
         disclaimer_title: "免責事項",
-        disclaimer_text: "本システムは研究・教育目的で提供されています。太陽フレアの予測は実験的なものであり、実用的な判断の唯一の根拠として使用しないでください。本情報の利用により生じた損害について、開発者および関連機関は一切の責任を負いかねます。",
+        disclaimer_text: "本システムは研究・教育目的で提供されています。太陽フレアの予測は実験的なものであり、実用的な判断の根拠として使用しないでください。本情報の利用により生じた損害について、開発者および関連機関は一切の責任を負いかねます。",
         japanese: "日本語",
         english: "English",
         about_solar_flares: "太陽フレアについて",
@@ -141,7 +141,12 @@ class TranslationManager {
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
             if (translations[this.currentLang] && translations[this.currentLang][key]) {
-                el.textContent = translations[this.currentLang][key];
+                const translation = translations[this.currentLang][key];
+                if (translation.includes('<br/>')) {
+                    el.innerHTML = translation;
+                } else {
+                    el.textContent = translation;
+                }
             }
         });
     }

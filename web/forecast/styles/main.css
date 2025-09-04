@@ -495,6 +495,7 @@ body {
     font-size: 1rem;
     font-weight: 600;
     color: #495057;
+    line-height: 1.2;
 }
 
 .prediction-result {
@@ -1635,6 +1636,7 @@ body {
         font-size: 0.85rem;
         padding: 0.25rem 0.5rem;
         text-align: center;
+        line-height: 1.1;
     }
     
     .performance-section {
@@ -1724,7 +1726,7 @@ body {
     .section-header {
         font-size: 0.75rem;
         padding: 0.2rem 0.4rem;
-        line-height: 1.1;
+        line-height: 1.0;
     }
     
     .performance-section {
@@ -1887,7 +1889,7 @@ body {
     .section-header {
         font-size: 0.7rem;
         padding: 0.2rem 0.3rem;
-        line-height: 1.1;
+        line-height: 1.0;
     }
     
     .performance-section {
@@ -2051,7 +2053,7 @@ body {
     .section-header {
         font-size: 0.6rem;
         padding: 0.1rem 0.15rem;
-        line-height: 1.0;
+        line-height: 0.9;
         text-align: center;
     }
     
