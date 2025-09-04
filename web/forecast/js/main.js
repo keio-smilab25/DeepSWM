@@ -549,6 +549,9 @@ class SolarFlareDemo {
         // Initialize the new panel structure first
         this.initializePanels();
         
+        // Set initial panel titles to "current" version
+        this.updateInitialPanelTitles();
+        
         // Then load the actual data
         await this.loadCurrentForecastAndImages();
     }
@@ -978,6 +981,9 @@ class SolarFlareDemo {
         timestamp.setUTCHours(hour, 0, 0, 0);
         this.updateDataTime(timestamp);
         
+        // Update panel titles based on selected date
+        this.updatePanelTitles(timestamp);
+        
         // Update forecast period display
         this.updateForecastPeriod(timestamp);
         
@@ -1272,6 +1278,13 @@ class SolarFlareDemo {
             this.predictionManager.updatePerformanceDisplays(this.currentDate);
         }
         
+        // Update panel titles with current language
+        if (this.currentDate && this.currentHour) {
+            const timestamp = new Date(this.currentDate);
+            timestamp.setUTCHours(this.currentHour, 0, 0, 0);
+            this.updatePanelTitles(timestamp);
+        }
+        
         // Refresh current forecast displays if available
         if (this.currentDate && this.currentHour) {
             this.updateCurrentForecast(this.currentDate, this.currentHour);
@@ -1347,6 +1360,49 @@ class SolarFlareDemo {
         if (modal) {
             modal.classList.remove('show');
             document.body.style.overflow = ''; // Restore scrolling
+        }
+    }
+    
+    updatePanelTitles(selectedTimestamp) {
+        // Check if the selected date is "current" (today's latest data)
+        const today = new Date();
+        const isToday = selectedTimestamp.getUTCFullYear() === today.getUTCFullYear() &&
+                       selectedTimestamp.getUTCMonth() === today.getUTCMonth() &&
+                       selectedTimestamp.getUTCDate() === today.getUTCDate();
+        
+        // Update solar surface title
+        const solarTitleEl = document.getElementById('solar-activity-title');
+        if (solarTitleEl) {
+            if (isToday) {
+                solarTitleEl.textContent = this.translationManager.t('current_solar_surface');
+            } else {
+                // For past dates, just use "Solar Surface" without "Current"
+                solarTitleEl.textContent = this.translationManager.t('current_solar_surface').replace('Current ', '').replace('現在の', '');
+            }
+        }
+        
+        // Update solar flare status title  
+        const statusTitleEl = document.querySelector('[data-i18n="current_solar_flare_status"]');
+        if (statusTitleEl) {
+            if (isToday) {
+                statusTitleEl.textContent = this.translationManager.t('current_solar_flare_status');
+            } else {
+                // For past dates, just use "Solar Flare Status" without "Current"
+                statusTitleEl.textContent = this.translationManager.t('current_solar_flare_status').replace('Current ', '').replace('現在の', '');
+            }
+        }
+    }
+    
+    updateInitialPanelTitles() {
+        // Set initial titles to "current" version
+        const solarTitleEl = document.getElementById('solar-activity-title');
+        if (solarTitleEl) {
+            solarTitleEl.textContent = this.translationManager.t('current_solar_surface');
+        }
+        
+        const statusTitleEl = document.querySelector('[data-i18n="current_solar_flare_status"]');
+        if (statusTitleEl) {
+            statusTitleEl.textContent = this.translationManager.t('current_solar_flare_status');
         }
     }
 
