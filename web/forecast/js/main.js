@@ -1140,11 +1140,13 @@ class SolarFlareDemo {
         const statusElement = document.getElementById(statusId);
         if (statusElement) {
             statusElement.className = `panel-status ${statusInfo.statusClass}`;
-            statusElement.querySelector('.status-text').innerHTML = `${statusInfo.icon} ${statusInfo.status}`;
+            const statusTextElement = statusElement.querySelector('.status-text');
+            statusTextElement.innerHTML = `${statusInfo.icon} ${statusInfo.status}`;
+            statusTextElement.removeAttribute('data-i18n'); // Remove translation attribute
             statusElement.querySelector('.level-text').textContent = `Lv.${statusInfo.level} (${statusInfo.flareClass})`;
             
             // Apply color to the icon
-            statusElement.querySelector('.status-text').style.color = statusInfo.color;
+            statusTextElement.style.color = statusInfo.color;
         }
     }
     
@@ -1159,11 +1161,13 @@ class SolarFlareDemo {
         const statusElement = document.getElementById('forecast-status');
         if (statusElement) {
             statusElement.className = `panel-status ${statusClass}`;
-            statusElement.querySelector('.status-text').innerHTML = `${icon} ${status}`;
+            const statusTextElement = statusElement.querySelector('.status-text');
+            statusTextElement.innerHTML = `${icon} ${status}`;
+            statusTextElement.removeAttribute('data-i18n'); // Remove translation attribute
             statusElement.querySelector('.level-text').textContent = `Lv.${level} (${flareClass})`;
             
             // Apply color to the icon
-            statusElement.querySelector('.status-text').style.color = color;
+            statusTextElement.style.color = color;
         }
     }
     
@@ -1292,6 +1296,18 @@ class SolarFlareDemo {
             translatableElements.forEach(element => {
                 const key = element.getAttribute('data-i18n');
                 const translation = this.translationManager.t(key);
+                
+                // Skip updating status elements that have been updated with actual status
+                // Check if the element contains an icon emoji (indicating it has been set)
+                if (key === 'loading' && element.classList.contains('status-text')) {
+                    const currentContent = element.innerHTML || element.textContent || '';
+                    // If content contains emoji or has been set to actual status, skip translation
+                    if (currentContent.match(/[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/u) ||
+                        (!currentContent.includes('Loading') && !currentContent.includes('読み込み中') && currentContent !== '--')) {
+                        return; // Skip updating this element
+                    }
+                }
+                
                 if (translation) {
                     if (translation.includes('<br/>')) {
                         element.innerHTML = translation;
