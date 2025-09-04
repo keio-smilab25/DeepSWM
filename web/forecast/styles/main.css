@@ -2577,6 +2577,16 @@ body.dark-theme {
     padding: 1rem;
 }
 
+.clickable-image {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.clickable-image:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
 @media (max-width: 1200px) {
     .model-images {
         max-width: 350px;
@@ -4072,4 +4082,178 @@ body.dark-theme {
 
 .dark-theme .disclaimer-text {
     color: #94a3b8;
+}
+
+/* Image Modal Styles */
+.image-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+.image-modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #666;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    z-index: 10001;
+}
+
+.modal-close:hover {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.modal-image {
+    max-width: 100%;
+    max-height: calc(90vh - 4rem);
+    width: auto;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.modal-caption {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    font-family: "Kanit", sans-serif;
+}
+
+/* Modal Animations */
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: scale(0.8) translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Dark Theme for Modals */
+.dark-theme .modal-content {
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    backdrop-filter: blur(20px);
+}
+
+.dark-theme .modal-close {
+    color: #cbd5e1;
+}
+
+.dark-theme .modal-close:hover {
+    background: rgba(51, 65, 85, 0.8);
+    color: #f1f5f9;
+}
+
+.dark-theme .modal-caption {
+    color: #f1f5f9;
+}
+
+.dark-theme .modal-image {
+    background: rgba(30, 41, 59, 0.8);
+    backdrop-filter: blur(10px);
+}
+
+/* Responsive Modal Styles */
+@media (max-width: 768px) {
+    .modal-content {
+        max-width: 95vw;
+        max-height: 95vh;
+        padding: 1rem;
+        border-radius: 8px;
+    }
+    
+    .modal-close {
+        top: 0.5rem;
+        right: 0.5rem;
+        font-size: 1.5rem;
+        width: 32px;
+        height: 32px;
+    }
+    
+    .modal-image {
+        max-height: calc(95vh - 3rem);
+    }
+    
+    .modal-caption {
+        font-size: 1rem;
+        margin-top: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 0.75rem;
+        border-radius: 6px;
+    }
+    
+    .modal-image {
+        max-height: calc(95vh - 2.5rem);
+        border-radius: 6px;
+    }
+    
+    .modal-caption {
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
 }

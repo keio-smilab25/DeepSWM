@@ -233,12 +233,12 @@
                                 <div class="model-images">
                                     <div class="model-image-container">
                                         <img src="../images/eye-catch_white.png" alt="Deep Space Weather Model Overview"
-                                            class="model-image">
+                                            class="model-image clickable-image" data-modal-target="modal-overview">
                                         <p class="image-caption">Deep SWM Architecture Overview</p>
                                     </div>
                                     <div class="model-image-container">
                                         <img src="../images/model_white.png" alt="Model Architecture Diagram"
-                                            class="model-image">
+                                            class="model-image clickable-image" data-modal-target="modal-architecture">
                                         <p class="image-caption">Model Architecture</p>
                                     </div>
                                 </div>
@@ -380,6 +380,25 @@
                     losses that may result from the use of this information. Users are advised to consult official space
                     weather services for operational forecasts.</p>
             </div>
+        </div>
+    </div>
+
+    <!-- Image Modals -->
+    <div id="modal-overview" class="image-modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <img src="../images/eye-catch_white.png" alt="Deep Space Weather Model Overview" class="modal-image">
+            <div class="modal-caption">Deep SWM Architecture Overview</div>
+        </div>
+    </div>
+
+    <div id="modal-architecture" class="image-modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <img src="../images/model_white.png" alt="Model Architecture Diagram" class="modal-image">
+            <div class="modal-caption">Model Architecture</div>
         </div>
     </div>
 

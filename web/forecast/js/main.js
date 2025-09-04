@@ -42,6 +42,9 @@ class SolarFlareDemo {
         // Initialize expandable sections
         this.initExpandableSections();
         
+        // Initialize image modals
+        this.initImageModals();
+        
         // Initialize current forecast
         this.initCurrentForecast();
         
@@ -1289,6 +1292,61 @@ class SolarFlareDemo {
                     element.textContent = translation;
                 }
             });
+        }
+    }
+    
+    initImageModals() {
+        // Add click event listeners to clickable images
+        const clickableImages = document.querySelectorAll('.clickable-image');
+        clickableImages.forEach(image => {
+            image.addEventListener('click', (e) => {
+                const modalTarget = e.target.getAttribute('data-modal-target');
+                if (modalTarget) {
+                    this.openModal(modalTarget);
+                }
+            });
+        });
+        
+        // Add click event listeners to modal close buttons
+        const closeButtons = document.querySelectorAll('.modal-close');
+        closeButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                this.closeModal(e.target.closest('.image-modal').id);
+            });
+        });
+        
+        // Add click event listeners to modal backdrops
+        const modalBackdrops = document.querySelectorAll('.modal-backdrop');
+        modalBackdrops.forEach(backdrop => {
+            backdrop.addEventListener('click', (e) => {
+                this.closeModal(e.target.closest('.image-modal').id);
+            });
+        });
+        
+        // Add ESC key listener to close modals
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const openModal = document.querySelector('.image-modal.show');
+                if (openModal) {
+                    this.closeModal(openModal.id);
+                }
+            }
+        });
+    }
+    
+    openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+    }
+    
+    closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.remove('show');
+            document.body.style.overflow = ''; // Restore scrolling
         }
     }
 
