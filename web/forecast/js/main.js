@@ -1209,15 +1209,8 @@ class SolarFlareDemo {
             
             const info = levelInfo[4-i];
             
-            // For filled blocks, use the color of the current level
-            // This makes all filled blocks the same color (e.g., all yellow for Active level)
-            let colorInfo;
-            if (i <= level) {
-                colorInfo = levelInfo[4-level]; // Use current level's color for all filled blocks
-            } else {
-                colorInfo = info; // Use individual color for unfilled blocks
-            }
-            const [r, g, b] = colorInfo.baseColor;
+            // Each level uses its own color
+            const [r, g, b] = info.baseColor;
             
             // Apply appropriate background colors
             if (i <= level) {
