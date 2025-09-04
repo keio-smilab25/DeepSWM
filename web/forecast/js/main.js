@@ -431,6 +431,8 @@ class SolarFlareDemo {
         
         if (isDarkTheme) {
             this.enableSpaceMode();
+        } else {
+            this.enableLightMode();
         }
         
         // Add theme toggle event listener
@@ -1281,6 +1283,20 @@ class SolarFlareDemo {
         
         // Update page content with current translations
         this.updatePageContent();
+    }
+    
+    updatePageContent() {
+        // Update all translatable elements
+        if (this.translationManager) {
+            const translatableElements = document.querySelectorAll('[data-i18n]');
+            translatableElements.forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                const translation = this.translationManager.t(key);
+                if (translation) {
+                    element.textContent = translation;
+                }
+            });
+        }
     }
 
 }
