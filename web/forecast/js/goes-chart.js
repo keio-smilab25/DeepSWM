@@ -197,6 +197,9 @@ class GOESChartManager {
                             display: false 
                         },
                         tooltip: {
+                            usePointStyle: true,
+                            mode: 'index',
+                            intersect: false,
                             callbacks: {
                                 label: (ctx) => {
                                     const v = ctx.raw;
@@ -205,12 +208,26 @@ class GOESChartManager {
                                               : v >= 1e-5 ? 'M'
                                               : v >= 1e-6 ? 'C'
                                               : 'O';
-                                    return `Flux: ${v.toExponential(2)} W/m² (Class ${cls})`;
+                                    return [`Flux: ${v.toExponential(2)} W/m²`, `(Class ${cls})`];
                                 }
                             },
-                            backgroundColor: document.body.classList.contains('dark-theme') ? 'rgba(15, 23, 42, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                            bodyFont: {
+                                weight: '900',
+                                size: 15,
+                                family: 'Kanit'
+                            },
+                            titleFont: {
+                                weight: '700',
+                                size: 13,
+                                family: 'Kanit'
+                            },
+                            padding: 12,
+                            cornerRadius: 8,
+                            backgroundColor: document.body.classList.contains('dark-theme') ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.95)',
                             titleColor: document.body.classList.contains('dark-theme') ? '#f1f5f9' : '#333',
-                            bodyColor: document.body.classList.contains('dark-theme') ? '#e2e8f0' : '#666'
+                            bodyColor: document.body.classList.contains('dark-theme') ? '#e2e8f0' : '#333',
+                            borderColor: document.body.classList.contains('dark-theme') ? 'rgba(148, 163, 184, 0.3)' : 'rgba(0, 0, 0, 0.1)',
+                            borderWidth: 1
                         },
                         annotation: {
                             annotations: {
@@ -388,9 +405,10 @@ class GOESChartManager {
         const textColor = isDark ? '#f1f5f9' : '#333';
         const tickColor = isDark ? '#cbd5e1' : '#666';
         const gridColor = isDark ? 'rgba(148, 163, 184, 0.2)' : 'rgba(0, 0, 0, 0.1)';
-        const tooltipBg = isDark ? 'rgba(15, 23, 42, 0.9)' : 'rgba(255, 255, 255, 0.9)';
+        const tooltipBg = isDark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.95)';
         const tooltipTitle = isDark ? '#f1f5f9' : '#333';
-        const tooltipBody = isDark ? '#e2e8f0' : '#666';
+        const tooltipBody = isDark ? '#e2e8f0' : '#333';
+        const tooltipBorder = isDark ? 'rgba(148, 163, 184, 0.3)' : 'rgba(0, 0, 0, 0.1)';
         
         // Update chart colors
         this.chartInstance.options.scales.y.title.color = textColor;
@@ -410,6 +428,20 @@ class GOESChartManager {
         this.chartInstance.options.plugins.tooltip.backgroundColor = tooltipBg;
         this.chartInstance.options.plugins.tooltip.titleColor = tooltipTitle;
         this.chartInstance.options.plugins.tooltip.bodyColor = tooltipBody;
+        this.chartInstance.options.plugins.tooltip.borderColor = tooltipBorder;
+        this.chartInstance.options.plugins.tooltip.borderWidth = 1;
+        this.chartInstance.options.plugins.tooltip.padding = 12;
+        this.chartInstance.options.plugins.tooltip.cornerRadius = 8;
+        this.chartInstance.options.plugins.tooltip.bodyFont = {
+            weight: '900',
+            size: 15,
+            family: 'Kanit'
+        };
+        this.chartInstance.options.plugins.tooltip.titleFont = {
+            weight: '700',
+            size: 13,
+            family: 'Kanit'
+        };
         
         this.chartInstance.update();
     }
