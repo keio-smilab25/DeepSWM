@@ -531,15 +531,6 @@ class SolarFlareDemo {
                     section.classList.remove('expanded');
                 } else {
                     section.classList.add('expanded');
-                    
-                    // Smooth scroll to the section after a short delay to allow animation
-                    setTimeout(() => {
-                        section.scrollIntoView({ 
-                            behavior: 'smooth', 
-                            block: 'start',
-                            inline: 'nearest'
-                        });
-                    }, 100);
                 }
             });
         });
