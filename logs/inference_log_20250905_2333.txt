@@ -1,0 +1,56 @@
+Starting inference execution at Fri Sep  5 23:33:01 UTC 2025
+=== Starting Inference Pipeline ===
+Current datetime: 090523
+Previous datetime: 090522
+Inference datetime: 20250905_230000
+[CURRENT] Fetching data for: 090523
+🚀 Starting data collection for: 2025-09-05 23:00 UTC
+✅ XRS updated: 2025090523 → 1.4675187003376777e-06
+✅ XRS updated: 2025090522 → 1.8937735148938373e-06
+📡 Fetching solar observation data...
+  Fetching AIA 0094Å...
+    ✅ PNG saved: data/images/0905/23_aia_0094.png
+  Fetching AIA 0131Å...
+    ✅ PNG saved: data/images/0905/23_aia_0131.png
+  Fetching AIA 0171Å...
+    ✅ PNG saved: data/images/0905/23_aia_0171.png
+  Fetching AIA 0193Å...
+❌ AIA 0193 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2025/09/05/H2300/AIA20250905_230000_0193.fits
+    ⚠️  AIA 0193 data unavailable, skipping PNG
+  Fetching AIA 0211Å...
+    ✅ PNG saved: data/images/0905/23_aia_0211.png
+  Fetching AIA 0304Å...
+    ✅ PNG saved: data/images/0905/23_aia_0304.png
+  Fetching AIA 0335Å...
+❌ AIA 0335 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2025/09/05/H2300/AIA20250905_230000_0335.fits
+    ⚠️  AIA 0335 data unavailable, skipping PNG
+  Fetching AIA 1600Å...
+    ✅ PNG saved: data/images/0905/23_aia_1600.png
+  Fetching AIA 4500Å...
+❌ AIA 4500 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2025/09/05/H2300/AIA20250905_230000_4500.fits
+    ⚠️  AIA 4500 data unavailable, skipping PNG
+  Fetching HMI magnetogram...
+❌ HMI fetch/process failed: 404 Client Error: Not Found for url: https://jsoc1.stanford.edu/data/hmi/images/2025/09/05/20250905_230000_M_1k.jpg
+    ⚠️  HMI data unavailable, skipping PNG
+💾 Saving H5 file for ML inference...
+✅ H5 saved: ./ml/datasets/all_data_hours/20250905_230000.h5
+🎉 Data collection completed for 2025-09-05 23:00 UTC
+[CURRENT] Data fetch successful for 090523
+[PREVIOUS] Fetching data for: 090522
+🚀 Starting data collection for: 2025-09-05 22:00 UTC
+✅ XRS updated: 2025090522 → 1.8937735148938373e-06
+✅ XRS updated: 2025090521 → 1.6044193671405083e-06
+✅ All files already exist for 2025-09-05 22:00
+[PREVIOUS] Data fetch successful for 090522
+[FEATURES] Extracting features for: 20250905_230000
+Saved features: /home/runner/work/DeepSWM/DeepSWM/ml/datasets/all_features/20250905_230000.h5
+[FEATURES] Feature extraction successful
+[INFERENCE] Running inference for: 20250905_230000
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/torch/amp/autocast_mode.py:250: UserWarning: User provided device_type of 'cuda', but CUDA is not available. Disabling
+  warnings.warn(
+Updated predictions: added 1 new, total 3773 timestamps in /home/runner/work/DeepSWM/DeepSWM/data/pred_24.json
+[INFERENCE] Inference successful
+=== Execution Summary ===
+Total errors encountered: 0
+Execution completed at: Fri Sep  5 23:33:17 UTC 2025
+✅ Workflow completed successfully with no errors
