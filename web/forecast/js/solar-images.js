@@ -115,8 +115,15 @@ class SolarImagesManager {
             copyright.className = 'channel-copyright';
             copyright.textContent = 'SDO©NASA';
             
-            container.appendChild(canvas);
-            container.appendChild(copyright);
+            // Create wrapper for relative positioning
+            const imgWrapper = document.createElement('div');
+            imgWrapper.className = 'channel-img-wrapper';
+            imgWrapper.style.cssText = 'position: relative; width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center;';
+            
+            imgWrapper.appendChild(canvas);
+            imgWrapper.appendChild(copyright);
+            
+            container.appendChild(imgWrapper);
             container.appendChild(label);
             grid.appendChild(container);
         }

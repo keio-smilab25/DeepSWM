@@ -885,8 +885,8 @@ body {
 
 .channel-copyright {
     position: absolute;
-    bottom: 0.6rem;
-    right: 0.3rem;
+    bottom: 0.2rem;
+    right: 0.1rem;
     background: transparent;
     color: #fff;
     font-size: 0.6rem;
@@ -901,40 +901,50 @@ body {
 
 @media (max-width: 1200px) {
     .channel-copyright {
-        bottom: 0.5rem;
-        right: 0.25rem;
         font-size: 0.55rem;
     }
 }
 
 @media (max-width: 900px) {
     .channel-copyright {
-        bottom: 0.45rem;
-        right: 0.2rem;
         font-size: 0.5rem;
     }
 }
 
 @media (max-width: 768px) {
     .channel-copyright {
-        bottom: 0.85rem;
-        right: 0.18rem;
         font-size: 0.45rem;
     }
 }
 
 @media (max-width: 480px) {
     .channel-copyright {
-        bottom: 0.85rem;
-        right: 0.15rem;
         font-size: 0.4rem;
     }
 }
 
-/* 下段（6番目以降）のコピーライトも上に配置 */
-.channel:nth-child(n+6) .channel-copyright {
-    bottom: 0.8rem;
+/* Copyright positioning is now handled by wrapper structure */
+
+/* AIA 304 copyright uses same styling as channel copyright */
+.aia-304-copyright {
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    background: transparent;
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 0;
+    font-family: "Kanit", sans-serif;
+    z-index: 10;
+    pointer-events: none;
+    letter-spacing: 0.5px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
+
+/* iPad positioning is now handled dynamically in JavaScript */
+
+/* All copyright positions are now handled by wrapper structure */
 
 /* Right Panel - Calendar */
 .right-panel {
@@ -3236,6 +3246,18 @@ body.dark-theme {
     flex-shrink: 0;
     aspect-ratio: 1;
 }
+
+/* Image wrapper for relative positioning */
+.channel-img-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* AIA 304 image wrapper no longer needed - using direct container positioning */
 
 .aia-304-canvas {
     width: 100%;

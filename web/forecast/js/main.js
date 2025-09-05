@@ -837,17 +837,46 @@ class SolarFlareDemo {
         // Display canvases
         container.innerHTML = '';
         
-        // Add copyright
-        const copyright = document.createElement('div');
-        copyright.className = 'aia-304-copyright';
-        copyright.textContent = 'SDO©NASA';
-        container.appendChild(copyright);
-        
+        // Add all canvases with proper overlay positioning
         this.aia304Canvases.forEach((canvas, index) => {
             canvas.className = 'aia-304-canvas';
             canvas.classList.toggle('active', index === 0);
+            // Use absolute positioning within the container for overlay effect
+            canvas.style.cssText = `
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 100%;
+                height: 100%;
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: contain;
+                display: ${index === 0 ? 'block' : 'none'};
+            `;
             container.appendChild(canvas);
         });
+        
+        // Add copyright directly to container (positioned relative to actual image)
+        const copyright = document.createElement('div');
+        copyright.className = 'aia-304-copyright';
+        copyright.textContent = 'SDO©NASA';
+        
+        // Position copyright relative to the actual image area
+        setTimeout(() => {
+            this.positionCopyrightOnImage(copyright, container);
+        }, 100); // Small delay to ensure container is rendered
+        
+        container.appendChild(copyright);
+        
+        // Add resize listener to reposition copyright when container size changes
+        const resizeObserver = new ResizeObserver(() => {
+            // Add small delay to ensure container has finished resizing
+            setTimeout(() => {
+                this.positionCopyrightOnImage(copyright, container);
+            }, 50);
+        });
+        resizeObserver.observe(container);
         
         console.log('Total images loaded:', this.aia304Canvases.length);
         
@@ -927,9 +956,15 @@ class SolarFlareDemo {
     }
     
     updateAutoDisplay() {
-        // Update active canvas
+        // Update active canvas using display property instead of active class
         this.aia304Canvases.forEach((canvas, index) => {
-            canvas.classList.toggle('active', index === this.currentFrame);
+            if (index === this.currentFrame) {
+                canvas.style.display = 'block';
+                canvas.classList.add('active');
+            } else {
+                canvas.style.display = 'none';
+                canvas.classList.remove('active');
+            }
         });
         
         console.log('Displaying frame:', this.currentFrame + 1, '/', this.aia304Canvases.length);
@@ -1415,6 +1450,57 @@ class SolarFlareDemo {
         if (statusTitleEl) {
             statusTitleEl.textContent = this.translationManager.t('current_solar_flare_status');
         }
+    }
+    
+    positionCopyrightOnImage(copyright, container) {
+        // Get container dimensions
+        const containerRect = container.getBoundingClientRect();
+        const containerStyle = window.getComputedStyle(container);
+        const containerWidth = containerRect.width;
+        const containerHeight = containerRect.height;
+        
+        // Since the container has aspect-ratio: 1 and centers the image with flex,
+        // the actual image area is the smaller dimension (width or height)
+        const imageSize = Math.min(containerWidth, containerHeight);
+        
+        // Calculate offsets to center the square image within the container
+        const horizontalOffset = (containerWidth - imageSize) / 2;
+        const verticalOffset = (containerHeight - imageSize) / 2;
+        
+        // Adjust position and font size for different devices
+        const screenWidth = window.innerWidth;
+        const isIPad = (screenWidth >= 768 && screenWidth <= 1366) || navigator.userAgent.includes('iPad');
+        const isIPhone = screenWidth <= 480; // iPhone size
+        const bottomMargin = isIPad ? 16 : 4; // Reduced margins for closer positioning
+        const rightMargin = 4; // Reduced right margin
+        const fontSize = isIPhone ? '0.45rem' : '0.6rem'; // Smaller font for iPhone
+        
+        // Position relative to the actual image bounds, closer to the edge
+        const bottomPosition = verticalOffset + bottomMargin;
+        const rightPosition = horizontalOffset + rightMargin;
+        
+        copyright.style.cssText = `
+            position: absolute;
+            bottom: ${bottomPosition}px;
+            right: ${rightPosition}px;
+            z-index: 1000;
+            background: transparent;
+            color: #fff;
+            font-size: ${fontSize};
+            font-weight: 700;
+            font-family: "Kanit", sans-serif;
+            pointer-events: none;
+            letter-spacing: 0.5px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        `;
+        
+        console.log(`Copyright positioned at bottom: ${bottomPosition}px, right: ${rightPosition}px (image size: ${imageSize}px, container: ${containerWidth}x${containerHeight})`);
+    }
+    
+    applyCopyrightPositioning(copyright) {
+        // For AIA 304 copyright, always keep it at bottom-right of image
+        // Let CSS handle all device-specific positioning
+        console.log('AIA 304 copyright positioning handled by CSS');
     }
 
 }
