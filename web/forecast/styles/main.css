@@ -104,6 +104,7 @@ body {
     font-weight: 400;
     display: block;
     margin-top: 0.2rem;
+    margin-bottom: 0.5rem;
 }
 
 /* サブタイトルとボタンを著者名の位置に揃える */
@@ -1834,6 +1835,10 @@ body {
         margin-left: 1.5rem;
     }
     
+    .university-name {
+        margin-bottom: 0.25rem;
+    }
+    
     .subtitle,
     .publication-links {
         transform: translateX(0);
@@ -2014,6 +2019,10 @@ body {
         margin-top: -0.3rem;
         text-align: center;
         margin-left: 2.8rem;
+    }
+    
+    .university-name {
+        margin-bottom: 0.15rem;
     }
     
     .logo {
