@@ -146,7 +146,7 @@ def run_main_inference(args) -> None:
     # Model params (match deepswm defaults used in training)
     model = DeepSWM(
         D=64,
-        drop_path_rate=0.6,
+        drop_path_rate=0.7,
         layer_scale_init_value=1.0e-6,
         L=128,
         L_SSE=3,
@@ -158,7 +158,7 @@ def run_main_inference(args) -> None:
             "stssm": 0.6,
             "ltssm": 0.6,
             "mixing_ssm": 0.6,
-            "head": 0.6,
+            "head": 0.7,
         },
     ).to(device)
 
@@ -180,7 +180,8 @@ def run_main_inference(args) -> None:
 
         with torch.no_grad():
             logits, _ = model(t1, t2)
-            probs = torch.softmax(logits, dim=1)[0].cpu().numpy().tolist()
+            probs = logits[0].cpu().numpy().tolist()
+            # probs = torch.softmax(logits, dim=1)[0].cpu().numpy().tolist()
 
         key = target.strftime("%Y%m%d%H")
         predictions[key] = [round(p, 6) for p in probs]
