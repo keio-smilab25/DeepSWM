@@ -7,9 +7,16 @@ class GOESChartManager {
         this.xrsDataMap = {};
         this.currentBaseTime = null;
         this.animationTimer = null;
+        this.timezoneManager = null;
         this.currentFrame = 0;
         this.isAnimating = false;
-        
+    }
+    
+    setTimezoneManager(timezoneManager) {
+        this.timezoneManager = timezoneManager;
+    }
+    
+    init() {
         // Flare class thresholds and colors
         this.flareThresholds = {
             X: 1e-4,
@@ -24,6 +31,9 @@ class GOESChartManager {
             C: 'rgba(0, 255, 0, 0.15)',
             O: 'rgba(0, 0, 255, 0.15)'
         };
+        
+        // Load XRS data
+        this.loadXRSData();
     }
     
     getBasePath() {
@@ -117,8 +127,14 @@ class GOESChartManager {
             return;
         }
         
-        const formattedTime = `${baseTime.getUTCFullYear()}-${String(baseTime.getUTCMonth() + 1).padStart(2, '0')}-` +
-                             `${String(baseTime.getUTCDate()).padStart(2, '0')} ${String(baseTime.getUTCHours()).padStart(2, '0')}:00 UTC`;
+        // Format time in user's timezone if timezone manager is available
+        let formattedTime;
+        if (this.timezoneManager) {
+            formattedTime = this.timezoneManager.formatTimeWithTimezone(baseTime);
+        } else {
+            formattedTime = `${baseTime.getUTCFullYear()}-${String(baseTime.getUTCMonth() + 1).padStart(2, '0')}-` +
+                           `${String(baseTime.getUTCDate()).padStart(2, '0')} ${String(baseTime.getUTCHours()).padStart(2, '0')}:00 UTC`;
+        }
         
         if (this.chartInstance) {
             // Update existing chart

@@ -15,7 +15,7 @@ const translations = {
         classification: "O+C vs M+X",
         binary_accuracy: "Binary Accuracy",
         no_prediction: "No prediction data available for this date",
-        time_label: "Time (UTC)",
+        time_label: "Time",
         confidence: "Confidence",
         prediction_results: "Forecast Result",
         prediction_probabilities: "Probability of Flares", 
@@ -36,7 +36,7 @@ const translations = {
         archive: "Archive",
         xray_flux_transition: "X-ray Flux Transition (GOES)",
         solar_flare: "Solar Flare",
-        data_time_utc: "Data Time (UTC)",
+        data_time_utc: "Data Time",
         author_names: "Shunya Nagashima and Komei Sugiura<br/><span class=\"university-name\">Keio University</span>",
         loading: "Loading...",
         m_accuracy: "M≥ Accuracy",
@@ -50,7 +50,11 @@ const translations = {
         flare_level_m: "Lv.3 (M-Class)",
         flare_level_c: "Lv.2 (C-Class)",
         flare_level_o: "Lv.1 (O-Class)",
-        predictions: "predictions"
+        predictions: "predictions",
+        timezone_utc: "UTC",
+        timezone_local: "Local Time",
+        timezone_auto: "Auto-detected Timezone",
+        data_time_local: "Data Time (Local)"
     },
     ja: {
         title: "深宇宙天気モデル",
@@ -66,7 +70,7 @@ const translations = {
         classification: "M≥での精度",
         binary_accuracy: "二値分類精度",
         no_prediction: "この日付の予測データがありません",
-        time_label: "時刻 (UTC)",
+        time_label: "時刻",
         confidence: "信頼度",
         prediction_results: "予報結果",
         prediction_probabilities: "予報確率",
@@ -87,7 +91,7 @@ const translations = {
         archive: "アーカイブ",
         xray_flux_transition: "X線フラックス推移 (GOES)",
         solar_flare: "太陽フレア",
-        data_time_utc: "データ時刻 (UTC)",
+        data_time_utc: "データ時刻",
         author_names: "長嶋隼矢, 杉浦孔明<br/><span class=\"university-name\">慶應義塾大学</span>",
         loading: "読み込み中...",
         m_accuracy: "M≥での精度",
@@ -101,7 +105,11 @@ const translations = {
         flare_level_m: "Lv.3 (Mクラス)",
         flare_level_c: "Lv.2 (Cクラス)",
         flare_level_o: "Lv.1 (Oクラス)",
-        predictions: "件の予測"
+        predictions: "件の予測",
+        timezone_utc: "UTC",
+        timezone_local: "現地時間",
+        timezone_auto: "自動検出タイムゾーン",
+        data_time_local: "データ時刻 (現地時間)"
     }
 };
 

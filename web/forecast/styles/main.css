@@ -3065,7 +3065,7 @@ body.dark-theme {
 
 .current-forecast-content {
     display: grid;
-    grid-template-columns: 0.7fr 1fr 1fr;
+    grid-template-columns: 0.85fr 1fr 1fr;
     gap: 1rem;
     align-items: stretch;
     height: 450px;

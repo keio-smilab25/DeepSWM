@@ -20,7 +20,7 @@ class SolarImagesManager {
         this.currentFrame = 0;
         this.isPlaying = true;
         this.animationInterval = null;
-        this.frameCount = 6; // 6 hours of data
+        this.frameCount = 4; // 4 hours of data
         
         // Remove animation controls setup
     }
@@ -57,7 +57,7 @@ class SolarImagesManager {
         
         this.currentFrame = (this.currentFrame + 1) % this.animationFrames.length;
         this.displayFrame(this.currentFrame);
-        this.updateFrameCounter();
+        // updateFrameCounter UI was removed; keep animation lightweight
     }
     
     displayFrame(frameIndex) {

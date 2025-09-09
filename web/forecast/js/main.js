@@ -3,11 +3,14 @@
 class SolarFlareDemo {
     constructor() {
         this.translationManager = new window.TranslationManager();
+        this.timezoneManager = new window.TimezoneManager();
         this.contentLoader = new window.ContentLoader(this.translationManager);
         this.solarImagesManager = new window.SolarImagesManager();
         this.predictionManager = new window.PredictionManager();
         this.goesChartManager = new window.GOESChartManager();
         this.predictionManager.setTranslationManager(this.translationManager);
+        this.goesChartManager.setTimezoneManager(this.timezoneManager);
+        this.goesChartManager.init();
         
         this.currentDate = null;
         this.currentHour = 12;
@@ -41,6 +44,8 @@ class SolarFlareDemo {
             // Refresh dynamic content after language change
             setTimeout(() => {
                 this.refreshDynamicContent();
+                this.updateDataTimeLabel();
+                this.updateTimeSelectorLabel();
             }, 100); // Small delay to ensure translation manager is updated
         });
         
@@ -55,6 +60,12 @@ class SolarFlareDemo {
         
         // Load latest data automatically
         this.loadLatestData();
+        
+        // Update timezone-dependent labels
+        setTimeout(() => {
+            this.updateDataTimeLabel();
+            this.updateTimeSelectorLabel();
+        }, 100);
         
         console.log('Demo initialized successfully');
     }
@@ -173,7 +184,9 @@ class SolarFlareDemo {
                 this.currentDate.getDate() === day && 
                 this.currentDate.getMonth() === this.currentMonth && 
                 this.currentDate.getFullYear() === this.currentYear;
-            const hasData = this.predictionManager.hasDataForDate(date);
+            // Convert local date to UTC for data check
+            const utcDateForCheck = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+            const hasData = this.predictionManager.hasDataForDate(utcDateForCheck);
             
             // Check if date is before cutoff (2025 May 1) or in the future
             const isBeforeCutoff = date < cutoffDate;
@@ -276,7 +289,9 @@ class SolarFlareDemo {
                     !e.target.classList.contains('disabled')) {
                     const dateStr = e.target.getAttribute('data-date');
                     if (dateStr) {
-                        this.currentDate = new Date(dateStr + 'T00:00:00Z');
+                        // Parse date in user's local timezone to avoid Invalid Date
+                        const [year, month, day] = dateStr.split('-').map(num => parseInt(num));
+                        this.currentDate = new Date(year, month - 1, day);
                         this.renderCalendar();
                         this.debouncedUpdateDisplay();
                     }
@@ -305,7 +320,9 @@ class SolarFlareDemo {
                 }
             }
             
-            return { date: latestDate, hour: latestHour };
+            // Convert UTC date to local date for calendar display
+            const localDate = new Date(latestDate.getUTCFullYear(), latestDate.getUTCMonth(), latestDate.getUTCDate());
+            return { date: localDate, hour: latestHour };
         }
         
         // Fallback to current time if no data available, but ensure it's within allowed range
@@ -326,6 +343,30 @@ class SolarFlareDemo {
         
         return { date: fallbackDate, hour: 12 };
     }
+
+	// Convert a local date and hour selection to UTC parts used by data APIs
+	getUtcFromLocal(localDate, localHour) {
+		const localDateTime = new Date(
+			localDate.getFullYear(),
+			localDate.getMonth(),
+			localDate.getDate(),
+			localHour, 0, 0, 0
+		);
+		const utcYear = localDateTime.getUTCFullYear();
+		const utcMonth = localDateTime.getUTCMonth();
+		const utcDay = localDateTime.getUTCDate();
+		const utcHour = localDateTime.getUTCHours();
+		const utcDate = new Date(Date.UTC(utcYear, utcMonth, utcDay));
+		const utcTimestamp = new Date(Date.UTC(utcYear, utcMonth, utcDay, utcHour, 0, 0, 0));
+		return { utcDate, utcHour, utcTimestamp };
+	}
+	
+	getSelectedUtcParts() {
+		if (!this.currentDate || typeof this.currentHour !== 'number') {
+			return { utcDate: new Date(), utcHour: 0, utcTimestamp: new Date() };
+		}
+		return this.getUtcFromLocal(this.currentDate, this.currentHour);
+	}
     
     initTimeSelector() {
         const timeSelect = document.getElementById('time-select');
@@ -347,12 +388,24 @@ class SolarFlareDemo {
             timeSelect.appendChild(option);
         }
         
+        // Update the time selector label with timezone
+        this.updateTimeSelectorLabel();
+        
         // Add change listener
         timeSelect.addEventListener('change', (e) => {
             this.currentHour = parseInt(e.target.value);
             this.updateTimestamp();
             this.debouncedUpdateDisplay();
         });
+    }
+
+    updateTimeSelectorLabel() {
+        const timeLabel = document.querySelector('label[data-i18n="time_label"]');
+        if (timeLabel && this.timezoneManager) {
+            const baseText = this.translationManager.t('time_label');
+            const timezone = this.timezoneManager.getTimezoneAbbreviation();
+            timeLabel.textContent = `${baseText} (${timezone})`;
+        }
     }
     
     loadLatestData() {
@@ -375,10 +428,10 @@ class SolarFlareDemo {
             timestamp: Date.now()
         };
         
-        // Set debounced timer (200ms delay for iOS Safari)
+        // Set debounced timer (50ms delay for responsiveness while preventing iOS Safari issues)
         this.updateDebounceTimer = setTimeout(() => {
             this.executeQueuedUpdate();
-        }, 200);
+        }, 50);
     }
     
     // Execute queued update with race condition protection
@@ -423,43 +476,54 @@ class SolarFlareDemo {
     }
     
     async updateDisplay() {
+        // Convert selected local date/hour to UTC parts for data operations
+        const { utcDate, utcHour } = this.getSelectedUtcParts();
+        
         // Update basic display elements first (synchronous)
-        this.updateDateDisplay();
-        this.updateTimestamp();
+        this.updateDateDisplay(utcDate);
+        this.updateTimestamp(utcDate);
         
         // Start async operations in parallel but wait for critical ones
-        const imageLoadPromise = this.solarImagesManager.loadImages(this.currentDate, this.currentHour);
+        const imageLoadPromise = this.solarImagesManager.loadImages(utcDate, utcHour);
         
         // Update prediction display (synchronous)
-        this.predictionManager.displayPrediction(this.currentDate, this.currentHour);
+        this.predictionManager.displayPrediction(utcDate, utcHour);
         
         // Update performance displays (synchronous)
-        this.predictionManager.updatePerformanceDisplays(this.currentDate);
+        this.predictionManager.updatePerformanceDisplays(utcDate);
         
         // Update Current Forecast with selected date/time (includes AIA 304 images)
-        this.updateCurrentForecast(this.currentDate, this.currentHour);
+        this.updateCurrentForecast(utcDate, utcHour);
         
         // Update GOES chart (synchronous)
-        const baseTime = new Date(this.currentDate);
-        baseTime.setUTCHours(this.currentHour, 0, 0, 0);
+        const baseTime = new Date(utcDate.getTime());
+        baseTime.setUTCHours(utcHour, 0, 0, 0);
         this.goesChartManager.updateChart(baseTime);
         
-        // Wait for critical image loading to complete
         try {
             await imageLoadPromise;
-            // Image loading completed
+            // Image loading completed -> refresh timestamp/header to avoid stale range
+            this.updateTimestamp(utcDate);
         } catch (error) {
             console.error('Error loading images:', error);
         }
     }
     
-    updateDateDisplay() {
+    updateDateDisplay(utcDate = null) {
         const lang = this.translationManager.getCurrentLang();
-        const dateStr = this.currentDate.toLocaleDateString(lang === 'ja' ? 'ja-JP' : 'en-US', {
+        
+        // Use provided UTC date or convert local date to UTC for data processing
+        if (!utcDate) {
+            utcDate = new Date(Date.UTC(this.currentDate.getFullYear(), this.currentDate.getMonth(), this.currentDate.getDate()));
+        }
+        const displayDate = new Date(utcDate);
+        displayDate.setUTCHours(this.currentHour, 0, 0, 0);
+        
+        // Format date in user's timezone
+        const dateStr = this.timezoneManager.formatDateInTimezone(displayDate, {
             year: 'numeric',
             month: 'long',
-            day: 'numeric',
-            timeZone: 'UTC'
+            day: 'numeric'
         });
         
         const selectedDateEl = document.getElementById('selected-date');
@@ -469,16 +533,29 @@ class SolarFlareDemo {
         
         const selectedTimeEl = document.getElementById('selected-time');
         if (selectedTimeEl) {
-            selectedTimeEl.textContent = `${String(this.currentHour).padStart(2, '0')}:00 UTC`;
+            const timeStr = this.timezoneManager.formatTimeWithTimezone(displayDate);
+            selectedTimeEl.textContent = timeStr;
         }
     }
     
-    updateTimestamp() {
+    updateTimestamp(utcDate = null) {
         const timestampEl = document.getElementById('timestamp');
         if (timestampEl && this.currentDate) {
-            const dateStr = `${this.currentDate.getUTCFullYear()}-${String(this.currentDate.getUTCMonth() + 1).padStart(2, '0')}-${String(this.currentDate.getUTCDate()).padStart(2, '0')}`;
-            const timeStr = `${String(this.currentHour).padStart(2, '0')}:00 UTC`;
-            timestampEl.textContent = `${dateStr} ${timeStr}`;
+            // Display in user's local timezone for calendar UI
+            const { utcDate: _utcDate, utcHour } = this.getSelectedUtcParts();
+            const displayDate = new Date(_utcDate);
+            displayDate.setUTCHours(utcHour, 0, 0, 0);
+            
+            const formattedTime = this.timezoneManager.formatDateInTimezone(displayDate, {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            const timezone = this.timezoneManager.getTimezoneAbbreviation();
+            timestampEl.textContent = `${formattedTime} ${timezone}`;
         }
         
         // Update Multi-wavelength Solar Images title with time range
@@ -486,13 +563,58 @@ class SolarFlareDemo {
         if (solarTitleEl && this.solarImagesManager && this.solarImagesManager.loadedTimeRange) {
             const { startTime, endTime } = this.solarImagesManager.loadedTimeRange;
             const solarImagesText = this.translationManager.t('solar_images');
-            solarTitleEl.textContent = `${solarImagesText} ${startTime} - ${endTime} UTC`;
+            
+            // Convert time strings to dates and format in user's timezone
+            try {
+                // Use UTC base date (data stored in UTC)
+                const dataUtcDate = utcDate || new Date(Date.UTC(this.currentDate.getFullYear(), this.currentDate.getMonth(), this.currentDate.getDate()));
+                // startTime/endTime = "MM/DD HH:MM" → parse explicitly
+                const [startMD, startHM] = String(startTime).split(' ');
+                const [endMD, endHM] = String(endTime).split(' ');
+                const [startMonthStr, startDayStr] = startMD.split('/');
+                const [startHourStr] = startHM.split(':');
+                const [endMonthStr, endDayStr] = endMD.split('/');
+                const [endHourStr] = endHM.split(':');
+                const year = dataUtcDate.getUTCFullYear();
+                const startUTC = new Date(Date.UTC(
+                    year,
+                    parseInt(startMonthStr, 10) - 1,
+                    parseInt(startDayStr, 10),
+                    parseInt(startHourStr, 10),
+                    0,
+                    0
+                ));
+                const endUTC = new Date(Date.UTC(
+                    year,
+                    parseInt(endMonthStr, 10) - 1,
+                    parseInt(endDayStr, 10),
+                    parseInt(endHourStr, 10),
+                    0,
+                    0
+                ));
+                
+                const timeRange = this.timezoneManager.formatDateRange(startUTC, endUTC);
+                solarTitleEl.textContent = `${solarImagesText} ${timeRange}`;
+            } catch (error) {
+                // Fallback to original format
+                const timezone = this.timezoneManager.getTimezoneAbbreviation();
+                solarTitleEl.textContent = `${solarImagesText} ${startTime} - ${endTime} ${timezone}`;
+            }
         } else if (solarTitleEl && this.currentDate) {
-            const month = String(this.currentDate.getUTCMonth() + 1).padStart(2, '0');
-            const day = String(this.currentDate.getUTCDate()).padStart(2, '0');
-            const hour = String(this.currentHour).padStart(2, '0');
+            // Create UTC date from local date for display
+            const displayDate = new Date(utcDate || new Date(Date.UTC(this.currentDate.getFullYear(), this.currentDate.getMonth(), this.currentDate.getDate())));
+            displayDate.setUTCHours(this.currentHour, 0, 0, 0);
+            
+            const timeStr = this.timezoneManager.formatDateInTimezone(displayDate, {
+                month: 'numeric',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            const timezone = this.timezoneManager.getTimezoneAbbreviation();
             const solarImagesText = this.translationManager.t('solar_images');
-            solarTitleEl.textContent = `${solarImagesText} ${month}/${day} ${hour}:00 UTC`;
+            solarTitleEl.textContent = `${solarImagesText} ${timeStr} ${timezone}`;
         }
     }
     
@@ -652,17 +774,31 @@ class SolarFlareDemo {
     updateDataTime(timestamp) {
         const timeElement = document.getElementById('current-time-value');
         if (timeElement && timestamp) {
-            const year = timestamp.getUTCFullYear();
-            const month = String(timestamp.getUTCMonth() + 1).padStart(2, '0');
-            const day = String(timestamp.getUTCDate()).padStart(2, '0');
-            const hour = String(timestamp.getUTCHours()).padStart(2, '0');
-            const minute = String(timestamp.getUTCMinutes()).padStart(2, '0');
+            // Format timestamp in user's timezone (without timezone suffix since it's in the label)
+            const formattedTime = this.timezoneManager.formatDateInTimezone(timestamp, {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
             
-            timeElement.textContent = `${year}/${month}/${day} ${hour}:${minute}`;
+            timeElement.textContent = formattedTime;
         }
+        
+        // Update the data time label with current timezone
+        this.updateDataTimeLabel();
         
         // Update the forecast title to show 24-hour range
         this.updateForecastTitle(timestamp);
+    }
+
+    updateDataTimeLabel() {
+        const timeLabel = document.querySelector('.time-label[data-i18n="data_time_utc"]');
+        if (timeLabel && this.timezoneManager) {
+            const baseText = this.translationManager.t('data_time_utc');
+            timeLabel.textContent = `${baseText}`;
+        }
     }
     
     updateForecastTitle(timestamp) {
@@ -672,33 +808,10 @@ class SolarFlareDemo {
             const startTime = new Date(timestamp);
             const endTime = new Date(timestamp.getTime() + 24 * 60 * 60 * 1000); // Add 24 hours
             
-            // Format start time using UTC methods
-            const startYear = startTime.getUTCFullYear();
-            const startMonth = String(startTime.getUTCMonth() + 1).padStart(2, '0');
-            const startDay = String(startTime.getUTCDate()).padStart(2, '0');
-            const startHour = String(startTime.getUTCHours()).padStart(2, '0');
-            const startMinute = String(startTime.getUTCMinutes()).padStart(2, '0');
+            // Format the date range in user's timezone
+            const dateRange = this.timezoneManager.formatDateRange(startTime, endTime);
             
-            // Format end time using UTC methods
-            const endYear = endTime.getUTCFullYear();
-            const endMonth = String(endTime.getUTCMonth() + 1).padStart(2, '0');
-            const endDay = String(endTime.getUTCDate()).padStart(2, '0');
-            const endHour = String(endTime.getUTCHours()).padStart(2, '0');
-            const endMinute = String(endTime.getUTCMinutes()).padStart(2, '0');
-            
-            // Create the title with date range
-            let startDateStr, endDateStr;
-            if (startYear === endYear) {
-                // Same year
-                startDateStr = `${startYear}/${startMonth}/${startDay} ${startHour}:${startMinute}`;
-                endDateStr = `${endMonth}/${endDay} ${endHour}:${endMinute}`;
-            } else {
-                // Different years (rare case)
-                startDateStr = `${startYear}/${startMonth}/${startDay} ${startHour}:${startMinute}`;
-                endDateStr = `${endYear}/${endMonth}/${endDay} ${endHour}:${endMinute}`;
-            }
-            
-            titleElement.innerHTML = `Solar Flare Forecast Over the Next 24 Hours<br>(${startDateStr} - ${endDateStr} UTC)`;
+            titleElement.innerHTML = `Solar Flare Forecast Over the Next 24 Hours<br>(${dateRange})`;
         }
     }
     
@@ -711,11 +824,14 @@ class SolarFlareDemo {
             const targetDate = defaultDateTime.date;
             const targetHour = defaultDateTime.hour;
             
+            // Convert local date/hour to UTC for data access
+            const { utcDate: utcTargetDate, utcHour: utcTargetHour } = this.getUtcFromLocal(targetDate, targetHour);
+            
             // Create data key for the selected date/hour
-            const year = targetDate.getUTCFullYear();
-            const month = String(targetDate.getUTCMonth() + 1).padStart(2, '0');
-            const day = String(targetDate.getUTCDate()).padStart(2, '0');
-            const hour = String(targetHour).padStart(2, '0');
+            const year = utcTargetDate.getUTCFullYear();
+            const month = String(utcTargetDate.getUTCMonth() + 1).padStart(2, '0');
+            const day = String(utcTargetDate.getUTCDate()).padStart(2, '0');
+            const hour = String(utcTargetHour).padStart(2, '0');
             const dataKey = `${year}${month}${day}${hour}`;
             
             // Check if prediction data exists for this key
@@ -739,8 +855,8 @@ class SolarFlareDemo {
                 x_prob: predictionArray[3]
             };
             
-            // Update both current status and forecast panels
-            this.updateCurrentForecast(targetDate, targetHour);
+            // Update both current status and forecast panels (use UTC date for data operations)
+            this.updateCurrentForecast(utcTargetDate, utcTargetHour);
             
             // Load 4 images going backwards from this timestamp
             await this.loadAIA304ImagesFromTimestamp(timestamp);
@@ -984,7 +1100,37 @@ class SolarFlareDemo {
         if (periodElement && this.loadedTimes.length > 0) {
             const startTime = this.loadedTimes[0]; // oldest
             const endTime = this.loadedTimes[this.loadedTimes.length - 1]; // newest
-            periodElement.textContent = `(${startTime} - ${endTime} UTC)`;
+            
+            // Convert time strings to proper dates and format in user's timezone to match other panels
+            try {
+                // Parse the MM/DD HH:MM format from loadedTimes
+                // Use the year from the UTC data to ensure consistency with data timestamps
+                const utcDate = new Date(Date.UTC(this.currentDate.getFullYear(), this.currentDate.getMonth(), this.currentDate.getDate()));
+                const currentYear = utcDate.getUTCFullYear();
+                const startParts = startTime.split(' ');
+                const startDate = startParts[0]; // MM/DD
+                const startHour = startParts[1]; // HH:MM
+                
+                const endParts = endTime.split(' ');
+                const endDate = endParts[0]; // MM/DD
+                const endHour = endParts[1]; // HH:MM
+                
+                const [startMonth, startDay] = startDate.split('/');
+                const [startH] = startHour.split(':');
+                
+                const [endMonth, endDay] = endDate.split('/');
+                const [endH] = endHour.split(':');
+                
+                const startUTC = new Date(Date.UTC(currentYear, parseInt(startMonth) - 1, parseInt(startDay), parseInt(startH), 0, 0));
+                const endUTC = new Date(Date.UTC(currentYear, parseInt(endMonth) - 1, parseInt(endDay), parseInt(endH), 0, 0));
+                
+                const timeRange = this.timezoneManager.formatDateRange(startUTC, endUTC);
+                periodElement.textContent = `(${timeRange})`;
+            } catch (error) {
+                // Fallback to original format with timezone abbreviation
+                const timezone = this.timezoneManager.getTimezoneAbbreviation();
+                periodElement.textContent = `(${startTime} - ${endTime} ${timezone})`;
+            }
         }
     }
     
@@ -1114,7 +1260,7 @@ class SolarFlareDemo {
         const hourStr = String(hour).padStart(2, '0');
         const dataKey = `${year}${month}${day}${hourStr}`;
         
-        // Update current status from XRS data
+        // Update current status
         this.updateCurrentStatus(dataKey);
         
         // Update current status time period (24 hours range)
@@ -1125,7 +1271,7 @@ class SolarFlareDemo {
             const predictionArray = this.predictionManager.predictionData[dataKey];
             const predictionObj = {
                 o_prob: predictionArray[0],
-                c_prob: predictionArray[1], 
+                c_prob: predictionArray[1],
                 m_prob: predictionArray[2],
                 x_prob: predictionArray[3]
             };
@@ -1141,8 +1287,8 @@ class SolarFlareDemo {
     updateCurrentStatusTime(timestamp) {
         const statusTimeEl = document.getElementById('current-status-time');
         if (statusTimeEl) {
-            const timeStr = this.formatTimeForDisplay(timestamp);
-            statusTimeEl.textContent = `(${timeStr} UTC)`;
+            const timeStr = this.timezoneManager.formatTimeWithTimezone(timestamp);
+            statusTimeEl.textContent = `(${timeStr})`;
         }
     }
     
@@ -1151,12 +1297,11 @@ class SolarFlareDemo {
         const startTime = new Date(timestamp);
         const endTime = new Date(timestamp.getTime() + 24 * 60 * 60 * 1000);
         
-        const startStr = this.formatTimeForDisplay(startTime);
-        const endStr = this.formatTimeForDisplay(endTime);
+        const dateRange = this.timezoneManager.formatDateRange(startTime, endTime);
         
         const forecastPeriodEl = document.getElementById('forecast-period');
         if (forecastPeriodEl) {
-            forecastPeriodEl.textContent = `(${startStr} - ${endStr} UTC)`;
+            forecastPeriodEl.textContent = `(${dateRange})`;
         }
     }
     
@@ -1222,10 +1367,9 @@ class SolarFlareDemo {
             const endTime = new Date(timestamp);
             const startTime = new Date(timestamp.getTime() - 24 * 60 * 60 * 1000);
             
-            const startStr = this.formatTimeForDisplay(startTime);
-            const endStr = this.formatTimeForDisplay(endTime);
+            const dateRange = this.timezoneManager.formatDateRange(startTime, endTime);
             
-            statusTimeEl.textContent = `(${startStr} - ${endStr} UTC)`;
+            statusTimeEl.textContent = `(${dateRange})`;
         }
     }
     
@@ -1401,14 +1545,9 @@ class SolarFlareDemo {
         
         // Update panel titles with current language
         if (this.currentDate && this.currentHour) {
-            const timestamp = new Date(this.currentDate);
-            timestamp.setUTCHours(this.currentHour, 0, 0, 0);
-            this.updatePanelTitles(timestamp);
-        }
-        
-        // Refresh current forecast displays if available
-        if (this.currentDate && this.currentHour) {
-            this.updateCurrentForecast(this.currentDate, this.currentHour);
+            // Convert local date to UTC for data operations
+            const { utcDate, utcHour } = this.getSelectedUtcParts();
+            this.updateCurrentForecast(utcDate, utcHour);
         }
         
         // Update page content with current translations
@@ -1502,10 +1641,11 @@ class SolarFlareDemo {
     
     updatePanelTitles(selectedTimestamp) {
         // Check if the selected date is "current" (today's latest data)
+        // Compare using local dates to match user's perception
         const today = new Date();
-        const isToday = selectedTimestamp.getUTCFullYear() === today.getUTCFullYear() &&
-                       selectedTimestamp.getUTCMonth() === today.getUTCMonth() &&
-                       selectedTimestamp.getUTCDate() === today.getUTCDate();
+        const selectedLocal = new Date(selectedTimestamp.getUTCFullYear(), selectedTimestamp.getUTCMonth(), selectedTimestamp.getUTCDate());
+        const todayLocal = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        const isToday = selectedLocal.getTime() === todayLocal.getTime();
         
         // Update solar surface title
         const solarTitleEl = document.getElementById('solar-activity-title');
