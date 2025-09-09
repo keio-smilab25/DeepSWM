@@ -41,7 +41,7 @@ class PredictionManager {
             
             if (predResponse.ok) {
                 this.predictionData = await predResponse.json();
-                console.log('Prediction data loaded:', Object.keys(this.predictionData).length, 'entries');
+                // Prediction data loaded
             } else {
                 console.warn('Failed to load prediction data:', predResponse.status);
                 this.predictionData = {};
@@ -49,7 +49,7 @@ class PredictionManager {
             
             if (xrsResponse.ok) {
                 this.xrsData = await xrsResponse.json();
-                console.log('XRS data loaded:', Object.keys(this.xrsData).length, 'entries');
+                // XRS data loaded
             } else {
                 console.warn('Failed to load XRS data:', xrsResponse.status);
                 this.xrsData = {};

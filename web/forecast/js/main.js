@@ -385,7 +385,7 @@ class SolarFlareDemo {
     async executeQueuedUpdate() {
         // If already updating, skip this call
         if (this.isUpdating) {
-            console.log('Update already in progress, skipping...');
+            // Update already in progress, skipping
             return;
         }
         
@@ -399,7 +399,7 @@ class SolarFlareDemo {
         this.isUpdating = true;
         
         try {
-            console.log('Executing queued update for:', updateData.date, 'hour:', updateData.hour);
+            // Executing queued update
             
             // Set current date/hour to the latest pending values
             this.currentDate = updateData.date;
@@ -415,7 +415,7 @@ class SolarFlareDemo {
             
             // Check if there's a newer pending update that came in during processing
             if (this.pendingUpdate && this.pendingUpdate.timestamp > updateData.timestamp) {
-                console.log('Newer update pending, executing...');
+                // Newer update pending, executing
                 // Small delay to prevent infinite loops
                 setTimeout(() => this.executeQueuedUpdate(), 50);
             }
@@ -447,7 +447,7 @@ class SolarFlareDemo {
         // Wait for critical image loading to complete
         try {
             await imageLoadPromise;
-            console.log('Image loading completed for:', this.currentDate, 'hour:', this.currentHour);
+            // Image loading completed
         } catch (error) {
             console.error('Error loading images:', error);
         }
@@ -704,7 +704,7 @@ class SolarFlareDemo {
     
     async loadCurrentForecastAndImages() {
         try {
-            console.log('Loading current forecast and images...');
+            // Loading current forecast and images
             
             // Use the same default date/time as calendar
             const defaultDateTime = this.getDefaultDateTime();
@@ -717,9 +717,6 @@ class SolarFlareDemo {
             const day = String(targetDate.getUTCDate()).padStart(2, '0');
             const hour = String(targetHour).padStart(2, '0');
             const dataKey = `${year}${month}${day}${hour}`;
-            
-            console.log('Using default date/time:', targetDate, 'hour:', targetHour);
-            console.log('Data key:', dataKey);
             
             // Check if prediction data exists for this key
             const data = this.predictionManager.predictionData;
@@ -890,7 +887,7 @@ class SolarFlareDemo {
         this.aia304Canvases = [];
         this.loadedTimes = [];
         
-        console.log('Loading AIA 304 images from timestamp:', baseTimestamp, 'requestId:', requestId);
+        // Loading AIA 304 images
         
         // Load 4 images going backwards from the base timestamp
         for (let i = 3; i >= 0; i--) { // Start from 3 hours back, go to current (oldest to newest)
@@ -906,16 +903,16 @@ class SolarFlareDemo {
                 if (canvas) {
                     this.aia304Canvases.push(canvas); // Add to end for chronological order (oldest first)
                     this.loadedTimes.push(`${month}/${day} ${hour}:00`);
-                    console.log('Loaded and processed image:', imagePath);
+                    // Image loaded and processed successfully
                 }
             } catch (error) {
-                console.log('Image not found:', imagePath);
+                // Image not found (expected for some timestamps)
             }
         }
         
         // Check if this request is still the latest one
         if (this.currentAIA304RequestId !== requestId) {
-            console.log('AIA 304 request superseded, skipping display update for requestId:', requestId);
+            // AIA 304 request superseded, skipping display update
             return;
         }
         
@@ -966,11 +963,11 @@ class SolarFlareDemo {
         });
         resizeObserver.observe(container);
         
-        console.log('Total images loaded:', this.aia304Canvases.length, 'for requestId:', requestId);
+        // Images loaded successfully
         
         // Final check before starting playback
         if (this.currentAIA304RequestId !== requestId) {
-            console.log('AIA 304 request superseded before playback, skipping for requestId:', requestId);
+            // AIA 304 request superseded before playback, skipping
             return;
         }
         
@@ -1040,7 +1037,7 @@ class SolarFlareDemo {
         this.currentFrame = 0;
         this.autoPlayInterval = null;
         
-        console.log('Starting auto playback with', this.aia304Canvases.length, 'canvases');
+        // Starting auto playback
         
         // Start continuous loop
         this.autoPlayInterval = setInterval(() => {
@@ -1061,7 +1058,7 @@ class SolarFlareDemo {
             }
         });
         
-        console.log('Displaying frame:', this.currentFrame + 1, '/', this.aia304Canvases.length);
+        // console.log('Displaying frame:', this.currentFrame + 1, '/', this.aia304Canvases.length);
     }
     
     stopAutoPlayback() {
@@ -1588,13 +1585,13 @@ class SolarFlareDemo {
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
         `;
         
-        console.log(`Copyright positioned at bottom: ${bottomPosition}px, right: ${rightPosition}px (image size: ${imageSize}px, container: ${containerWidth}x${containerHeight})`);
+        // Copyright positioned
     }
     
     applyCopyrightPositioning(copyright) {
         // For AIA 304 copyright, always keep it at bottom-right of image
         // Let CSS handle all device-specific positioning
-        console.log('AIA 304 copyright positioning handled by CSS');
+        // AIA 304 copyright positioning handled by CSS
     }
 
 }

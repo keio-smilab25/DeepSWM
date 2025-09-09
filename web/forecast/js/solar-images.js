@@ -153,7 +153,7 @@ class SolarImagesManager {
                     const canvas = await this.loadAndProcessImage(imageUrl, wavelength.code);
                     frameCanvases.push(canvas);
                 } catch (error) {
-                    console.log(`Image not found: ${imageUrl}, using placeholder...`);
+                    // Image not found, using placeholder
                     const placeholderCanvas = await this.loadPlaceholderImage(wavelength);
                     frameCanvases.push(placeholderCanvas);
                     
@@ -192,11 +192,11 @@ class SolarImagesManager {
         const placeholderUrl = `${this.basePath}/data/images/placeholder/${wavelength.filename}.png`;
         
         try {
-            console.log(`Loading placeholder: ${placeholderUrl}`);
+            // Loading placeholder
             const canvas = await this.loadAndProcessImage(placeholderUrl, wavelength.code);
             return canvas;
         } catch (error) {
-            console.log(`Failed to load placeholder, creating default: ${error.message}`);
+            // Failed to load placeholder, creating default
             return this.createDefaultPlaceholder(wavelength.name);
         }
     }
@@ -213,7 +213,7 @@ class SolarImagesManager {
                 this.displayFrame(this.currentFrame);
             }
             
-            console.log(`Replaced placeholder with fallback for ${wavelength.name}`);
+            // Placeholder replaced with fallback
         }
     }
 
@@ -229,16 +229,16 @@ class SolarImagesManager {
             const fallbackUrl = `${this.basePath}/data/images/${fallbackDateStr}/${fallbackHourStr}_${wavelength.filename}.png`;
             
             try {
-                console.log(`Trying fallback: ${fallbackUrl}`);
+                // Trying fallback image
                 const canvas = await this.loadAndProcessImage(fallbackUrl, wavelength.code);
-                console.log(`Found fallback image: ${fallbackUrl}`);
+                // Fallback image found
                 return canvas;
             } catch (error) {
                 // Continue searching
             }
         }
         
-        console.log(`No fallback found for ${wavelength.name}`);
+        // No fallback found
         return null;
     }
     

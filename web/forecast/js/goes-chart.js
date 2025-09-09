@@ -41,7 +41,7 @@ class GOESChartManager {
             const response = await fetch(`${this.basePath}/data/xrs.json`);
             if (response.ok) {
                 this.xrsDataMap = await response.json();
-                console.log('XRS data loaded:', Object.keys(this.xrsDataMap).length, 'entries');
+                // XRS data loaded
                 return true;
             } else {
                 console.warn('Failed to load XRS data:', response.status);
@@ -64,8 +64,7 @@ class GOESChartManager {
     
     getXRSDataForTimeRange(baseTime) {
         const data = [];
-        console.log('Getting XRS data for base time:', baseTime.toISOString());
-        console.log('Available XRS keys:', Object.keys(this.xrsDataMap).slice(0, 10), '... (showing first 10)');
+        // Getting XRS data for base time
         
         // Load data for 72 hours going backwards from selected time
         for (let i = 71; i >= 0; i--) {
@@ -76,11 +75,11 @@ class GOESChartManager {
             data.push(flux != null ? flux : null);
             
             if (i >= 69) { // Log first few entries for debugging (most recent)
-                console.log(`Hour -${i}: key=${key}, flux=${flux}`);
+                // XRS data point found
             }
         }
         
-        console.log('XRS data array length:', data.length, 'non-null entries:', data.filter(d => d !== null).length);
+        // XRS data array prepared
         return data;
     }
     
@@ -349,7 +348,7 @@ class GOESChartManager {
         // Stop any existing animation
         this.stopAnimation();
         
-        console.log('Starting GOES animation with data length:', flareData.length);
+        // Starting GOES animation
         
         if (!this.chartInstance || flareData.length === 0) {
             console.warn('Cannot start animation: chartInstance=', !!this.chartInstance, 'dataLength=', flareData.length);
@@ -363,7 +362,7 @@ class GOESChartManager {
         const dataset = this.chartInstance.data.datasets[0];
         dataset.pointRadius = Array(72).fill(2);
         
-        console.log('GOES animation started');
+        // GOES animation started
         
         this.animationTimer = setInterval(() => {
             // Highlight current frame
