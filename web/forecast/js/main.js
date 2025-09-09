@@ -13,6 +13,11 @@ class SolarFlareDemo {
         this.currentHour = 12;
         this.datePicker = null;
         
+        // Add debouncing and queue management for iOS Safari fix
+        this.updateDebounceTimer = null;
+        this.isUpdating = false;
+        this.pendingUpdate = null;
+        
         this.init();
     }
     
@@ -273,7 +278,7 @@ class SolarFlareDemo {
                     if (dateStr) {
                         this.currentDate = new Date(dateStr + 'T00:00:00Z');
                         this.renderCalendar();
-                        this.updateDisplay();
+                        this.debouncedUpdateDisplay();
                     }
                 }
             });
@@ -346,7 +351,7 @@ class SolarFlareDemo {
         timeSelect.addEventListener('change', (e) => {
             this.currentHour = parseInt(e.target.value);
             this.updateTimestamp();
-            this.updateDisplay();
+            this.debouncedUpdateDisplay();
         });
     }
     
@@ -356,23 +361,96 @@ class SolarFlareDemo {
         }
     }
     
-    updateDisplay() {
+    // Debounced update display method for iOS Safari fix
+    debouncedUpdateDisplay() {
+        // Clear existing timer
+        if (this.updateDebounceTimer) {
+            clearTimeout(this.updateDebounceTimer);
+        }
+        
+        // Set pending update data
+        this.pendingUpdate = {
+            date: new Date(this.currentDate),
+            hour: this.currentHour,
+            timestamp: Date.now()
+        };
+        
+        // Set debounced timer (200ms delay for iOS Safari)
+        this.updateDebounceTimer = setTimeout(() => {
+            this.executeQueuedUpdate();
+        }, 200);
+    }
+    
+    // Execute queued update with race condition protection
+    async executeQueuedUpdate() {
+        // If already updating, skip this call
+        if (this.isUpdating) {
+            console.log('Update already in progress, skipping...');
+            return;
+        }
+        
+        // If no pending update, skip
+        if (!this.pendingUpdate) {
+            return;
+        }
+        
+        const updateData = this.pendingUpdate;
+        this.pendingUpdate = null;
+        this.isUpdating = true;
+        
+        try {
+            console.log('Executing queued update for:', updateData.date, 'hour:', updateData.hour);
+            
+            // Set current date/hour to the latest pending values
+            this.currentDate = updateData.date;
+            this.currentHour = updateData.hour;
+            
+            // Execute the actual update
+            await this.updateDisplay();
+            
+        } catch (error) {
+            console.error('Error during queued update:', error);
+        } finally {
+            this.isUpdating = false;
+            
+            // Check if there's a newer pending update that came in during processing
+            if (this.pendingUpdate && this.pendingUpdate.timestamp > updateData.timestamp) {
+                console.log('Newer update pending, executing...');
+                // Small delay to prevent infinite loops
+                setTimeout(() => this.executeQueuedUpdate(), 50);
+            }
+        }
+    }
+    
+    async updateDisplay() {
+        // Update basic display elements first (synchronous)
         this.updateDateDisplay();
         this.updateTimestamp();
-        this.solarImagesManager.loadImages(this.currentDate, this.currentHour);
+        
+        // Start async operations in parallel but wait for critical ones
+        const imageLoadPromise = this.solarImagesManager.loadImages(this.currentDate, this.currentHour);
+        
+        // Update prediction display (synchronous)
         this.predictionManager.displayPrediction(this.currentDate, this.currentHour);
         
-        // Update performance displays
-        // Month performance depends on current date, all period performance is independent
+        // Update performance displays (synchronous)
         this.predictionManager.updatePerformanceDisplays(this.currentDate);
         
-        // Update Current Forecast with selected date/time
+        // Update Current Forecast with selected date/time (includes AIA 304 images)
         this.updateCurrentForecast(this.currentDate, this.currentHour);
         
-        // Update GOES chart with current date and hour
+        // Update GOES chart (synchronous)
         const baseTime = new Date(this.currentDate);
         baseTime.setUTCHours(this.currentHour, 0, 0, 0);
         this.goesChartManager.updateChart(baseTime);
+        
+        // Wait for critical image loading to complete
+        try {
+            await imageLoadPromise;
+            console.log('Image loading completed for:', this.currentDate, 'hour:', this.currentHour);
+        } catch (error) {
+            console.error('Error loading images:', error);
+        }
     }
     
     updateDateDisplay() {
@@ -805,10 +883,14 @@ class SolarFlareDemo {
         const container = document.getElementById('aia-304-container');
         if (!container) return;
         
+        // Create unique request ID to handle race conditions
+        const requestId = Date.now() + Math.random();
+        this.currentAIA304RequestId = requestId;
+        
         this.aia304Canvases = [];
         this.loadedTimes = [];
         
-        console.log('Loading AIA 304 images from timestamp:', baseTimestamp);
+        console.log('Loading AIA 304 images from timestamp:', baseTimestamp, 'requestId:', requestId);
         
         // Load 4 images going backwards from the base timestamp
         for (let i = 3; i >= 0; i--) { // Start from 3 hours back, go to current (oldest to newest)
@@ -829,6 +911,12 @@ class SolarFlareDemo {
             } catch (error) {
                 console.log('Image not found:', imagePath);
             }
+        }
+        
+        // Check if this request is still the latest one
+        if (this.currentAIA304RequestId !== requestId) {
+            console.log('AIA 304 request superseded, skipping display update for requestId:', requestId);
+            return;
         }
         
         // Update solar activity period display
@@ -878,7 +966,13 @@ class SolarFlareDemo {
         });
         resizeObserver.observe(container);
         
-        console.log('Total images loaded:', this.aia304Canvases.length);
+        console.log('Total images loaded:', this.aia304Canvases.length, 'for requestId:', requestId);
+        
+        // Final check before starting playback
+        if (this.currentAIA304RequestId !== requestId) {
+            console.log('AIA 304 request superseded before playback, skipping for requestId:', requestId);
+            return;
+        }
         
         // Start automatic playback
         if (this.aia304Canvases.length > 1) {
