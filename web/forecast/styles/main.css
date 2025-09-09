@@ -22,7 +22,7 @@ body {
     background: #f8f9fa;
     min-height: 100vh;
     color: #333;
-    padding: 0.5rem;
+    padding: 1.5rem 0.5rem 0.5rem 0.5rem;
     line-height: 1.6;
     overflow-x: hidden;
 }
@@ -1767,7 +1767,7 @@ body {
 
 @media (max-width: 768px) {
     body {
-        padding: 0.25rem;
+        padding: 1rem 0.25rem 0.25rem 0.25rem;
     }
     
     .container {
@@ -1982,7 +1982,7 @@ body {
 
 @media (max-width: 480px) {
     body {
-        padding: 0.15rem;
+        padding: 0.8rem 0.15rem 0.15rem 0.15rem;
     }
     
     .header {
@@ -2135,6 +2135,7 @@ body {
 body.dark-theme {
     background: linear-gradient(135deg, #0c1445 0%, #1a2472 50%, #2d3561 100%);
     color: #e8e9ea;
+    padding: 1.5rem 0.5rem 0.5rem 0.5rem;
 }
 
 .dark-theme .container {
