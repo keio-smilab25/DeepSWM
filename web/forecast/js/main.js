@@ -301,47 +301,85 @@ class SolarFlareDemo {
     }
     
     getDefaultDateTime() {
-        // Use the same logic as calendar - get the latest available date from prediction data
-        const latestDate = this.predictionManager.getLatestAvailableDate();
-        if (latestDate) {
-            // For the latest date, try to find the latest hour with data
-            const year = latestDate.getUTCFullYear();
-            const month = String(latestDate.getUTCMonth() + 1).padStart(2, '0');
-            const day = String(latestDate.getUTCDate()).padStart(2, '0');
+        // Local-first: start from local now - 2h, convert to UTC for data check, step back if missing
+        const pred = this.predictionManager?.predictionData || {};
+        
+        // Build prediction key from UTC date parts
+        const buildKey = (utcDateObj, utcHour) => {
+            const y = utcDateObj.getUTCFullYear();
+            const m = String(utcDateObj.getUTCMonth() + 1).padStart(2, '0');
+            const d = String(utcDateObj.getUTCDate()).padStart(2, '0');
+            const h = String(utcHour).padStart(2, '0');
+            return `${y}${m}${d}${h}`;
+        };
+        
+        const nowLocal = new Date();
+        const earliestUtcMs = Date.UTC(2025, 4, 1, 0, 0, 0); // 2025-05-01 00:00:00 UTC
+        
+        // Search window: look back up to 7 days from local now-2h
+        const maxLookbackHours = 24 * 7;
+        for (let i = 2; i <= maxLookbackHours + 2; i++) {
+            // Candidate local time = nowLocal - i hours
+            const candidateLocalTs = new Date(
+                nowLocal.getFullYear(),
+                nowLocal.getMonth(),
+                nowLocal.getDate(),
+                nowLocal.getHours(),
+                0, 0, 0
+            );
+            candidateLocalTs.setHours(candidateLocalTs.getHours() - i);
             
-            // Check for the latest hour with data on this date
-            let latestHour = 0;
-            for (let h = 23; h >= 0; h--) {
-                const hour = String(h).padStart(2, '0');
-                const dataKey = `${year}${month}${day}${hour}`;
-                if (this.predictionManager.predictionData && this.predictionManager.predictionData[dataKey]) {
-                    latestHour = h;
-                    break;
-                }
+            // Convert local candidate to UTC parts used by data keys
+            const localDateOnly = new Date(
+                candidateLocalTs.getFullYear(),
+                candidateLocalTs.getMonth(),
+                candidateLocalTs.getDate()
+            );
+            const localHourOnly = candidateLocalTs.getHours();
+            const { utcDate, utcHour, utcTimestamp } = this.getUtcFromLocal(localDateOnly, localHourOnly);
+            
+            // Stop if before operational cutoff (in UTC)
+            if (utcTimestamp.getTime() < earliestUtcMs) break;
+            
+            const key = buildKey(utcDate, utcHour);
+            if (Object.prototype.hasOwnProperty.call(pred, key)) {
+                // Return as local date/hour for UI
+                return { date: localDateOnly, hour: localHourOnly };
             }
-            
-            // Convert UTC date to local date for calendar display
-            const localDate = new Date(latestDate.getUTCFullYear(), latestDate.getUTCMonth(), latestDate.getUTCDate());
-            return { date: localDate, hour: latestHour };
         }
         
-        // Fallback to current time if no data available, but ensure it's within allowed range
-        const now = new Date();
-        const currentYear = now.getFullYear();
-        
-        // Ensure the date is within allowed range (2025 May 1 or later)
-        let fallbackDate = now;
-        const cutoffDate = new Date(2025, 4, 1); // May 1, 2025
-        
-        if (now < cutoffDate) {
-            // If current date is before May 1, 2025, use May 1, 2025
-            fallbackDate = new Date(cutoffDate);
-        } else if (now.getFullYear() > currentYear) {
-            // If somehow we're in the future, cap at current year
-            fallbackDate = new Date(currentYear, 11, 31); // December 31, current year
+        // Fallback: use latest prediction entry; convert UTC -> local for default selection
+        const keys = this.predictionManager && this.predictionManager.predictionData
+            ? Object.keys(this.predictionManager.predictionData)
+            : [];
+        if (keys.length > 0) {
+            keys.sort((a, b) => b.localeCompare(a));
+            const latestKey = keys[0]; // YYYYMMDDHH in UTC
+            const y = parseInt(latestKey.slice(0, 4), 10);
+            const m = parseInt(latestKey.slice(4, 6), 10) - 1;
+            const d = parseInt(latestKey.slice(6, 8), 10);
+            const h = parseInt(latestKey.slice(8, 10), 10);
+            const utcTs = new Date(Date.UTC(y, m, d, h, 0, 0));
+            const localDate = new Date(utcTs.getFullYear(), utcTs.getMonth(), utcTs.getDate());
+            const localHour = utcTs.getHours();
+            return { date: localDate, hour: localHour };
         }
         
-        return { date: fallbackDate, hour: 12 };
+        // Absolute fallback: clamp within allowed range and use local now - 2h
+        const cutoffLocal = new Date(2025, 4, 1, 0, 0, 0);
+        const fallbackTs = new Date(
+            nowLocal.getFullYear(),
+            nowLocal.getMonth(),
+            nowLocal.getDate(),
+            nowLocal.getHours(),
+            0, 0, 0
+        );
+        fallbackTs.setHours(fallbackTs.getHours() - 2);
+        const fallbackDate = fallbackTs < cutoffLocal
+            ? new Date(cutoffLocal.getFullYear(), cutoffLocal.getMonth(), cutoffLocal.getDate())
+            : new Date(fallbackTs.getFullYear(), fallbackTs.getMonth(), fallbackTs.getDate());
+        const fallbackHour = fallbackTs < cutoffLocal ? 0 : fallbackTs.getHours();
+        return { date: fallbackDate, hour: fallbackHour };
     }
 
 	// Convert a local date and hour selection to UTC parts used by data APIs
