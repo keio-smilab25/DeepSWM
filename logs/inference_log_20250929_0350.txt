@@ -1,0 +1,29 @@
+Starting inference execution at Mon Sep 29 03:50:57 UTC 2025
+=== Starting Inference Pipeline ===
+Current datetime: 092903
+Previous datetime: 092902
+Inference datetime: 20250929_030000
+[CURRENT] Fetching data for: 092903
+🚀 Starting data collection for: 2025-09-29 03:00 UTC
+✅ XRS updated: 2025092903 → 2.672169785000733e-06
+✅ XRS updated: 2025092902 → 3.666266638902016e-05
+✅ All files already exist for 2025-09-29 03:00
+[CURRENT] Data fetch successful for 092903
+[PREVIOUS] Fetching data for: 092902
+🚀 Starting data collection for: 2025-09-29 02:00 UTC
+✅ XRS updated: 2025092902 → 3.666266638902016e-05
+✅ XRS updated: 2025092901 → 1.8717100829235278e-06
+✅ All files already exist for 2025-09-29 02:00
+[PREVIOUS] Data fetch successful for 092902
+[FEATURES] Extracting features for: 20250929_030000
+Skip existing: /home/runner/work/DeepSWM/DeepSWM/ml/datasets/all_features/20250929_030000.h5
+[FEATURES] Feature extraction successful
+[INFERENCE] Running inference for: 20250929_030000
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/torch/amp/autocast_mode.py:250: UserWarning: User provided device_type of 'cuda', but CUDA is not available. Disabling
+  warnings.warn(
+Updated predictions: added 1 new, total 3572 timestamps in /home/runner/work/DeepSWM/DeepSWM/data/pred_24.json
+[INFERENCE] Inference successful
+=== Execution Summary ===
+Total errors encountered: 0
+Execution completed at: Mon Sep 29 03:51:12 UTC 2025
+✅ Workflow completed successfully with no errors
