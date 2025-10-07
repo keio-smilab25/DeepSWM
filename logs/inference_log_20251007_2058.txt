@@ -1,0 +1,37 @@
+Starting inference execution at Tue Oct  7 20:58:59 UTC 2025
+=== Starting Inference Pipeline ===
+Current datetime: 100720
+Previous datetime: 100719
+Inference datetime: 20251007_200000
+[CURRENT] Fetching data for: 100720
+🚀 Starting data collection for: 2025-10-07 20:00 UTC
+✅ XRS updated: 2025100720 → 7.729282174295804e-07
+✅ XRS updated: 2025100719 → 6.622175874326786e-07
+✅ All files already exist for 2025-10-07 20:00
+[CURRENT] Data fetch successful for 100720
+[PREVIOUS] Fetching data for: 100719
+🚀 Starting data collection for: 2025-10-07 19:00 UTC
+✅ XRS updated: 2025100719 → 6.622175874326786e-07
+✅ XRS updated: 2025100718 → 8.24332971660624e-07
+✅ All files already exist for 2025-10-07 19:00
+[PREVIOUS] Data fetch successful for 100719
+[FEATURES] Extracting features for: 20251007_200000
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'repr' attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. 'repr' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'frozen' attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. 'frozen' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+Skip existing: /home/runner/work/DeepSWM/DeepSWM/ml/datasets/all_features/20251007_200000.h5
+[FEATURES] Feature extraction successful
+[INFERENCE] Running inference for: 20251007_200000
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'repr' attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. 'repr' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'frozen' attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. 'frozen' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/torch/amp/autocast_mode.py:250: UserWarning: User provided device_type of 'cuda', but CUDA is not available. Disabling
+  warnings.warn(
+Updated predictions: added 1 new, total 3758 timestamps in /home/runner/work/DeepSWM/DeepSWM/data/pred_24.json
+[INFERENCE] Inference successful
+=== Execution Summary ===
+Total errors encountered: 0
+Execution completed at: Tue Oct  7 20:59:14 UTC 2025
+✅ Workflow completed successfully with no errors
