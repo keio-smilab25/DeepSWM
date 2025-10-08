@@ -1,0 +1,60 @@
+Starting inference execution at Wed Oct  8 23:32:10 UTC 2025
+=== Starting Inference Pipeline ===
+Current datetime: 100823
+Previous datetime: 100822
+Inference datetime: 20251008_230000
+[CURRENT] Fetching data for: 100823
+🚀 Starting data collection for: 2025-10-08 23:00 UTC
+✅ XRS updated: 2025100823 → 6.053069228073582e-07
+✅ XRS updated: 2025100822 → 6.103674081714416e-07
+📡 Fetching solar observation data...
+  Fetching AIA 0094Å...
+    ✅ PNG saved: data/images/1008/23_aia_0094.png
+  Fetching AIA 0131Å...
+    ✅ PNG saved: data/images/1008/23_aia_0131.png
+  Fetching AIA 0171Å...
+    ✅ PNG saved: data/images/1008/23_aia_0171.png
+  Fetching AIA 0193Å...
+    ✅ PNG saved: data/images/1008/23_aia_0193.png
+  Fetching AIA 0211Å...
+    ✅ PNG saved: data/images/1008/23_aia_0211.png
+  Fetching AIA 0304Å...
+    ✅ PNG saved: data/images/1008/23_aia_0304.png
+  Fetching AIA 0335Å...
+    ✅ PNG saved: data/images/1008/23_aia_0335.png
+  Fetching AIA 1600Å...
+    ✅ PNG saved: data/images/1008/23_aia_1600.png
+  Fetching AIA 4500Å...
+    ✅ PNG saved: data/images/1008/23_aia_4500.png
+  Fetching HMI magnetogram...
+    ✅ PNG saved: data/images/1008/23_hmi.png
+💾 Saving H5 file for ML inference...
+✅ H5 saved: ./ml/datasets/all_data_hours/20251008_230000.h5
+🎉 Data collection completed for 2025-10-08 23:00 UTC
+[CURRENT] Data fetch successful for 100823
+[PREVIOUS] Fetching data for: 100822
+🚀 Starting data collection for: 2025-10-08 22:00 UTC
+✅ XRS updated: 2025100822 → 6.103674081714416e-07
+✅ XRS updated: 2025100821 → 9.12416339815536e-07
+✅ All files already exist for 2025-10-08 22:00
+[PREVIOUS] Data fetch successful for 100822
+[FEATURES] Extracting features for: 20251008_230000
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'repr' attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. 'repr' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'frozen' attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. 'frozen' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+Saved features: /home/runner/work/DeepSWM/DeepSWM/ml/datasets/all_features/20251008_230000.h5
+[FEATURES] Feature extraction successful
+[INFERENCE] Running inference for: 20251008_230000
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'repr' attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. 'repr' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'frozen' attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. 'frozen' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/torch/amp/autocast_mode.py:250: UserWarning: User provided device_type of 'cuda', but CUDA is not available. Disabling
+  warnings.warn(
+Updated predictions: added 1 new, total 3782 timestamps in /home/runner/work/DeepSWM/DeepSWM/data/pred_24.json
+[INFERENCE] Inference successful
+=== Execution Summary ===
+Total errors encountered: 0
+Execution completed at: Wed Oct  8 23:32:34 UTC 2025
+✅ Workflow completed successfully with no errors
