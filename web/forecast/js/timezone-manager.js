@@ -342,19 +342,17 @@ class TimezoneManager {
         }
 
         try {
-            const startStr = this.formatDateInTimezone(startUTC, { 
-                month: 'numeric',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-            
-            const endStr = this.formatDateInTimezone(endUTC, { 
-                month: 'numeric',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
+            const formatWithoutYear = (utcDate) => {
+                const localDate = this.convertUTCToLocal(utcDate);
+                const month = String(localDate.getMonth() + 1).padStart(2, '0');
+                const day = String(localDate.getDate()).padStart(2, '0');
+                const hour = String(localDate.getHours()).padStart(2, '0');
+                const minute = String(localDate.getMinutes()).padStart(2, '0');
+                return `${month}/${day} ${hour}:${minute}`;
+            };
+
+            const startStr = formatWithoutYear(startUTC);
+            const endStr = formatWithoutYear(endUTC);
             
             const timezone = this.getTimezoneAbbreviation();
             return `${startStr} - ${endStr} ${timezone}`;

@@ -3122,6 +3122,18 @@ body.dark-theme {
     font-size: 0.95rem;
 }
 
+@media (min-width: 1401px) {
+    .current-forecast-section .panel-title {
+        font-size: 1.25rem;
+        min-height: 2.6rem;
+    }
+
+    .current-forecast-section .forecast-panel .panel-title {
+        font-size: 1.1rem;
+        line-height: 1.1;
+    }
+}
+
 .panel-subtitle {
     font-size: 0.9rem;
     font-weight: 600;
@@ -3133,6 +3145,20 @@ body.dark-theme {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+#solar-activity-period,
+#current-status-time,
+#forecast-period {
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    #solar-activity-period,
+    #current-status-time,
+    #forecast-period {
+        white-space: normal;
+    }
 }
 
 /* Solar Surface Panel */
@@ -3639,23 +3665,70 @@ body.dark-theme {
 /* Responsive Design for Panels */
 @media (max-width: 1400px) {
     .current-forecast-content {
-        grid-template-columns: 1fr 1fr 1fr;
-        height: auto;
+        grid-template-columns: repeat(3, 1fr);
+        height: 450px;
         gap: 0.75rem;
     }
     
     .panel {
-        height: 380px;
+        height: 100%;
+        padding: 0.8rem;
     }
     
+    .solar-surface-panel,
+    .current-status-panel,
+    .forecast-panel {
+        height: 100%;
+    }
+
     .panel-title {
-        font-size: 1rem;
-        min-height: 2rem;
+        font-size: 0.95rem;
+        min-height: 2.4rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .forecast-panel .panel-title {
+        font-size: 0.8rem;
+        line-height: 1;
+        word-break: keep-all;
+        margin-bottom: 0.2rem;
     }
     
     .panel-subtitle {
-        font-size: 0.85rem;
-        min-height: 1.3rem;
+        font-size: 0.8rem;
+        min-height: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .current-status-panel .status-level-blocks,
+    .forecast-panel .forecast-level-blocks {
+        padding: 0.6rem;
+        gap: 0.3rem;
+        justify-content: space-between;
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .status-level-blocks .level-block,
+    .forecast-level-blocks .level-block {
+        height: 46px;
+        min-height: 46px;
+        max-height: 46px;
+        padding: 0.3rem 0.45rem;
+    }
+
+    .panel-status {
+        padding: 0.35rem 0.45rem;
+    }
+
+    .panel-status .status-text {
+        font-size: 1.1rem;
+    }
+
+    .panel-status .level-text {
+        font-size: 0.95rem;
     }
 }
 

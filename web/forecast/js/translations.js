@@ -32,7 +32,7 @@ const translations = {
         about_deepswm: "About Deep Space Weather Model (DeepSWM)",
         current_solar_surface: "Current Solar Surface",
         current_solar_flare_status: "Current Solar Flare Status",
-        solar_flare_forecast_24h: "Solar Flare Forecast Over the Next 24 Hours",
+        solar_flare_forecast_24h: "Solar Flare Forecast<br/>Over the Next 24 Hours",
         archive: "Archive",
         xray_flux_transition: "X-ray Flux Transition (GOES)",
         solar_flare: "Solar Flare",

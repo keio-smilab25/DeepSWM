@@ -12,6 +12,9 @@ class SolarFlareDemo {
         this.goesChartManager.setTimezoneManager(this.timezoneManager);
         this.goesChartManager.init();
         
+        this.lastDataTimestamp = null;
+        this.handleResponsiveResize = this.handleResponsiveResize.bind(this);
+        
         this.currentDate = null;
         this.currentHour = 12;
         this.datePicker = null;
@@ -60,6 +63,8 @@ class SolarFlareDemo {
         
         // Load latest data automatically
         this.loadLatestData();
+
+        this.setupResponsiveHandlers();
         
         // Update timezone-dependent labels
         setTimeout(() => {
@@ -808,11 +813,47 @@ class SolarFlareDemo {
         };
         this.updateForecastPanel(defaultPrediction);
     }
-    
-    updateDataTime(timestamp) {
+
+    setupResponsiveHandlers() {
+        window.addEventListener('resize', this.handleResponsiveResize);
+        window.addEventListener('orientationchange', this.handleResponsiveResize);
+    }
+
+    handleResponsiveResize() {
+        if (this.lastDataTimestamp) {
+            this.applyDataTimeDisplay(this.lastDataTimestamp);
+        }
+    }
+
+    shouldUseCompactTimestamp() {
+        const width = window.innerWidth || document.documentElement.clientWidth || 0;
+        const height = window.innerHeight || document.documentElement.clientHeight || 0;
+        return width <= 1280 && height <= 760;
+    }
+
+    applyDataTimeDisplay(timestamp) {
         const timeElement = document.getElementById('current-time-value');
-        if (timeElement && timestamp) {
-            // Format timestamp in user's timezone (without timezone suffix since it's in the label)
+        if (!timeElement || !timestamp) {
+            return;
+        }
+
+        if (this.shouldUseCompactTimestamp()) {
+            const currentLang = typeof this.translationManager?.getCurrentLang === 'function'
+                ? this.translationManager.getCurrentLang()
+                : 'en';
+            const locale = currentLang === 'ja' ? 'ja-JP' : 'en-CA';
+            const formatter = new Intl.DateTimeFormat(locale, {
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false,
+                timeZone: this.timezoneManager.userTimezone
+            });
+            let compact = formatter.format(timestamp);
+            compact = compact.replace(/[,\u3001]/g, '').replace(/\s+/g, ' ').trim();
+            timeElement.textContent = compact;
+        } else {
             const formattedTime = this.timezoneManager.formatDateInTimezone(timestamp, {
                 year: 'numeric',
                 month: '2-digit',
@@ -820,9 +861,17 @@ class SolarFlareDemo {
                 hour: '2-digit',
                 minute: '2-digit'
             });
-            
             timeElement.textContent = formattedTime;
         }
+    }
+    
+    updateDataTime(timestamp) {
+        if (!timestamp) {
+            return;
+        }
+
+        this.lastDataTimestamp = timestamp;
+        this.applyDataTimeDisplay(timestamp);
         
         // Update the data time label with current timezone
         this.updateDataTimeLabel();
