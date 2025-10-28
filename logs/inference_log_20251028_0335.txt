@@ -1,0 +1,61 @@
+Starting inference execution at Tue Oct 28 03:35:01 UTC 2025
+=== Starting Inference Pipeline ===
+Current datetime: 102803
+Previous datetime: 102802
+Inference datetime: 20251028_030000
+[CURRENT] Fetching data for: 102803
+🚀 Starting data collection for: 2025-10-28 03:00 UTC
+✅ XRS updated: 2025102803 → 6.135280159469403e-07
+✅ XRS updated: 2025102802 → 6.272034624998923e-07
+📡 Fetching solar observation data...
+  Fetching AIA 0094Å...
+    ✅ PNG saved: data/images/1028/03_aia_0094.png
+  Fetching AIA 0131Å...
+    ✅ PNG saved: data/images/1028/03_aia_0131.png
+  Fetching AIA 0171Å...
+    ✅ PNG saved: data/images/1028/03_aia_0171.png
+  Fetching AIA 0193Å...
+    ✅ PNG saved: data/images/1028/03_aia_0193.png
+  Fetching AIA 0211Å...
+    ✅ PNG saved: data/images/1028/03_aia_0211.png
+  Fetching AIA 0304Å...
+    ✅ PNG saved: data/images/1028/03_aia_0304.png
+  Fetching AIA 0335Å...
+    ✅ PNG saved: data/images/1028/03_aia_0335.png
+  Fetching AIA 1600Å...
+    ✅ PNG saved: data/images/1028/03_aia_1600.png
+  Fetching AIA 4500Å...
+    ✅ PNG saved: data/images/1028/03_aia_4500.png
+  Fetching HMI magnetogram...
+❌ HMI fetch/process failed: HTTPSConnectionPool(host='jsoc1.stanford.edu', port=443): Max retries exceeded with url: /data/hmi/images/2025/10/28/20251028_030000_M_1k.jpg (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7efc82759ab0>, 'Connection to jsoc1.stanford.edu timed out. (connect timeout=30)'))
+    ⚠️  HMI data unavailable, skipping PNG
+💾 Saving H5 file for ML inference...
+✅ H5 saved: ./ml/datasets/all_data_hours/20251028_030000.h5
+🎉 Data collection completed for 2025-10-28 03:00 UTC
+[CURRENT] Data fetch successful for 102803
+[PREVIOUS] Fetching data for: 102802
+🚀 Starting data collection for: 2025-10-28 02:00 UTC
+✅ XRS updated: 2025102802 → 6.272034624998923e-07
+✅ XRS updated: 2025102801 → 7.975156677275663e-07
+✅ All files already exist for 2025-10-28 02:00
+[PREVIOUS] Data fetch successful for 102802
+[FEATURES] Extracting features for: 20251028_030000
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'repr' attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. 'repr' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'frozen' attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. 'frozen' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+Skip existing: /home/runner/work/DeepSWM/DeepSWM/ml/datasets/all_features/20251028_030000.h5
+[FEATURES] Feature extraction successful
+[INFERENCE] Running inference for: 20251028_030000
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'repr' attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. 'repr' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'frozen' attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. 'frozen' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/torch/amp/autocast_mode.py:250: UserWarning: User provided device_type of 'cuda', but CUDA is not available. Disabling
+  warnings.warn(
+Updated predictions: added 1 new, total 4188 timestamps in /home/runner/work/DeepSWM/DeepSWM/data/pred_24.json
+[INFERENCE] Inference successful
+=== Execution Summary ===
+Total errors encountered: 0
+Execution completed at: Tue Oct 28 03:35:52 UTC 2025
+✅ Workflow completed successfully with no errors
