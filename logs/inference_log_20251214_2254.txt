@@ -1,0 +1,54 @@
+Starting inference execution at Sun Dec 14 22:54:55 UTC 2025
+=== Starting Inference Pipeline ===
+Current datetime: 121422
+Previous datetime: 121421
+Inference datetime: 20251214_220000
+[CURRENT] Fetching data for: 121422
+🚀 Starting data collection for: 2025-12-14 22:00 UTC
+✅ XRS updated: 2025121422 → 8.087677656476444e-07
+✅ XRS updated: 2025121421 → 8.001150604286522e-07
+✅ All files already exist for 2025-12-14 22:00
+[CURRENT] Data fetch successful for 121422
+[PREVIOUS] Fetching data for: 121421
+🚀 Starting data collection for: 2025-12-14 21:00 UTC
+✅ XRS updated: 2025121421 → 8.001150604286522e-07
+✅ XRS updated: 2025121420 → 7.783562523400178e-07
+📡 Fetching solar observation data...
+  Fetching AIA 0094Å...
+    ✅ PNG saved: data/images/1214/21_aia_0094.png
+  Fetching AIA 0131Å...
+    ✅ PNG saved: data/images/1214/21_aia_0131.png
+  Fetching AIA 0171Å...
+    ✅ PNG saved: data/images/1214/21_aia_0171.png
+  Fetching AIA 0193Å...
+    ✅ PNG saved: data/images/1214/21_aia_0193.png
+  Fetching AIA 0211Å...
+    ✅ PNG saved: data/images/1214/21_aia_0211.png
+  Fetching AIA 0304Å...
+    ✅ PNG saved: data/images/1214/21_aia_0304.png
+  Fetching AIA 0335Å...
+    ✅ PNG saved: data/images/1214/21_aia_0335.png
+  Fetching AIA 1600Å...
+    ✅ PNG saved: data/images/1214/21_aia_1600.png
+  Fetching AIA 4500Å...
+❌ AIA 4500 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2025/12/14/H2100/AIA20251214_210000_4500.fits
+    ⚠️  AIA 4500 data unavailable, skipping PNG
+  Fetching HMI magnetogram...
+❌ HMI fetch/process failed: HTTPSConnectionPool(host='jsoc1.stanford.edu', port=443): Max retries exceeded with url: /data/hmi/images/2025/12/14/20251214_210000_M_1k.jpg (Caused by ConnectTimeoutError(<HTTPSConnection(host='jsoc1.stanford.edu', port=443) at 0x7f670a7639a0>, 'Connection to jsoc1.stanford.edu timed out. (connect timeout=30)'))
+    ⚠️  HMI data unavailable, skipping PNG
+💾 Saving H5 file for ML inference...
+✅ H5 saved: ./ml/datasets/all_data_hours/20251214_210000.h5
+🎉 Data collection completed for 2025-12-14 21:00 UTC
+[PREVIOUS] Data fetch successful for 121421
+[FEATURES] Extracting features for: 20251214_220000
+Skip existing: /home/runner/work/DeepSWM/DeepSWM/ml/datasets/all_features/20251214_220000.h5
+[FEATURES] Feature extraction successful
+[INFERENCE] Running inference for: 20251214_220000
+/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/torch/amp/autocast_mode.py:250: UserWarning: User provided device_type of 'cuda', but CUDA is not available. Disabling
+  warnings.warn(
+Updated predictions: added 1 new, total 5202 timestamps in /home/runner/work/DeepSWM/DeepSWM/data/pred_24.json
+[INFERENCE] Inference successful
+=== Execution Summary ===
+Total errors encountered: 0
+Execution completed at: Sun Dec 14 22:55:47 UTC 2025
+✅ Workflow completed successfully with no errors
