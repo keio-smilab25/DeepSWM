@@ -1,0 +1,52 @@
+Starting inference execution at Sat Dec 20 19:55:42 UTC 2025
+=== Starting Inference Pipeline ===
+Current datetime: 122019
+Previous datetime: 122018
+Inference datetime: 20251220_190000
+[CURRENT] Fetching data for: 122019
+🚀 Starting data collection for: 2025-12-20 19:00 UTC
+✅ XRS updated: 2025122019 → 7.546142342107487e-07
+✅ XRS updated: 2025122018 → 9.075275215764123e-07
+✅ All files already exist for 2025-12-20 19:00
+[CURRENT] Data fetch successful for 122019
+[PREVIOUS] Fetching data for: 122018
+🚀 Starting data collection for: 2025-12-20 18:00 UTC
+✅ XRS updated: 2025122018 → 9.075275215764123e-07
+✅ XRS updated: 2025122017 → 9.654308996687178e-07
+📡 Fetching solar observation data...
+  Fetching AIA 0094Å...
+    ✅ PNG saved: data/images/1220/18_aia_0094.png
+  Fetching AIA 0131Å...
+    ✅ PNG saved: data/images/1220/18_aia_0131.png
+  Fetching AIA 0171Å...
+    ✅ PNG saved: data/images/1220/18_aia_0171.png
+  Fetching AIA 0193Å...
+    ✅ PNG saved: data/images/1220/18_aia_0193.png
+  Fetching AIA 0211Å...
+    ✅ PNG saved: data/images/1220/18_aia_0211.png
+  Fetching AIA 0304Å...
+    ✅ PNG saved: data/images/1220/18_aia_0304.png
+  Fetching AIA 0335Å...
+    ✅ PNG saved: data/images/1220/18_aia_0335.png
+  Fetching AIA 1600Å...
+    ✅ PNG saved: data/images/1220/18_aia_1600.png
+  Fetching AIA 4500Å...
+    ✅ PNG saved: data/images/1220/18_aia_4500.png
+  Fetching HMI magnetogram...
+    ✅ PNG saved: data/images/1220/18_hmi.png
+💾 Saving H5 file for ML inference...
+✅ H5 saved: ./ml/datasets/all_data_hours/20251220_180000.h5
+🎉 Data collection completed for 2025-12-20 18:00 UTC
+[PREVIOUS] Data fetch successful for 122018
+[FEATURES] Extracting features for: 20251220_190000
+Skip existing: /home/runner/work/DeepSWM/DeepSWM/ml/datasets/all_features/20251220_190000.h5
+[FEATURES] Feature extraction successful
+[INFERENCE] Running inference for: 20251220_190000
+/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/torch/amp/autocast_mode.py:250: UserWarning: User provided device_type of 'cuda', but CUDA is not available. Disabling
+  warnings.warn(
+Updated predictions: added 1 new, total 5324 timestamps in /home/runner/work/DeepSWM/DeepSWM/data/pred_24.json
+[INFERENCE] Inference successful
+=== Execution Summary ===
+Total errors encountered: 0
+Execution completed at: Sat Dec 20 19:56:04 UTC 2025
+✅ Workflow completed successfully with no errors
