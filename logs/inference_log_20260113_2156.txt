@@ -1,0 +1,93 @@
+Starting inference execution at Tue Jan 13 21:56:16 UTC 2026
+=== Starting Inference Pipeline ===
+Current datetime: 011321
+Previous datetime: 011320
+Inference datetime: 20260113_210000
+[CURRENT] Fetching data for: 011321
+🚀 Starting data collection for: 2026-01-13 21:00 UTC
+✅ XRS updated: 2026011321 → 9.71980853137211e-07
+✅ XRS updated: 2026011320 → 1.4544317537001916e-06
+📡 Fetching solar observation data...
+  Fetching AIA 0094Å...
+❌ AIA 0094 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/13/H2100/AIA20260113_210000_0094.fits
+    ⚠️  AIA 0094 data unavailable, skipping PNG
+  Fetching AIA 0131Å...
+❌ AIA 0131 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/13/H2100/AIA20260113_210000_0131.fits
+    ⚠️  AIA 0131 data unavailable, skipping PNG
+  Fetching AIA 0171Å...
+❌ AIA 0171 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/13/H2100/AIA20260113_210000_0171.fits
+    ⚠️  AIA 0171 data unavailable, skipping PNG
+  Fetching AIA 0193Å...
+❌ AIA 0193 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/13/H2100/AIA20260113_210000_0193.fits
+    ⚠️  AIA 0193 data unavailable, skipping PNG
+  Fetching AIA 0211Å...
+❌ AIA 0211 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/13/H2100/AIA20260113_210000_0211.fits
+    ⚠️  AIA 0211 data unavailable, skipping PNG
+  Fetching AIA 0304Å...
+❌ AIA 0304 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/13/H2100/AIA20260113_210000_0304.fits
+    ⚠️  AIA 0304 data unavailable, skipping PNG
+  Fetching AIA 0335Å...
+❌ AIA 0335 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/13/H2100/AIA20260113_210000_0335.fits
+    ⚠️  AIA 0335 data unavailable, skipping PNG
+  Fetching AIA 1600Å...
+❌ AIA 1600 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/13/H2100/AIA20260113_210000_1600.fits
+    ⚠️  AIA 1600 data unavailable, skipping PNG
+  Fetching AIA 4500Å...
+❌ AIA 4500 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/13/H2100/AIA20260113_210000_4500.fits
+    ⚠️  AIA 4500 data unavailable, skipping PNG
+  Fetching HMI magnetogram...
+    ✅ PNG saved: data/images/0113/21_hmi.png
+💾 Saving H5 file for ML inference...
+✅ H5 saved: ./ml/datasets/all_data_hours/20260113_210000.h5
+🎉 Data collection completed for 2026-01-13 21:00 UTC
+[CURRENT] Data fetch successful for 011321
+[PREVIOUS] Fetching data for: 011320
+🚀 Starting data collection for: 2026-01-13 20:00 UTC
+✅ XRS updated: 2026011320 → 1.4544317537001916e-06
+✅ XRS updated: 2026011319 → 1.3353640042623738e-06
+📡 Fetching solar observation data...
+  Fetching AIA 0094Å...
+❌ AIA 0094 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/13/H2000/AIA20260113_200000_0094.fits
+    ⚠️  AIA 0094 data unavailable, skipping PNG
+  Fetching AIA 0131Å...
+❌ AIA 0131 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/13/H2000/AIA20260113_200000_0131.fits
+    ⚠️  AIA 0131 data unavailable, skipping PNG
+  Fetching AIA 0171Å...
+❌ AIA 0171 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/13/H2000/AIA20260113_200000_0171.fits
+    ⚠️  AIA 0171 data unavailable, skipping PNG
+  Fetching AIA 0193Å...
+❌ AIA 0193 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/13/H2000/AIA20260113_200000_0193.fits
+    ⚠️  AIA 0193 data unavailable, skipping PNG
+  Fetching AIA 0211Å...
+❌ AIA 0211 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/13/H2000/AIA20260113_200000_0211.fits
+    ⚠️  AIA 0211 data unavailable, skipping PNG
+  Fetching AIA 0304Å...
+❌ AIA 0304 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/13/H2000/AIA20260113_200000_0304.fits
+    ⚠️  AIA 0304 data unavailable, skipping PNG
+  Fetching AIA 0335Å...
+❌ AIA 0335 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/13/H2000/AIA20260113_200000_0335.fits
+    ⚠️  AIA 0335 data unavailable, skipping PNG
+  Fetching AIA 1600Å...
+❌ AIA 1600 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/13/H2000/AIA20260113_200000_1600.fits
+    ⚠️  AIA 1600 data unavailable, skipping PNG
+  Fetching AIA 4500Å...
+❌ AIA 4500 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/13/H2000/AIA20260113_200000_4500.fits
+    ⚠️  AIA 4500 data unavailable, skipping PNG
+  Fetching HMI magnetogram...
+    ✅ PNG saved: data/images/0113/20_hmi.png
+💾 Saving H5 file for ML inference...
+✅ H5 saved: ./ml/datasets/all_data_hours/20260113_200000.h5
+🎉 Data collection completed for 2026-01-13 20:00 UTC
+[PREVIOUS] Data fetch successful for 011320
+[FEATURES] Extracting features for: 20260113_210000
+Skip existing: /home/runner/work/DeepSWM/DeepSWM/ml/datasets/all_features/20260113_210000.h5
+[FEATURES] Feature extraction successful
+[INFERENCE] Running inference for: 20260113_210000
+/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/torch/amp/autocast_mode.py:250: UserWarning: User provided device_type of 'cuda', but CUDA is not available. Disabling
+  warnings.warn(
+Updated predictions: added 1 new, total 5827 timestamps in /home/runner/work/DeepSWM/DeepSWM/data/pred_24.json
+[INFERENCE] Inference successful
+=== Execution Summary ===
+Total errors encountered: 0
+Execution completed at: Tue Jan 13 21:56:33 UTC 2026
+✅ Workflow completed successfully with no errors
