@@ -1,0 +1,86 @@
+Starting inference execution at Wed Jan 21 15:06:40 UTC 2026
+=== Starting Inference Pipeline ===
+Current datetime: 012115
+Previous datetime: 012114
+Inference datetime: 20260121_150000
+[CURRENT] Fetching data for: 012115
+🚀 Starting data collection for: 2026-01-21 15:00 UTC
+✅ XRS updated: 2026012115 → 1.4480235677183373e-06
+✅ XRS updated: 2026012114 → 1.5780231024109526e-06
+📡 Fetching solar observation data...
+  Fetching AIA 0094Å...
+❌ AIA 0094 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/21/H1500/AIA20260121_150000_0094.fits
+    ⚠️  AIA 0094 data unavailable, skipping PNG
+  Fetching AIA 0131Å...
+❌ AIA 0131 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/21/H1500/AIA20260121_150000_0131.fits
+    ⚠️  AIA 0131 data unavailable, skipping PNG
+  Fetching AIA 0171Å...
+❌ AIA 0171 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/21/H1500/AIA20260121_150000_0171.fits
+    ⚠️  AIA 0171 data unavailable, skipping PNG
+  Fetching AIA 0193Å...
+❌ AIA 0193 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/21/H1500/AIA20260121_150000_0193.fits
+    ⚠️  AIA 0193 data unavailable, skipping PNG
+  Fetching AIA 0211Å...
+❌ AIA 0211 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/21/H1500/AIA20260121_150000_0211.fits
+    ⚠️  AIA 0211 data unavailable, skipping PNG
+  Fetching AIA 0304Å...
+❌ AIA 0304 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/21/H1500/AIA20260121_150000_0304.fits
+    ⚠️  AIA 0304 data unavailable, skipping PNG
+  Fetching AIA 0335Å...
+❌ AIA 0335 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/21/H1500/AIA20260121_150000_0335.fits
+    ⚠️  AIA 0335 data unavailable, skipping PNG
+  Fetching AIA 1600Å...
+❌ AIA 1600 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/21/H1500/AIA20260121_150000_1600.fits
+    ⚠️  AIA 1600 data unavailable, skipping PNG
+  Fetching AIA 4500Å...
+❌ AIA 4500 fetch/process failed: 404 Client Error: Not Found for url: https://sdo5.nascom.nasa.gov/data/aia/synoptic/2026/01/21/H1500/AIA20260121_150000_4500.fits
+    ⚠️  AIA 4500 data unavailable, skipping PNG
+  Fetching HMI magnetogram...
+❌ HMI fetch/process failed: 404 Client Error: Not Found for url: https://jsoc1.stanford.edu/data/hmi/images/2026/01/21/20260121_150000_M_1k.jpg
+    ⚠️  HMI data unavailable, skipping PNG
+💾 Saving H5 file for ML inference...
+✅ H5 saved: ./ml/datasets/all_data_hours/20260121_150000.h5
+🎉 Data collection completed for 2026-01-21 15:00 UTC
+[CURRENT] Data fetch successful for 012115
+[PREVIOUS] Fetching data for: 012114
+🚀 Starting data collection for: 2026-01-21 14:00 UTC
+✅ XRS updated: 2026012114 → 1.5780231024109526e-06
+✅ XRS updated: 2026012113 → 3.6869369068881497e-06
+📡 Fetching solar observation data...
+  Fetching AIA 0094Å...
+    ✅ PNG saved: data/images/0121/14_aia_0094.png
+  Fetching AIA 0131Å...
+    ✅ PNG saved: data/images/0121/14_aia_0131.png
+  Fetching AIA 0171Å...
+    ✅ PNG saved: data/images/0121/14_aia_0171.png
+  Fetching AIA 0193Å...
+    ✅ PNG saved: data/images/0121/14_aia_0193.png
+  Fetching AIA 0211Å...
+    ✅ PNG saved: data/images/0121/14_aia_0211.png
+  Fetching AIA 0304Å...
+    ✅ PNG saved: data/images/0121/14_aia_0304.png
+  Fetching AIA 0335Å...
+    ✅ PNG saved: data/images/0121/14_aia_0335.png
+  Fetching AIA 1600Å...
+    ✅ PNG saved: data/images/0121/14_aia_1600.png
+  Fetching AIA 4500Å...
+    ✅ PNG saved: data/images/0121/14_aia_4500.png
+  Fetching HMI magnetogram...
+❌ HMI fetch/process failed: 404 Client Error: Not Found for url: https://jsoc1.stanford.edu/data/hmi/images/2026/01/21/20260121_140000_M_1k.jpg
+    ⚠️  HMI data unavailable, skipping PNG
+💾 Saving H5 file for ML inference...
+✅ H5 saved: ./ml/datasets/all_data_hours/20260121_140000.h5
+🎉 Data collection completed for 2026-01-21 14:00 UTC
+[PREVIOUS] Data fetch successful for 012114
+[FEATURES] Extracting features for: 20260121_150000
+Saved features: /home/runner/work/DeepSWM/DeepSWM/ml/datasets/all_features/20260121_150000.h5
+[FEATURES] Feature extraction successful
+[INFERENCE] Running inference for: 20260121_150000
+/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/torch/amp/autocast_mode.py:250: UserWarning: User provided device_type of 'cuda', but CUDA is not available. Disabling
+  warnings.warn(
+Updated predictions: added 1 new, total 5984 timestamps in /home/runner/work/DeepSWM/DeepSWM/data/pred_24.json
+[INFERENCE] Inference successful
+=== Execution Summary ===
+Total errors encountered: 0
+Execution completed at: Wed Jan 21 15:07:02 UTC 2026
+✅ Workflow completed successfully with no errors
