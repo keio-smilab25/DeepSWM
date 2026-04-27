@@ -4,13 +4,17 @@
 [![arXiv](https://img.shields.io/badge/arXiv-2508.07847-b31b1b.svg)](https://arxiv.org/abs/2508.07847)
 [![project](https://img.shields.io/badge/Project-Page-brightgreen.svg)](https://keio-smilab25.github.io/DeepSWM)
 [![paper](https://img.shields.io/badge/Paper-PDF-red.svg)]()
-[![data](https://img.shields.io/badge/Dataset-FlareBench-orange.svg)]()
+[![data](https://img.shields.io/badge/Dataset-FlareBench-orange.svg)](https://pub-4f7db9ce770f41a091c81b96648d9afd.r2.dev/flarebench_dataset.tar.zst)
 
 **Deep Space Weather Model (Deep SWM)** - accurately and reliably predicts solar flares by capturing long-range spatio-temporal dependencies and fine-grained features in multi-channel solar image series.
 
 <p align="center">
   <img src="web/images/eye-catch_white.png" alt="Deep SWM Overview">
 </p>
+
+## 📢 News
+
+- **[2026-04]** 🎉 The full **FlareBench** dataset (~1.26 TB, covering the complete 11-year solar cycle) is now publicly available. See [📊 Data Preparation](#-data-preparation) for the download URL and usage notes.
 
 ## 📖 Abstract
 <details>
