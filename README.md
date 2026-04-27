@@ -95,7 +95,21 @@ pip install -r requirements.txt
 
 ## 📊 Data Preparation
 
-The FlareBench dataset will be made available on Zenodo upon publication. Please check back soon for download instructions.
+The full **FlareBench** dataset (approximately 1.26 TB, `tar` + `zstd` compressed) is available for academic use at the following URL:
+
+```
+https://pub-4f7db9ce770f41a091c81b96648d9afd.r2.dev/flarebench_dataset.tar.zst
+```
+
+The archive contains the raw `aia/`, `hmi/`, and `xrs/` directories. After downloading, extract it with
+
+```bash
+tar --zstd -xf flarebench_dataset.tar.zst
+```
+
+Then build the hourly HDF5 datasets with `ml/src/data/create_datasets.py`. The script expects `aia/` and `hmi/` to be located directly under `--data_root`, while `xrs/` is expected to reside in the parent directory of `--data_root` (see the path construction in the script). Please arrange the extracted directories accordingly before running the script.
+
+The dataset is provided **for academic use only**. Please do not redistribute it.
 
 ## 🚀 Pre-training
 
