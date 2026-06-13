@@ -1,0 +1,61 @@
+Starting inference execution at Sat Jun 13 18:47:47 UTC 2026
+=== Starting Inference Pipeline ===
+Current datetime: 061318
+Previous datetime: 061317
+Inference datetime: 20260613_180000
+[CURRENT] Fetching data for: 061318
+🚀 Starting data collection for: 2026-06-13 18:00 UTC
+✅ XRS updated: 2026061318 → 6.78202695780783e-07
+✅ XRS updated: 2026061317 → 6.02088562118297e-07
+📡 Fetching solar observation data...
+  Fetching AIA 0094Å...
+❌ AIA 0094 fetch/process failed: HTTPSConnectionPool(host='sdo5.nascom.nasa.gov', port=443): Max retries exceeded with url: /data/aia/synoptic/2026/06/13/H1800/AIA20260613_180000_0094.fits (Caused by ConnectTimeoutError(<HTTPSConnection(host='sdo5.nascom.nasa.gov', port=443) at 0x7f8e6bd58af0>, 'Connection to sdo5.nascom.nasa.gov timed out. (connect timeout=30)'))
+    ⚠️  AIA 0094 data unavailable, skipping PNG
+  Fetching AIA 0131Å...
+❌ AIA 0131 fetch/process failed: HTTPSConnectionPool(host='sdo5.nascom.nasa.gov', port=443): Max retries exceeded with url: /data/aia/synoptic/2026/06/13/H1800/AIA20260613_180000_0131.fits (Caused by ConnectTimeoutError(<HTTPSConnection(host='sdo5.nascom.nasa.gov', port=443) at 0x7f8e6bd598a0>, 'Connection to sdo5.nascom.nasa.gov timed out. (connect timeout=30)'))
+    ⚠️  AIA 0131 data unavailable, skipping PNG
+  Fetching AIA 0171Å...
+❌ AIA 0171 fetch/process failed: HTTPSConnectionPool(host='sdo5.nascom.nasa.gov', port=443): Max retries exceeded with url: /data/aia/synoptic/2026/06/13/H1800/AIA20260613_180000_0171.fits (Caused by ConnectTimeoutError(<HTTPSConnection(host='sdo5.nascom.nasa.gov', port=443) at 0x7f8e6bd5a0e0>, 'Connection to sdo5.nascom.nasa.gov timed out. (connect timeout=30)'))
+    ⚠️  AIA 0171 data unavailable, skipping PNG
+  Fetching AIA 0193Å...
+❌ AIA 0193 fetch/process failed: HTTPSConnectionPool(host='sdo5.nascom.nasa.gov', port=443): Max retries exceeded with url: /data/aia/synoptic/2026/06/13/H1800/AIA20260613_180000_0193.fits (Caused by ConnectTimeoutError(<HTTPSConnection(host='sdo5.nascom.nasa.gov', port=443) at 0x7f8e6bd5a920>, 'Connection to sdo5.nascom.nasa.gov timed out. (connect timeout=30)'))
+    ⚠️  AIA 0193 data unavailable, skipping PNG
+  Fetching AIA 0211Å...
+❌ AIA 0211 fetch/process failed: HTTPSConnectionPool(host='sdo5.nascom.nasa.gov', port=443): Max retries exceeded with url: /data/aia/synoptic/2026/06/13/H1800/AIA20260613_180000_0211.fits (Caused by ConnectTimeoutError(<HTTPSConnection(host='sdo5.nascom.nasa.gov', port=443) at 0x7f8e6bd5b160>, 'Connection to sdo5.nascom.nasa.gov timed out. (connect timeout=30)'))
+    ⚠️  AIA 0211 data unavailable, skipping PNG
+  Fetching AIA 0304Å...
+❌ AIA 0304 fetch/process failed: HTTPSConnectionPool(host='sdo5.nascom.nasa.gov', port=443): Max retries exceeded with url: /data/aia/synoptic/2026/06/13/H1800/AIA20260613_180000_0304.fits (Caused by ConnectTimeoutError(<HTTPSConnection(host='sdo5.nascom.nasa.gov', port=443) at 0x7f8e6bd5af20>, 'Connection to sdo5.nascom.nasa.gov timed out. (connect timeout=30)'))
+    ⚠️  AIA 0304 data unavailable, skipping PNG
+  Fetching AIA 0335Å...
+❌ AIA 0335 fetch/process failed: HTTPSConnectionPool(host='sdo5.nascom.nasa.gov', port=443): Max retries exceeded with url: /data/aia/synoptic/2026/06/13/H1800/AIA20260613_180000_0335.fits (Caused by ConnectTimeoutError(<HTTPSConnection(host='sdo5.nascom.nasa.gov', port=443) at 0x7f8e6bd5a6e0>, 'Connection to sdo5.nascom.nasa.gov timed out. (connect timeout=30)'))
+    ⚠️  AIA 0335 data unavailable, skipping PNG
+  Fetching AIA 1600Å...
+❌ AIA 1600 fetch/process failed: HTTPSConnectionPool(host='sdo5.nascom.nasa.gov', port=443): Max retries exceeded with url: /data/aia/synoptic/2026/06/13/H1800/AIA20260613_180000_1600.fits (Caused by ConnectTimeoutError(<HTTPSConnection(host='sdo5.nascom.nasa.gov', port=443) at 0x7f8e6bd59ea0>, 'Connection to sdo5.nascom.nasa.gov timed out. (connect timeout=30)'))
+    ⚠️  AIA 1600 data unavailable, skipping PNG
+  Fetching AIA 4500Å...
+❌ AIA 4500 fetch/process failed: HTTPSConnectionPool(host='sdo5.nascom.nasa.gov', port=443): Max retries exceeded with url: /data/aia/synoptic/2026/06/13/H1800/AIA20260613_180000_4500.fits (Caused by ConnectTimeoutError(<HTTPSConnection(host='sdo5.nascom.nasa.gov', port=443) at 0x7f8e6bd59660>, 'Connection to sdo5.nascom.nasa.gov timed out. (connect timeout=30)'))
+    ⚠️  AIA 4500 data unavailable, skipping PNG
+  Fetching HMI magnetogram...
+    ✅ PNG saved: data/images/0613/18_hmi.png
+💾 Saving H5 file for ML inference...
+✅ H5 saved: ./ml/datasets/all_data_hours/20260613_180000.h5
+🎉 Data collection completed for 2026-06-13 18:00 UTC
+[CURRENT] Data fetch successful for 061318
+[PREVIOUS] Fetching data for: 061317
+🚀 Starting data collection for: 2026-06-13 17:00 UTC
+✅ XRS updated: 2026061317 → 6.02088562118297e-07
+✅ XRS updated: 2026061316 → 8.748931463742338e-07
+✅ All files already exist for 2026-06-13 17:00
+[PREVIOUS] Data fetch successful for 061317
+[FEATURES] Extracting features for: 20260613_180000
+Saved features: /home/runner/work/DeepSWM/DeepSWM/ml/datasets/all_features/20260613_180000.h5
+[FEATURES] Feature extraction successful
+[INFERENCE] Running inference for: 20260613_180000
+/opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/torch/amp/autocast_mode.py:250: UserWarning: User provided device_type of 'cuda', but CUDA is not available. Disabling
+  warnings.warn(
+Updated predictions: added 1 new, total 8669 timestamps in /home/runner/work/DeepSWM/DeepSWM/data/pred_24.json
+[INFERENCE] Inference successful
+=== Execution Summary ===
+Total errors encountered: 0
+Execution completed at: Sat Jun 13 18:52:33 UTC 2026
+✅ Workflow completed successfully with no errors
